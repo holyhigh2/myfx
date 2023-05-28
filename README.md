@@ -10,7 +10,10 @@ _.each<HTMLElement>(document.body.children, (el)=>{})
 //array
 _.each([1, 2, 3], num=>{})
 //set
-_.each(new Set([1, 2, 3]), num=>{})
+_.each(new Set([1, 2, 3]), num=>{
+    if(...)
+        return false// you can break the loop at any time
+})
 ```
 > English | [中文](./README_ZH.md)
 
