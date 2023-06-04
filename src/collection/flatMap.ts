@@ -27,23 +27,23 @@ function flatMap<V>(
       value: V,
       index: string | number | symbol,
       collection: Collection<V>
-    ) => V)
+    ) => V | Promise<any>)
     | NonFuncItee,
   depth?: number
 ): V[]
 function flatMap<V, K extends string | number | symbol>(
   collection: Collection<V>,
-  itee: ((value: V, index: K, collection: Collection<V>) => V) | NonFuncItee,
+  itee: ((value: V, index: K, collection: Collection<V>) => V | Promise<any>) | NonFuncItee,
   depth?: number
 ): V[]
 function flatMap<V, K extends string | number | symbol, U>(
   collection: Collection<V>,
-  itee: ((value: V, index: K, collection: Collection<V>) => U) | NonFuncItee,
+  itee: ((value: V, index: K, collection: Collection<V>) => U | Promise<any>) | NonFuncItee,
   depth?: number
 ): U[]
 function flatMap<V, K extends string | number | symbol, U>(
   collection: Collection<V>,
-  itee: ((value: V, index: K, collection: Collection<V>) => U) | NonFuncItee,
+  itee: ((value: V, index: K, collection: Collection<V>) => U | Promise<any>) | NonFuncItee,
   depth?: number
 ): U[] {
   return flat(map<V, K, U>(collection, itee), depth || 1)

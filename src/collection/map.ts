@@ -36,20 +36,20 @@ import each from "./each";
 function map<V>(
   collection: Collection<V>,
   itee:
-    | ((value: V, index: UnknownMapKey, collection: Collection<V>) => V)
+    | ((value: V, index: UnknownMapKey, collection: Collection<V>) => V | Promise<any>)
     | NonFuncItee
 ): V[]
 function map<V, K extends string | number | symbol>(
   collection: Collection<V>,
-  itee: ((value: V, index: K, collection: Collection<V>) => V) | NonFuncItee
+  itee: ((value: V, index: K, collection: Collection<V>) => V | Promise<any>) | NonFuncItee
 ): V[]
 function map<V, K extends string | number | symbol, U>(
   collection: Collection<V>,
-  itee: ((value: V, index: K, collection: Collection<V>) => U) | NonFuncItee
+  itee: ((value: V, index: K, collection: Collection<V>) => U | Promise<any>) | NonFuncItee
 ): U[]
 function map<V, K extends string | number | symbol, U>(
   collection: Collection<V>,
-  itee: ((value: V, index: K, collection: Collection<V>) => U) | NonFuncItee
+  itee: ((value: V, index: K, collection: Collection<V>) => U | Promise<any>) | NonFuncItee
 ): U[] {
   const rs: U[] = []
   const cb = _iteratee(itee)

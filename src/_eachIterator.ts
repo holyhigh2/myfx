@@ -10,7 +10,7 @@ function _eachIterator<V, K extends string | number | symbol>(
     value: V,
     index: K,
     collection: any
-  ) => boolean | void,
+  ) => boolean | void | Promise<void>,
   forRight: boolean
 ) {
   let values

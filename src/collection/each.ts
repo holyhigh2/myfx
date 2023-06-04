@@ -26,15 +26,15 @@ function each<V>(
     value: V,
     index: UnknownMapKey,
     collection: Collection<V>
-  ) => boolean | void
+  ) => boolean | void | Promise<void>
 ): void
 function each<V, K extends string | number | symbol>(
   collection: Collection<V>,
-  callback: (value: V, index: K, collection: Collection<V>) => boolean | void
+  callback: (value: V, index: K, collection: Collection<V>) => boolean | void | Promise<void>
 ): void
 function each<V, K extends string | number | symbol>(
   collection: Collection<V>,
-  callback: (value: V, index: K, collection: Collection<V>) => boolean | void
+  callback: (value: V, index: K, collection: Collection<V>) => boolean | void | Promise<void>
 ): void {
   _eachIterator<V, K>(collection, callback, false)
 }

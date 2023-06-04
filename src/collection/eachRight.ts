@@ -24,7 +24,7 @@ function eachRight<V>(
     value: V,
     index: UnknownMapKey,
     collection: Collection<V>
-  ) => boolean | void
+  ) => boolean | void | Promise<void>
 ): void
 function eachRight<V, K extends string | number | symbol>(
   collection: Collection<V>,

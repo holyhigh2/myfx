@@ -5645,7 +5645,7 @@
    * @param v
    * @returns Myfx对象
    */
-  function myFunc(v) {
+  function myfx(v) {
       return v instanceof FuncChain ? v : new FuncChain(v);
   }
   const CAN_COMPREHENSIONS = [split.name, toArray.name, range.name];
@@ -6015,7 +6015,7 @@
               globalValues = paramAry[1];
           }
           globalKeys.push('_');
-          globalValues.push(myFunc);
+          globalValues.push(myfx);
           const getRender = new Function(...globalKeys, '$options', `return function(${declarations}){
       const textQ=[];
       const print=(str)=>{
@@ -6490,7 +6490,7 @@
       ...template$1,
       ...tree,
   });
-  mixin(myFunc, {
+  mixin(myfx, {
       ...str,
       ...num,
       ...datetime,
@@ -6504,9 +6504,9 @@
       ...template$1,
       ...tree,
   });
-  myFunc.VERSION = '1.0.0'; //version
+  myfx.VERSION = '1.0.2'; //version
   /**
-   * 显式开启myfuncs的函数链，返回一个包裹了参数v的myfuncs链式对象。
+   * 显式开启myfx的函数链，返回一个包裹了参数v的myfx链式对象。
    * <p>
    * 函数链使用惰性计算 —— 直到显示调用value()方法时，函数链才会进行计算并返回结果
    * </p>
@@ -6515,15 +6515,15 @@
    * console.log(_.chain([1,2,3,4]).map(v=>v+1).filter(v=>v%2!==0).take(2).join('-').value())
    *
    * @param v
-   * @returns myfuncs对象
+   * @returns myfx对象
    */
-  myFunc.chain = myFunc;
+  myfx.chain = myfx;
   //bind _
   const ctx = globalThis;
   if (ctx.myff) {
       setTimeout(function () {
           ctx.__f_prev = ctx._;
-          ctx._ = myFunc;
+          ctx._ = myfx;
       }, 0);
   }
 
@@ -6552,7 +6552,7 @@
   exports.compose = compose;
   exports.concat = concat;
   exports.countBy = countBy;
-  exports.default = myFunc;
+  exports.default = myfx;
   exports.defaultTo = defaultTo;
   exports.defaults = defaults;
   exports.defaultsDeep = defaultsDeep;

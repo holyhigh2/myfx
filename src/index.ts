@@ -61,7 +61,7 @@ mixin(myfx, {
   ...tree,
 });
 
-(myfx as any).VERSION = '1.0.1';//version
+(myfx as any).VERSION = '1.0.2';//version
 /**
  * 显式开启myfx的函数链，返回一个包裹了参数v的myfx链式对象。
  * <p>

@@ -22,7 +22,7 @@ function flatMapDeep<V>(
       value: V,
       index: string | number | symbol,
       collection: Collection<V>
-    ) => V)
+    ) => V | Promise<any>)
     | NonFuncItee
 ): V[]
 function flatMapDeep<V, K extends string | number | symbol>(
