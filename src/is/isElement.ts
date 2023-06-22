@@ -1,5 +1,5 @@
 /**
- * 判断值是不是DOM元素
+ * 判断值是不是Element的实例
  *
  * @example
  * //true
@@ -11,8 +11,8 @@
  * @returns
  * @since 1.0.0
  */
-function isElement(v: unknown): v is HTMLElement {
-  return typeof v === 'object' && v instanceof HTMLElement
+function isElement(v: unknown): v is Element {
+  return typeof v === 'object' && v instanceof Element
 }
 
 export default isElement

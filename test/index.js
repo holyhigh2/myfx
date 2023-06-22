@@ -1801,7 +1801,7 @@
   }
 
   /**
-   * 判断值是不是DOM元素
+   * 判断值是不是Element的实例
    *
    * @example
    * //true
@@ -1814,7 +1814,7 @@
    * @since 1.0.0
    */
   function isElement(v) {
-      return typeof v === 'object' && v instanceof HTMLElement;
+      return typeof v === 'object' && v instanceof Element;
   }
 
   /**
@@ -6504,7 +6504,7 @@
       ...template$1,
       ...tree,
   });
-  myfx.VERSION = '1.0.2'; //version
+  myfx.VERSION = '1.0.3'; //version
   /**
    * 显式开启myfx的函数链，返回一个包裹了参数v的myfx链式对象。
    * <p>
