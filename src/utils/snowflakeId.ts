@@ -18,7 +18,7 @@ import padZ from "../string/padZ";
  * @param nodeId 节点id，10bit整数
  * @param [epoch=1580486400000] 时间起点，用于计算相对时间戳
  * @returns snowflakeId 由于js精度问题，直接返回字符串而不是number，如果nodeId为空返回 '0000000000000000000'
- * @since 1.4.0
+ * @since 1.0.0
  */
 function snowflakeId(nodeId: number, epoch?: number): string {
   epoch = epoch || 1580486400000

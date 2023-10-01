@@ -24,7 +24,7 @@ const REG_EXP_KEYWORDS: string[] = [
  *
  * @param str 需要转义的字符串
  * @returns 转义后的新字符串
- * @since 1.3.0
+ * @since 1.0.0
  */
 function escapeRegExp(str: any): string {
   return toString(str)

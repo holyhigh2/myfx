@@ -23,7 +23,7 @@ import isRegExp from '../is/isObject'
  * @param options.omission 替代字符，默认 '...'
  * @param options.separator 截断符。如果截取后的字符串中包含截断符，则最终只会返回截断符之前的内容
  * @returns 返回新字符串
- * @since 1.3.0
+ * @since 1.0.0
  */
 function truncate(
   str: any,

@@ -6,13 +6,13 @@ import {UnknownMapKey} from '../types'
  * @param predicate (node,times,cancel)断言函数，如果返回true表示节点匹配。或调用cancel中断查找
  * @param parentKey 父节点引用属性名
  * @returns 断言为true的最近一个祖先节点
- * @since 2.2.0
+ * @since 1.0.0
  */
-function closest(
+function closest<T = Record<UnknownMapKey, any>>(
   node: Record<UnknownMapKey, any>,
   predicate: (node: Record<UnknownMapKey, any>,times:number,cancel:()=>void) => boolean,
   parentKey: string,
-): Record<UnknownMapKey, any> | null {
+): T | null {
   let p = node
   let t:any = null
   let k = true

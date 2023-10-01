@@ -4,3 +4,5 @@ package-lock.json
 todo.*
 package-file.json
 docs
+/dev/
+!/dev/index.html

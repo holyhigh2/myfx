@@ -49,7 +49,7 @@ import sortedIndexBy from '../array/sortedIndexBy'
  * @param options.attrMap 转换tree节点时的属性映射，如\{text:'name'\}表示把array中一条记录的name属性映射为tree节点的text属性
  * @param options.sortKey 如果指定排序字段，则会在转换tree时自动排序。字段值可以是数字或字符等可直接进行比较的类型。性能高于转换后再排序
  * @returns 返回转换好的顶级节点数组或空数组
- * @since 1.5.0
+ * @since 1.0.0
  */
 function arrayToTree(
   array: Record<UnknownMapKey, any>[],

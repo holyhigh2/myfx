@@ -2,34 +2,34 @@
 /* eslint-disable no-invalid-this */
 /* eslint-disable max-len */
 
-import * as str from './string'
-import * as num from './number'
-import * as datetime from './datetime'
-import * as is from './is'
-import * as object from './object'
-import * as collection from './collection'
-import * as array from './array'
-import * as math from './math'
-import * as utils from './utils'
-import * as functions from './function'
-import * as template from './template/template'
-import * as tree from './tree'
+import * as str from './_modules/string'
+import * as num from './_modules/number'
+import * as datetime from './_modules/datetime'
+import * as is from './_modules/is'
+import * as object from './_modules/object'
+import * as collection from './_modules/collection'
+import * as array from './_modules/array'
+import * as math from './_modules/math'
+import * as utils from './_modules/utils'
+import * as functions from './_modules/function'
+import * as template from './_modules/template'
+import * as tree from './_modules/tree'
 
-import { myfx,FuncChain } from "./func";
+import { myfx,FuncChain } from "./_modules/func";
 import mixin from "./utils/mixin";
 
-export * from './string'
-export * from './number'
-export * from './datetime'
-export * from './is'
-export * from './object'
-export * from './array'
-export * from './collection'
-export * from './math'
-export * from './utils'
-export * from './function'
-export * from './tree'
-export * from './template/template'
+export * from './_modules/string'
+export * from './_modules/number'
+export * from './_modules/datetime'
+export * from './_modules/is'
+export * from './_modules/object'
+export * from './_modules/array'
+export * from './_modules/collection'
+export * from './_modules/math'
+export * from './_modules/utils'
+export * from './_modules/function'
+export * from './_modules/tree'
+export * from './_modules/template'
 
 mixin(FuncChain,{
   ...str,
@@ -61,7 +61,7 @@ mixin(myfx, {
   ...tree,
 });
 
-(myfx as any).VERSION = '1.0.3';//version
+(myfx as any).VERSION = '1.1.0';//version
 /**
  * 显式开启myfx的函数链，返回一个包裹了参数v的myfx链式对象。
  * <p>
@@ -81,7 +81,7 @@ const ctx = globalThis as any
 if(ctx.myff){
   setTimeout(function(){
     ctx.__f_prev = ctx._
-    ctx._ = myfx
+    ctx._ = ctx.myfx = myfx
   },0);
 }
 

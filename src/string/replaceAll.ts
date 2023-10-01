@@ -20,7 +20,7 @@ import isObject from '../is/isObject'
  * @param searchValue 查找内容，正则或者字符串。非global模式的正则对象会自动转为global模式
  * @param replaceValue 替换内容，字符串或处理函数。函数的返回值将用于替换
  * @returns 替换后的新字符串
- * @since 1.3.0
+ * @since 1.0.0
  */
 function replaceAll(
   str: any,

@@ -1,4 +1,3 @@
-import { UnknownMapKey } from "../types"
 /**
  * 返回对象的所有key数组
  * 
@@ -13,7 +12,7 @@ import { UnknownMapKey } from "../types"
  * @param obj
  * @returns 对象的key
  */
-function keys(obj: Record<UnknownMapKey, any>): string[] {
+function keys(obj: unknown): string[] {
   if (obj === null || obj === undefined) return []
   return Object.keys(obj)
 }

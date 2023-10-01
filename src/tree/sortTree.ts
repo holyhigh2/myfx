@@ -44,7 +44,7 @@ import isEmpty from '../is/isEmpty'
  * @param options 自定义选项
  * @param options.childrenKey 包含子节点容器的key。默认'children'
  *
- * @since 1.5.0
+ * @since 1.0.0
  */
 function sortTree(
   treeNodes: Record<UnknownMapKey, any> | Record<UnknownMapKey, any>[],

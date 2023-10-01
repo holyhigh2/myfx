@@ -12,7 +12,7 @@ import isNil from '../is/isNil'
  * @param a 
  * @param b 
  * @returns a+b
- * @since 2.3
+ * @since 1.0.0
  */
 function add(a:number,b:number):number{
   a = isNil(a) ? 0 : a

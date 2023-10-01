@@ -12,7 +12,7 @@ import isFunction from "../is/isFunction"
  * @param fn 需要执行的函数
  * @param args 可变参数
  * @returns 执行结果。如果函数无效或无返回值返回undefined
- * @since 2.4.0
+ * @since 1.0.0
  */
 function call(fn: any, ...args: any): any {
   if (!isFunction(fn)) return undefined

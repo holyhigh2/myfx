@@ -41,17 +41,20 @@ import cloneWith from '../object/cloneWith'
  *
  *
  * @param treeNodes 一组节点或一个节点
- * @param predicate (node) 断言
+ * @param predicate (node,parentNode,chain,level) 断言
  * <br>当断言是函数时回调参数见定义
  * <br>其他类型请参考 {@link utils!iteratee}
  * @param options 自定义选项
  * @param options.childrenKey 包含子节点容器的key。默认'children'
  * @returns 找到的符合条件的所有节点副本或空数组
- * @since 1.5.0
+ * @since 1.0.0
  */
 function filterTree(
   treeNodes: Record<UnknownMapKey, any> | Record<UnknownMapKey, any>[],
-  predicate: (node: Record<UnknownMapKey, any>) => boolean | NonFuncItee,
+  predicate: (node: Record<UnknownMapKey, any>,
+    parentNode: Record<UnknownMapKey, any>,
+    chain: Record<UnknownMapKey, any>[],
+    level:number) => boolean | NonFuncItee,
   options?: { childrenKey?: string }
 ): Record<UnknownMapKey, any>[] {
   options = options || {}
@@ -60,10 +63,10 @@ function filterTree(
   let nodes: Record<UnknownMapKey, any>[] = []
   walkTree(
     treeNodes,
-    (p, n, c) => {
-      const rs = callback(n)
+    (n,p, c,l) => {
+      const rs = callback(n,p, c,l)
       if (rs) {
-        c.forEach((node) => {
+        c.forEach((node: Record<UnknownMapKey, any>) => {
           if (!includes(nodes, node)) {
             nodes.push(node)
           }

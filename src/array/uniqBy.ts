@@ -15,7 +15,7 @@ import { NonFuncItee, UnknownMapKey } from "../types";
  * <br>当iteratee是函数时回调参数见定义
  * <br>其他类型请参考 {@link utils.iteratee}
  * @returns 去重后的新数组对象
- * @since 1.1.0
+ * @since 1.0.0
  */
 function uniqBy<T>(
   array: T[],

@@ -13,7 +13,7 @@ import compact from "../array/compact"
 import last from "../array/last"
 import takeRight from "../array/takeRight"
 import unzip from "../array/unzip"
-import {myfx} from '../func'
+import {myfx} from '../_modules/func'
 import each from '../collection/each'
 import includes from '../collection/includes'
 import map from '../collection/map'
@@ -62,7 +62,7 @@ import toPairs from "../object/toPairs"
  * @param options.globals 全局变量对象，可以在任意位置引用。模板内置的全局对象有两个：`print(content)`函数、`_` 对象，Myfx的命名空间
  * @param options.stripWhite 是否剔除空白，默认false。剔除发生在编译期间，渲染时不会受到影响。剔除规则：如果一行只有一个FTL注释或语句，则该行所占空白会被移除。
  * @returns 编译后的执行函数。该函数需要传递一个对象类型的参数作为运行时参数
- * @since 1.2.0
+ * @since 1.0.0
  */
 function template(string: string, options?: IOptions) {
   const delimiters = map<string>(template.settings.delimiters, (d) => {

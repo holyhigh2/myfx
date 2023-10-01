@@ -1,4 +1,3 @@
-import { UnknownMapKey } from "../types"
 import _identity from "../_identity"
 import keys from "./keys";
 /**
@@ -17,8 +16,8 @@ import keys from "./keys";
  * @param obj
  * @returns 对象根属性对应的值列表
  */
-function values(obj: Record<UnknownMapKey, any>): any[] {
-  return keys(obj).map((k) => obj[k])
+function values(obj: unknown): any[] {
+  return keys(obj).map((k) => (obj as any)[k])
 }
 
 export default values

@@ -20,7 +20,7 @@ import isArrayLike from '../is/isArrayLike'
  * console.log(_.sum(new Set([1,2,3])))
  *
  * @param values 数字/字符数组/Set
- * @since 2.3
+ * @since 1.0.0
  * @returns
  */
 function sum(

@@ -5,7 +5,7 @@ import _toPath from "../_toPath"
  * 删除obj上path路径对应属性
  * @param obj 需要设置属性值的对象，如果obj不是对象(isObject返回false)，直接返回obj
  * @param path 属性路径，可以是索引数字，字符串key，或者多级属性数组
- * @since 2.3
+ * @since 1.0.0
  * @returns 成功返回true，失败或路径不存在返回false
  */
 function unset(

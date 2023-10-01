@@ -1,7 +1,7 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
-  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.myff = {}));
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.myfx = {}));
 })(this, (function (exports) { 'use strict';
 
   function _getGrouped(str) {
@@ -23,7 +23,7 @@
    *
    * @param v
    * @returns
-   * @since 1.2.3
+   * @since 1.0.0
    */
   function isNil(v) {
       return v === null || v === undefined;
@@ -202,7 +202,7 @@
    *
    * @param str 需要转义的字符串
    * @returns 转义后的新字符串
-   * @since 1.3.0
+   * @since 1.0.0
    */
   function escapeRegExp(str) {
       return toString(str)
@@ -737,7 +737,7 @@
    * @param options.omission 替代字符，默认 '...'
    * @param options.separator 截断符。如果截取后的字符串中包含截断符，则最终只会返回截断符之前的内容
    * @returns 返回新字符串
-   * @since 1.3.0
+   * @since 1.0.0
    */
   function truncate(str, len, options) {
       str = toString(str);
@@ -3402,7 +3402,7 @@
    * 删除obj上path路径对应属性
    * @param obj 需要设置属性值的对象，如果obj不是对象(isObject返回false)，直接返回obj
    * @param path 属性路径，可以是索引数字，字符串key，或者多级属性数组
-   * @since 2.3
+   * @since 1.0.0
    * @returns 成功返回true，失败或路径不存在返回false
    */
   function unset(obj, path) {
@@ -4545,7 +4545,7 @@
    * @param array 数组
    * @param length
    * @returns 新数组
-   * @since 1.2.0
+   * @since 1.0.0
    */
   function takeRight(array, length) {
       const rs = toArray(array);
@@ -4628,7 +4628,7 @@
    * <br>当iteratee是函数时回调参数见定义
    * <br>其他类型请参考 {@link utils.iteratee}
    * @returns 去重后的新数组对象
-   * @since 1.1.0
+   * @since 1.0.0
    */
   function uniqBy(array, itee) {
       const cb = iteratee(itee || identity);
@@ -4817,7 +4817,7 @@
    * @param a
    * @param b
    * @returns a+b
-   * @since 2.3
+   * @since 1.0.0
    */
   function add(a, b) {
       a = isNil(a) ? 0 : a;
@@ -4838,7 +4838,7 @@
    * @param a
    * @param b
    * @returns a/b
-   * @since 2.3
+   * @since 1.0.0
    */
   function divide(a, b) {
       a = isNil(a) ? 0 : a;
@@ -4858,7 +4858,7 @@
    *
    * @param values 数字/字符数组/Set
    * @returns
-   * @since 2.3
+   * @since 1.0.0
    */
   function max(values) {
       const vals = flatMap(values, v => isNil(v) || isNaN(v) ? [] : v);
@@ -4879,7 +4879,7 @@
    *
    * @param values 数字/字符数组/Set
    * @returns mean value
-   * @since 2.3
+   * @since 1.0.0
    */
   function mean(values) {
       const vals = map(values, v => isNil(v) ? 0 : v);
@@ -4902,13 +4902,34 @@
    * console.log(_.min([-Infinity,-9999,0,null]))
    * @param values 数字/字符数组/Set
    * @returns
-   * @since 2.3
+   * @since 1.0.0
    */
   function min(values) {
       const vals = flatMap(values, v => isNil(v) || isNaN(v) ? [] : v);
       let f64a = new Float64Array(vals);
       f64a.sort();
       return f64a[0];
+  }
+
+  /**
+   * 返回min/max如果value超出范围
+   * @example
+   * //1
+   * console.log(_.minmax([1,10,0]))
+   * //6
+   * console.log(_.minmax([4,8,6]))
+   *
+   * @param min
+   * @param max
+   * @param value
+   * @returns
+   */
+  function minmax(min, max, value) {
+      if (value < min)
+          return min;
+      if (value > max)
+          return max;
+      return value;
   }
 
   /**
@@ -4924,7 +4945,7 @@
    * @param a
    * @param b
    * @returns a*b
-   * @since 2.3
+   * @since 1.0.0
    */
   function multiply(a, b) {
       a = isNil(a) ? 0 : a;
@@ -4957,7 +4978,7 @@
    * @param a
    * @param b
    * @returns a - b
-   * @since 2.3
+   * @since 1.0.0
    */
   function subtract(a, b) {
       a = isNil(a) ? 0 : a;
@@ -4986,6 +5007,7 @@
     max: max,
     mean: mean,
     min: min,
+    minmax: minmax,
     multiply: multiply,
     randf: randf,
     randi: randi,
@@ -5004,7 +5026,7 @@
    *
    * @param [len=16] id长度
    * @returns alphaId
-   * @since 1.4.0
+   * @since 1.0.0
    */
   function alphaId(len) {
       const bytes = self.crypto.getRandomValues(new Uint8Array(len || 16));
@@ -5081,14 +5103,14 @@
    * console.log(_.noConflict())
    *
    * @returns 返回myfuncs命名空间
-   * @since 2.0.0
+   * @since 1.0.0
    */
   function noConflict() {
       const ctx = globalThis;
-      if (ctx.myff) {
+      if (ctx.myfx) {
           ctx._ = ctx.__f_prev;
       }
-      return ctx.myff;
+      return ctx.myfx;
   }
 
   /**
@@ -5107,7 +5129,7 @@
    * @param nodeId 节点id，10bit整数
    * @param [epoch=1580486400000] 时间起点，用于计算相对时间戳
    * @returns snowflakeId 由于js精度问题，直接返回字符串而不是number，如果nodeId为空返回 '0000000000000000000'
-   * @since 1.4.0
+   * @since 1.0.0
    */
   function snowflakeId(nodeId, epoch) {
       epoch = epoch || 1580486400000;
@@ -5190,7 +5212,7 @@
    *
    * @param delimiter 是否生成分隔符
    * @returns uuid
-   * @since 1.4.0
+   * @since 1.0.0
    */
   function uuid(delimiter) {
       let uuid = '';
@@ -5390,7 +5412,7 @@
    * @param fn 需要执行的函数
    * @param args 可变参数
    * @returns 执行结果。如果函数无效或无返回值返回undefined
-   * @since 2.4.0
+   * @since 1.0.0
    */
   function call(fn, ...args) {
       if (!isFunction(fn))
@@ -5464,8 +5486,10 @@
    * @param expression 计算表达式
    * @returns 表达式计算结果
    */
-  function fval(expression) {
-      return Function('"use strict";return ' + expression)();
+  function fval(expression, args) {
+      const ks = keys(args);
+      const val = values(args);
+      return Function(...ks, '"use strict";return ' + expression)(...val);
   }
 
   /**
@@ -5812,10 +5836,10 @@
    * @param options.globals 全局变量对象，可以在任意位置引用。模板内置的全局对象有两个：`print(content)`函数、`_` 对象，Myfx的命名空间
    * @param options.stripWhite 是否剔除空白，默认false。剔除发生在编译期间，渲染时不会受到影响。剔除规则：如果一行只有一个FTL注释或语句，则该行所占空白会被移除。
    * @returns 编译后的执行函数。该函数需要传递一个对象类型的参数作为运行时参数
-   * @since 1.2.0
+   * @since 1.0.0
    */
-  function template(string, options) {
-      const delimiters = map(template.settings.delimiters, (d) => {
+  function template$1(string, options) {
+      const delimiters = map(template$1.settings.delimiters, (d) => {
           const letters = replace(d, /\//gim, '');
           return map(letters, (l) => {
               return includes(ESCAPES, l) ? '\\' + l : l;
@@ -5824,10 +5848,10 @@
       options = toObject(options);
       const mixins = options.mixins;
       const stripWhite = options.stripWhite || false;
-      const comment = delimiters[0] + template.settings.comment + delimiters[1];
-      const interpolate = delimiters[0] + template.settings.interpolate + delimiters[1];
-      const evaluate = delimiters[0] + template.settings.evaluate + delimiters[1];
-      const mixin = delimiters[0] + template.settings.mixin + delimiters[1];
+      const comment = delimiters[0] + template$1.settings.comment + delimiters[1];
+      const interpolate = delimiters[0] + template$1.settings.interpolate + delimiters[1];
+      const evaluate = delimiters[0] + template$1.settings.evaluate + delimiters[1];
+      const mixin = delimiters[0] + template$1.settings.mixin + delimiters[1];
       const splitExp = new RegExp(`(?:${comment})|(?:${mixin})|(?:${interpolate})|(?:${evaluate})`, 'mg');
       // ///////////////////////////////----拆分表达式与文本
       // 1. 对指令及插值进行分段
@@ -5840,7 +5864,7 @@
   /**
    * 模板设置对象
    */
-  template.settings = {
+  template$1.settings = {
       /**
        * @defaultValue ['[%', '%]']
        */
@@ -5941,7 +5965,7 @@
   function parseNode(rs, mixins) {
       const parts = compact(rs);
       const src = parts[0];
-      const modifier = src.replace(template.settings.delimiters[0], '')[0];
+      const modifier = src.replace(template$1.settings.delimiters[0], '')[0];
       switch (modifier) {
           case '-':
               return {
@@ -6027,9 +6051,9 @@
       };
   }
 
-  var template$1 = /*#__PURE__*/Object.freeze({
+  var template = /*#__PURE__*/Object.freeze({
     __proto__: null,
-    default: template
+    template: template$1
   });
 
   /**
@@ -6075,7 +6099,7 @@
    * @param options.attrMap 转换tree节点时的属性映射，如\{text:'name'\}表示把array中一条记录的name属性映射为tree节点的text属性
    * @param options.sortKey 如果指定排序字段，则会在转换tree时自动排序。字段值可以是数字或字符等可直接进行比较的类型。性能高于转换后再排序
    * @returns 返回转换好的顶级节点数组或空数组
-   * @since 1.5.0
+   * @since 1.0.0
    */
   function arrayToTree(array, idKey = 'id', pidKey, options = {}) {
       if (!isArray(array))
@@ -6145,7 +6169,7 @@
    * @param predicate (node,times,cancel)断言函数，如果返回true表示节点匹配。或调用cancel中断查找
    * @param parentKey 父节点引用属性名
    * @returns 断言为true的最近一个祖先节点
-   * @since 2.2.0
+   * @since 1.0.0
    */
   function closest(node, predicate, parentKey) {
       let p = node;
@@ -6199,7 +6223,7 @@
    * @param callback (parentNode,node,chain)回调函数，如果返回false则中断遍历，如果返回-1则停止分支遍历
    * @param options 自定义选项
    * @param options.childrenKey 包含子节点容器的key。默认'children'
-   * @since 1.5.0
+   * @since 1.0.0
    */
   function walkTree(treeNodes, callback, options) {
       _walkTree(treeNodes, callback, options);
@@ -6271,7 +6295,7 @@
    * @param options 自定义选项
    * @param options.childrenKey 包含子节点容器的key。默认'children'
    * @returns 找到的符合条件的所有节点副本或空数组
-   * @since 1.5.0
+   * @since 1.0.0
    */
   function filterTree(treeNodes, predicate, options) {
       options = options || {};
@@ -6334,7 +6358,7 @@
    * @param options 自定义选项
    * @param options.childrenKey 包含子节点容器的key。默认'children'
    * @returns 第一个匹配断言的节点或undefined
-   * @since 1.5.0
+   * @since 1.0.0
    */
   function findTreeNode(treeNodes, predicate, options) {
       const callback = iteratee(predicate);
@@ -6390,7 +6414,7 @@
    * @param options 自定义选项
    * @param options.childrenKey 包含子节点容器的key。默认'children'
    * @returns 找到的符合条件的所有节点或空数组
-   * @since 1.5.0
+   * @since 1.0.0
    */
   function findTreeNodes(treeNodes, predicate, options) {
       const callback = iteratee(predicate);
@@ -6446,7 +6470,7 @@
    * @param options 自定义选项
    * @param options.childrenKey 包含子节点容器的key。默认'children'
    *
-   * @since 1.5.0
+   * @since 1.0.0
    */
   function sortTree(treeNodes, comparator, options) {
       options = options || {};
@@ -6487,7 +6511,7 @@
       ...utils,
       ...functions,
       ...array,
-      ...template$1,
+      ...template,
       ...tree,
   });
   mixin(myfx, {
@@ -6501,10 +6525,10 @@
       ...utils,
       ...functions,
       ...array,
-      ...template$1,
+      ...template,
       ...tree,
   });
-  myfx.VERSION = '1.0.3'; //version
+  myfx.VERSION = '1.1.0'; //version
   /**
    * 显式开启myfx的函数链，返回一个包裹了参数v的myfx链式对象。
    * <p>
@@ -6520,7 +6544,7 @@
   myfx.chain = myfx;
   //bind _
   const ctx = globalThis;
-  if (ctx.myff) {
+  if (ctx.myfx) {
       setTimeout(function () {
           ctx.__f_prev = ctx._;
           ctx._ = myfx;
@@ -6653,6 +6677,7 @@
   exports.merge = merge;
   exports.mergeWith = mergeWith;
   exports.min = min;
+  exports.minmax = minmax;
   exports.mixin = mixin;
   exports.multiply = multiply;
   exports.noConflict = noConflict;
@@ -6705,6 +6730,7 @@
   exports.take = take;
   exports.takeRight = takeRight;
   exports.tap = tap;
+  exports.template = template$1;
   exports.test = test;
   exports.times = times;
   exports.toArray = toArray;

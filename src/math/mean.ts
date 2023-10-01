@@ -12,7 +12,7 @@ import map from '../collection/map'
  *
  * @param values 数字/字符数组/Set
  * @returns mean value
- * @since 2.3
+ * @since 1.0.0
  */
 function mean(values: Set<string | number> | Array<string | number> ):number{
   const vals = map<any>(values, v => isNil(v) ? 0 : v)

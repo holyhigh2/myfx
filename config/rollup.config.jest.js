@@ -21,7 +21,7 @@ const targets = [
       {
         file: 'test/index.js',
         format: 'umd',
-        name: 'myff'
+        name: 'myfx'
       }
     ],
   }

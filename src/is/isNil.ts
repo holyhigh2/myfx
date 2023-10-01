@@ -13,7 +13,7 @@
  *
  * @param v
  * @returns
- * @since 1.2.3
+ * @since 1.0.0
  */
 function isNil(v: unknown): v is null | undefined {
   return v === null || v === undefined

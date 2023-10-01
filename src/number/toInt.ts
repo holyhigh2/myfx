@@ -4,7 +4,7 @@ import toInteger from "./toInteger"
  *
  * @param v
  * @returns
- * @since 2.5.0
+ * @since 1.0.0
  */
 
 export default toInteger

@@ -11,7 +11,7 @@ import toArray from "../collection/toArray";
  * @param array 数组
  * @param length
  * @returns 新数组
- * @since 1.2.0
+ * @since 1.0.0
  */
 function takeRight<T>(array: T[], length?: number): T[] {
   const rs = toArray<T>(array)

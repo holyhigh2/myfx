@@ -7,7 +7,7 @@
  * console.log(_.noConflict())
  *
  * @returns 返回myfuncs命名空间
- * @since 2.0.0
+ * @since 1.0.0
  */
 export default function noConflict(): Record<string, any> {
   const ctx = globalThis as any

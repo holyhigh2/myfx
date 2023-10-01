@@ -12,7 +12,7 @@ const VARIANTS = ['8', '9', 'a', 'b']
  *
  * @param delimiter 是否生成分隔符
  * @returns uuid
- * @since 1.4.0
+ * @since 1.0.0
  */
 function uuid(delimiter?: boolean): string {
   let uuid = ''

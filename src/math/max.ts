@@ -12,7 +12,7 @@ import flatMap from '../collection/flatMap'
  *
  * @param values 数字/字符数组/Set
  * @returns
- * @since 2.3
+ * @since 1.0.0
  */
 function max(
   values: Set<string | number> | Array<string | number>

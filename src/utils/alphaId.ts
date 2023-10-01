@@ -10,7 +10,7 @@ const ALPHABET =
  *
  * @param [len=16] id长度
  * @returns alphaId
- * @since 1.4.0
+ * @since 1.0.0
  */
 function alphaId(len?: number): string {
   const bytes = self.crypto.getRandomValues(new Uint8Array(len || 16))

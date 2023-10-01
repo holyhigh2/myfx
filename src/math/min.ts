@@ -11,7 +11,7 @@ import flatMap from '../collection/flatMap'
  * console.log(_.min([-Infinity,-9999,0,null]))
  * @param values 数字/字符数组/Set
  * @returns
- * @since 2.3
+ * @since 1.0.0
  */
 function min(
   values: Set<string | number> | Array<string | number>

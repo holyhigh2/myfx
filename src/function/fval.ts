@@ -1,3 +1,6 @@
+import keys from "../object/keys"
+import values from "../object/values"
+
 /**
  * 类似eval，对表达式进行求值并返回结果。不同于eval，fval()执行在严格模式下
  * 
@@ -8,12 +11,17 @@
  * console.log(_.fval('3+2'));
  * //{name:"func.js"}
  * console.log(_.fval("{name:'func.js'}"));
+ * //0
+ * console.log(_.fval('1+x-b',{x:2,b:3}))
  *
  * @param expression 计算表达式
+ * @param args 参数对象
  * @returns 表达式计算结果
  */
-function fval<T>(expression: string): T {
-  return Function('"use strict";return ' + expression)()
+function fval<T>(expression: string,args?:Record<string,any>): T {
+  const ks = keys(args)
+  const val = values(args)
+  return Function(...ks,'"use strict";return ' + expression)(...val)
 }
 
 export default fval

@@ -1,6 +1,7 @@
 import {UnknownMapKey} from '../types'
 import isArray from '../is/isArray'
 import isEmpty from '../is/isEmpty'
+import isArrayLike from '../is/isArrayLike'
 
 /**
  * 以给定节点为根遍历所有子孙节点。深度优先
@@ -33,20 +34,21 @@ import isEmpty from '../is/isEmpty'
  * _.insert(data,0,...roots);
  * const tree = _.arrayToTree(data,'id','pid',{sortKey:'sortNo'});
  *
- * _.walkTree(tree,(parentNode,node,chain)=>console.log('node',node.name,'sortNo',node.sortNo,'chain',_.map(chain,n=>n.name)))
+ * _.walkTree(tree,(node,parentNode,chain)=>console.log('node',node.name,'sortNo',node.sortNo,'chain',_.map(chain,n=>n.name)))
  *
  * @param treeNodes 一组节点或一个节点
- * @param callback (parentNode,node,chain)回调函数，如果返回false则中断遍历，如果返回-1则停止分支遍历
+ * @param callback (node,parentNode,chain,level)回调函数，如果返回false则中断遍历，如果返回-1则停止分支遍历
  * @param options 自定义选项
  * @param options.childrenKey 包含子节点容器的key。默认'children'
- * @since 1.5.0
+ * @since 1.0.0
  */
 function walkTree(
   treeNodes: Record<UnknownMapKey, any> | Record<UnknownMapKey, any>[],
   callback: (
-    parentNode: Record<UnknownMapKey, any>,
     node: Record<UnknownMapKey, any>,
-    chain: Record<UnknownMapKey, any>[]
+    parentNode: Record<UnknownMapKey, any>,
+    chain: Record<UnknownMapKey, any>[],
+    level:number
   ) => boolean | number | void,
   options?: Record<UnknownMapKey, any>
 ): void {
@@ -55,9 +57,10 @@ function walkTree(
 function _walkTree(
   treeNodes: Record<UnknownMapKey, any> | Record<UnknownMapKey, any>[],
   callback: (
-    parentNode: Record<UnknownMapKey, any>,
     node: Record<UnknownMapKey, any>,
-    chain: Record<UnknownMapKey, any>[]
+    parentNode: Record<UnknownMapKey, any>,
+    chain: Record<UnknownMapKey, any>[],
+    level:number
   ) => boolean | number | void,
   options?: Record<UnknownMapKey, any>,
   ...rest: any[]
@@ -66,10 +69,10 @@ function _walkTree(
   const parentNode = rest[0]
   const chain = rest[1] || []
   const childrenKey = options.childrenKey || 'children'
-  const data = isArray(treeNodes) ? treeNodes : [treeNodes]
+  const data = isArrayLike(treeNodes) ? treeNodes : [treeNodes]
   for (let i = 0; i < data.length; i++) {
     const node = data[i]
-    const rs = callback(parentNode, node, chain)
+    const rs = callback(node,parentNode, chain,chain.length)
     if (rs === false) return
     if (rs === -1) continue
 

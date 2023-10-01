@@ -10,6 +10,7 @@ import CasesDatetime from './cases.datetime'
 import CasesMath from './cases.math'
 import CasesNumber from './cases.number'
 import CasesObject from './cases.object'
+import CasesFunction from './cases.function'
 
 const Cases = merge(
   CasesIs,
@@ -19,7 +20,8 @@ const Cases = merge(
   CasesColl,
   CasesMath,
   CasesNumber,
-  CasesObject
+  CasesObject,
+  CasesFunction
 )
 
 for (let fnName in Cases) {

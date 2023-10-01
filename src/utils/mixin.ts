@@ -1,5 +1,5 @@
+import isFunction from "../is/isFunction"
 import functions from "../object/functions"
-import { isFunction } from "../is";
 /**
  * 为func.js扩展额外函数，扩展后的函数同样具有函数链访问能力
  *
