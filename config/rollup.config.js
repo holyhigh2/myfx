@@ -1,6 +1,5 @@
 /* eslint-disable max-len */
 import commonjs from '@rollup/plugin-commonjs'
-import terser from '@rollup/plugin-terser'
 import banner2 from 'rollup-plugin-banner2'
 import json from '@rollup/plugin-json'
 import copy from 'rollup-plugin-copy'
