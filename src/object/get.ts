@@ -1,5 +1,4 @@
 import isObject from "../is/isObject"
-import { UnknownMapKey } from "../types"
 import _toPath from "../_toPath"
 /**
  * 通过path获取对象属性值
@@ -24,7 +23,7 @@ import _toPath from "../_toPath"
  * @returns 属性值或默认值
  */
 function get<V>(
-  obj: Record<UnknownMapKey, any>,
+  obj: any,
   path: Array<string | number> | string | number,
   defaultValue?: any
 ): V {
