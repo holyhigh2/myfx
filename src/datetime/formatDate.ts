@@ -5,9 +5,9 @@ import toDate from "./toDate"
 
 const INVALID_DATE = ''
 const SearchExp =
-  /y{2,4}|M{1,3}|d{1,4}|h{1,2}|m{1,2}|s{1,2}|Q{1,2}|E{1,2}|W{1,2}|w{1,2}/gm
-  const pad0 = (str:string)=>str.length>1?'':'0'+str
-  const pad00 = (str: string)=>str.length>2?'':(str.length>1?'0'+str:'00'+str)
+  /y{2,4}|M{1,3}|d{1,4}|h{1,2}|m{1,2}|s{1,2}|Q{1,2}|E{1,2}|W{1,2}|w{1,2}|H{1,2}|S|a/gm
+  const pad0 = (str:string)=>str.length>1?str:'0'+str
+  const pad00 = (str: string)=>str.length>2?str:(str.length>1?'0'+str:'00'+str)
 
 /**
  * 通过表达式格式化日期时间
@@ -27,8 +27,10 @@ const SearchExp =
   - `dd` 2位日(01-30/31/29/28)
   - `ddd` 一年中的日(1-365)
   - `dddd` 一年中的日(001-365)
-  - `h` 1位小时(0-23)
-  - `hh` 2位小时(00-23)
+  - `h` 1位小时(1-12)
+  - `hh` 2位小时(01-12)
+  - `H` 1位小时(0-23)
+  - `HH` 2位小时(00-23)
   - `m` 1位分钟(0-59)
   - `mm` 2位分钟(00-59)
   - `s` 1位秒(0-59)
@@ -41,6 +43,8 @@ const SearchExp =
   - `ww` 一月中的周描述(第一周 - 第六周)
   - `E` 星期(1-7)
   - `EE` 星期描述(星期一 - 星期日)
+  - `S` 毫秒
+  - `a` AM/PM
  *
  * @example
  * //now time
@@ -58,7 +62,7 @@ const SearchExp =
  * //2021-02-01
  * console.log(_.formatDate('2021-2-1','yyyy-MM-dd'))
  * //21-12-11 10:09:08
- * console.log(_.formatDate('2021-12-11T10:09:08','yy-MM-dd hh:mm:ss'))
+ * console.log(_.formatDate('2021-12-11T10:09:08','yy-MM-dd HH:mm:ss'))
  * //12/11/2020 1009
  * console.log(_.formatDate('2020-12-11 10:09:08','MM/dd/yyyy hhmm'))
  * //2020-12-11 08:00
@@ -107,7 +111,7 @@ function formatDate(val: string | Date | number, pattern?: string): string {
             case 'MMM':
               return locale?.months[month] || tag
           }
-        } else if (cap == 'd') {
+        } else if (cap === 'd') {
           let dayOfMonth = valDate.getDate()
           switch (tag) {
             case 'd':
@@ -119,16 +123,24 @@ function formatDate(val: string | Date | number, pattern?: string): string {
             case 'dddd':
               return pad00(getDayOfYear(valDate) + '')
           }
-        } else if (cap == 'h') {
+        } else if (cap === 'a') {
+          let val = valDate.getHours() 
+          return val<12?locale?.meridiems[0]:locale?.meridiems[1]
+        }else if (cap === 'h') {//12
+          let val = valDate.getHours() 
+          val = val % 12;
+          if(val === 0)val = 12
+          return tag.length > 1 ? pad0(val+'') : val+''
+        }else if (cap === 'H') {//24
           const val = valDate.getHours() + ''
           return tag.length > 1 ? pad0(val) : val
-        } else if (cap == 'm') {
+        } else if (cap === 'm') {
           const val = valDate.getMinutes() + ''
           return tag.length > 1 ? pad0(val) : val
-        } else if (cap == 's') {
+        } else if (cap === 's') {
           const val = valDate.getSeconds() + ''
           return tag.length > 1 ? pad0(val) : val
-        } else if (cap == 'Q') {
+        } else if (cap === 'Q') {
           const quarter = Math.ceil(month / 3)
           if (tag === 'Q') return quarter + ''
           return locale?.quarters[quarter - 1] || tag
@@ -145,6 +157,8 @@ function formatDate(val: string | Date | number, pattern?: string): string {
           return tag === 'E'
             ? dayOfWeek + ''
             : locale?.days[dayOfWeek - 1] || tag
+        }else if (cap === 'S') {
+          return valDate.getMilliseconds()+''
         }
         return tag
       })
@@ -155,7 +169,7 @@ function formatDate(val: string | Date | number, pattern?: string): string {
 const cache: Record<string, Function> = {}
 const Locale: Record<
   string,
-  { quarters: string[]; months: string[]; weeks: string[]; days: string[] }
+  { quarters: string[]; months: string[]; weeks: string[]; days: string[];meridiems:string[] }
 > = {
   'zh-CN': {
     quarters: ['一季度', '二季度', '三季度', '四季度'],
@@ -175,6 +189,7 @@ const Locale: Record<
     ].map((v) => v + '月'),
     weeks: ['一', '二', '三', '四', '五', '六'].map((v) => '第' + v + '周'),
     days: ['一', '二', '三', '四', '五', '六', '日'].map((v) => '星期' + v),
+    meridiems: ['AM','PM']
   },
 }
 let Lang = globalThis.navigator?.language || 'zh-CN'
@@ -186,6 +201,7 @@ let Lang = globalThis.navigator?.language || 'zh-CN'
  * @param options.months 月度描述，默认"一 - 十二月"
  * @param options.weeks 一月中的周描述，默认"第一 - 六周"
  * @param options.days 星期描述，默认"星期一 - 日"
+ * @param options.meridiems 上午/下午描述，默认"AM/PM"
  */
 formatDate.locale = function (
   lang: string,
@@ -194,11 +210,12 @@ formatDate.locale = function (
     months: string[]
     weeks: string[]
     days: string[]
+    meridiems: string[]
   }
 ): void {
   let locale = Locale[lang]
   if (!locale) {
-    locale = Locale[lang] = { quarters: [], months: [], weeks: [], days: [] }
+    locale = Locale[lang] = { quarters: [], months: [], weeks: [], days: [],meridiems:[] }
   }
 
   if (options?.quarters) {
@@ -212,6 +229,9 @@ formatDate.locale = function (
   }
   if (options?.days) {
     locale.days = options?.days
+  }
+  if (options?.meridiems) {
+    locale.meridiems = options?.meridiems
   }
 }
 /**

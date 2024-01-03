@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.2.0] - 2024/1/3
+### Add
+- datetime -> formatDate(new patterns)
+
 ## [1.1.0] - 2023/10/1
 ### Add
 - math -> minmax
