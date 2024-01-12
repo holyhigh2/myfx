@@ -1,6 +1,6 @@
 {
   "name": "myfx",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "A modular utility library with more utils, higher performance and simpler declarations ...",
   "main": "index.umd.js",
   "module": "index.esm.js",
@@ -22,7 +22,7 @@
     "stdlib"
   ],
   "scripts": {
-    "build": "node ./config/build.modules.js & rollup --config ./config/rollup.config.js & rollup --config ./config/rollup.config.dts.js",
+    "build": "node ./config/build.chainfx.js & node ./config/build.modules.js & rollup --config ./config/rollup.config.js & rollup --config ./config/rollup.config.dts.js",
     "jest": "rollup --config ./config/rollup.config.jest.js --bundleConfigAsCjs & jest --no-cache --verbose test/index.spec.ts",
     "dev": "rollup --config ./config/rollup.config.dev.js --bundleConfigAsCjs --watch",
     "doc": "npx typedoc"
@@ -38,14 +38,15 @@
     "jest-environment-jsdom": "29.0.1",
     "js-cleanup": "^1.2.0",
     "rollup": "^3.29.4",
-    "rollup-plugin-livereload": "^2.0.0",
-    "rollup-plugin-serve": "^1.1",
     "rollup-plugin-banner2": "1.2.2",
     "rollup-plugin-clear": "2.0.7",
     "rollup-plugin-copy": "3.4.0",
     "rollup-plugin-dts": "^6.0.2",
+    "rollup-plugin-livereload": "^2.0.0",
+    "rollup-plugin-serve": "^1.1",
     "rollup-plugin-typescript2": "0.36.0",
     "ts-jest": "^28.0.8",
+    "ts-morph": "^21.0.1",
     "tslib": "^2.4.1",
     "typedoc": "^0.25.1",
     "typedoc-plugin-markdown": "^3.14.0",

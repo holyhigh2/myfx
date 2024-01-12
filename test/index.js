@@ -927,6 +927,9 @@
               if (fractionPtn) {
                   if (fraction.length >= fixedLen) {
                       dStr = parseFloat('0.' + fraction).toFixed(fixedLen);
+                      if (dStr[0] === '1') {
+                          integer += 1;
+                      }
                       dStr = dStr.substring(1);
                   }
                   else {
@@ -1426,9 +1429,9 @@
   }
 
   const INVALID_DATE = '';
-  const SearchExp = /y{2,4}|M{1,3}|d{1,4}|h{1,2}|m{1,2}|s{1,2}|Q{1,2}|E{1,2}|W{1,2}|w{1,2}/gm;
-  const pad0 = (str) => str.length > 1 ? '' : '0' + str;
-  const pad00 = (str) => str.length > 2 ? '' : (str.length > 1 ? '0' + str : '00' + str);
+  const SearchExp = /y{2,4}|M{1,3}|d{1,4}|h{1,2}|m{1,2}|s{1,2}|Q{1,2}|E{1,2}|W{1,2}|w{1,2}|H{1,2}|S|a/gm;
+  const pad0 = (str) => str.length > 1 ? str : '0' + str;
+  const pad00 = (str) => str.length > 2 ? str : (str.length > 1 ? '0' + str : '00' + str);
   /**
    * 通过表达式格式化日期时间
    *
@@ -1447,8 +1450,10 @@
     - `dd` 2位日(01-30/31/29/28)
     - `ddd` 一年中的日(1-365)
     - `dddd` 一年中的日(001-365)
-    - `h` 1位小时(0-23)
-    - `hh` 2位小时(00-23)
+    - `h` 1位小时(1-12)
+    - `hh` 2位小时(01-12)
+    - `H` 1位小时(0-23)
+    - `HH` 2位小时(00-23)
     - `m` 1位分钟(0-59)
     - `mm` 2位分钟(00-59)
     - `s` 1位秒(0-59)
@@ -1461,6 +1466,8 @@
     - `ww` 一月中的周描述(第一周 - 第六周)
     - `E` 星期(1-7)
     - `EE` 星期描述(星期一 - 星期日)
+    - `S` 毫秒
+    - `a` AM/PM
    *
    * @example
    * //now time
@@ -1478,7 +1485,7 @@
    * //2021-02-01
    * console.log(_.formatDate('2021-2-1','yyyy-MM-dd'))
    * //21-12-11 10:09:08
-   * console.log(_.formatDate('2021-12-11T10:09:08','yy-MM-dd hh:mm:ss'))
+   * console.log(_.formatDate('2021-12-11T10:09:08','yy-MM-dd HH:mm:ss'))
    * //12/11/2020 1009
    * console.log(_.formatDate('2020-12-11 10:09:08','MM/dd/yyyy hhmm'))
    * //2020-12-11 08:00
@@ -1526,7 +1533,7 @@
                               return locale?.months[month] || tag;
                       }
                   }
-                  else if (cap == 'd') {
+                  else if (cap === 'd') {
                       let dayOfMonth = valDate.getDate();
                       switch (tag) {
                           case 'd':
@@ -1539,19 +1546,30 @@
                               return pad00(getDayOfYear(valDate) + '');
                       }
                   }
-                  else if (cap == 'h') {
+                  else if (cap === 'a') {
+                      let val = valDate.getHours();
+                      return val < 12 ? locale?.meridiems[0] : locale?.meridiems[1];
+                  }
+                  else if (cap === 'h') { //12
+                      let val = valDate.getHours();
+                      val = val % 12;
+                      if (val === 0)
+                          val = 12;
+                      return tag.length > 1 ? pad0(val + '') : val + '';
+                  }
+                  else if (cap === 'H') { //24
                       const val = valDate.getHours() + '';
                       return tag.length > 1 ? pad0(val) : val;
                   }
-                  else if (cap == 'm') {
+                  else if (cap === 'm') {
                       const val = valDate.getMinutes() + '';
                       return tag.length > 1 ? pad0(val) : val;
                   }
-                  else if (cap == 's') {
+                  else if (cap === 's') {
                       const val = valDate.getSeconds() + '';
                       return tag.length > 1 ? pad0(val) : val;
                   }
-                  else if (cap == 'Q') {
+                  else if (cap === 'Q') {
                       const quarter = Math.ceil(month / 3);
                       if (tag === 'Q')
                           return quarter + '';
@@ -1573,6 +1591,9 @@
                       return tag === 'E'
                           ? dayOfWeek + ''
                           : locale?.days[dayOfWeek - 1] || tag;
+                  }
+                  else if (cap === 'S') {
+                      return valDate.getMilliseconds() + '';
                   }
                   return tag;
               });
@@ -1600,6 +1621,7 @@
           ].map((v) => v + '月'),
           weeks: ['一', '二', '三', '四', '五', '六'].map((v) => '第' + v + '周'),
           days: ['一', '二', '三', '四', '五', '六', '日'].map((v) => '星期' + v),
+          meridiems: ['AM', 'PM']
       },
   };
   let Lang = globalThis.navigator?.language || 'zh-CN';
@@ -1611,11 +1633,12 @@
    * @param options.months 月度描述，默认"一 - 十二月"
    * @param options.weeks 一月中的周描述，默认"第一 - 六周"
    * @param options.days 星期描述，默认"星期一 - 日"
+   * @param options.meridiems 上午/下午描述，默认"AM/PM"
    */
   formatDate.locale = function (lang, options) {
       let locale = Locale[lang];
       if (!locale) {
-          locale = Locale[lang] = { quarters: [], months: [], weeks: [], days: [] };
+          locale = Locale[lang] = { quarters: [], months: [], weeks: [], days: [], meridiems: [] };
       }
       if (options?.quarters) {
           locale.quarters = options?.quarters;
@@ -1628,6 +1651,9 @@
       }
       if (options?.days) {
           locale.days = options?.days;
+      }
+      if (options?.meridiems) {
+          locale.meridiems = options?.meridiems;
       }
   };
   /**
@@ -5079,17 +5105,17 @@
   function mixin(target, obj) {
       functions$1(obj).forEach((fnName) => {
           const fn = obj[fnName];
-          if (isFunction(target)) {
-              target[fnName] = fn;
-          }
-          else {
-              target.prototype[fnName] = function (...rest) {
+          if (target.prototype && target.prototype.constructor.name === 'FuncChain') {
+              target.prototype['_' + fnName] = function (...rest) {
                   this._chain.push({
                       fn: fn,
                       params: rest,
                   });
                   return this;
               };
+          }
+          else {
+              target['_' + fnName] = fn;
           }
       });
   }
@@ -5107,10 +5133,10 @@
    */
   function noConflict() {
       const ctx = globalThis;
-      if (ctx.myfx) {
+      if (ctx.myff) {
           ctx._ = ctx.__f_prev;
       }
-      return ctx.myfx;
+      return ctx.myff;
   }
 
   /**
@@ -5482,8 +5508,11 @@
    * console.log(_.fval('3+2'));
    * //{name:"func.js"}
    * console.log(_.fval("{name:'func.js'}"));
+   * //0
+   * console.log(_.fval('1+x-b',{x:2,b:3}))
    *
    * @param expression 计算表达式
+   * @param args 参数对象
    * @returns 表达式计算结果
    */
   function fval(expression, args) {
@@ -5552,245 +5581,6 @@
     partial: partial,
     tap: tap
   });
-
-  /* eslint-disable no-invalid-this */
-  /* eslint-disable require-jsdoc */
-  /* eslint-disable max-len */
-  /**
-   * 函数链操作相关函数
-   * @author holyhigh
-   */
-  /**
-   * 用于定义FuncChain对象并构造函数链
-   * 注意，该类仅用于内部构造函数链
-   */
-  class FuncChain {
-      /**
-       * @internal
-       */
-      constructor(v) {
-          this._wrappedValue = v;
-          this._chain = [];
-      }
-      /**
-       * 惰性计算。执行函数链并返回计算结果
-       * @example
-       * //2-4
-       * console.log(_([1,2,3,4]).map(v=>v+1).filter(v=>v%2===0).take(2).join('-').value())
-       * //[1,2,2,1]
-       * console.log(_(["{a:1,b:2}","{a:2,b:1}"]).map((v) => _.fval(v)).map(v=>[v.a,v.b]).join().value())
-       * //[1,2,3,4]
-       * console.log(_([1,2,3,4]).value())
-       *
-       * @returns 执行函数链返回的值
-       */
-      value() {
-          let comprehension = isArrayLike(this._wrappedValue)
-              ? createComprehension()
-              : null;
-          const maxChainIndex = this._chain.length - 1;
-          return this._chain.reduce((acc, v, i) => {
-              const params = [acc, ...v.params];
-              if (comprehension) {
-                  let rs;
-                  const sig = buildComprehension(comprehension, v.fn, v.params);
-                  if (sig > 0 || (!sig && maxChainIndex === i)) {
-                      rs = execComprehension(comprehension, acc);
-                      if (comprehension.tap) {
-                          comprehension.tap(rs);
-                      }
-                      comprehension = null;
-                  }
-                  if (sig > 1) {
-                      comprehension = createComprehension(v.fn, v.params);
-                  }
-                  if (rs) {
-                      return sig !== 1 ? rs : v.fn(...[rs, ...v.params]);
-                  }
-                  return acc;
-              }
-              if (CAN_COMPREHENSIONS.includes(v.fn.name)) {
-                  comprehension = createComprehension();
-                  return v.fn(...[acc, ...v.params]);
-              }
-              return v.fn(...params);
-          }, this._wrappedValue);
-      }
-  }
-  /**
-   * 返回一个包裹了参数v的FuncChain对象，并隐式开始函数链。函数链可以链接Myfx提供的所有函数，如
-
-  ```js
-   _([1,2,3,4]).map(v=>v+1).filter(v=>v%2===0).take(2).join('-').value()
-  ```
-
-   * 函数链与直接调用方法的区别不仅在于可以链式调用，更在于函数链是基于惰性求值的。
-   * 上式中必须通过显式调用`value()`方法才能获取结果，
-   * 而只有在`value()`方法调用时整个函数链才进行求值。
-   *
-   *
-   * 惰性求值允许FuncChain实现捷径融合(shortcut fusion) —— 一项基于已有函数对数组循环次数进行大幅减少以提升性能的优化技术。
-   * 下面的例子演示了原生函数链和Myfx函数链的性能差异
-   * @example
-   * let ary = _.range(20000000);
-  console.time('native');
-  let c = 0;
-  let a = ary.map((v)=>{
-      c++;
-      return v+1;
-    }).filter((v) => {
-      c++;
-      return v%2==0;
-    })
-    .reverse()
-    .slice(1, 4)
-  console.timeEnd('native');
-  console.log(a, c, '次');//大约600ms左右，循环 40000000 次
-
-  //Myfx
-  ary = _.range(20000000);
-  console.time('Myfx');
-  let x = 0;
-  let targets = _(ary)
-    .map((v) => {
-      x++;
-      return v+1;
-    })
-    .filter((v) => {
-      x++;
-      return v%2==0;
-    })
-    .reverse()
-    .slice(1, 4)
-    .value();
-  console.timeEnd('Myfx');
-  console.log(targets, x, '次');//大约0.5ms左右，循环 18 次
-   *
-   * @param v
-   * @returns Myfx对象
-   */
-  function myfx(v) {
-      return v instanceof FuncChain ? v : new FuncChain(v);
-  }
-  const CAN_COMPREHENSIONS = [split.name, toArray.name, range.name];
-  function createComprehension(fn, params) {
-      const comprehension = {
-          forEachRight: false,
-          goalSettings: [],
-          range: [],
-          reverse: false,
-          count: undefined,
-          tap: undefined,
-          returnEl: false,
-      };
-      if (fn && params) {
-          buildComprehension(comprehension, fn, params);
-      }
-      return comprehension;
-  }
-  function buildComprehension(comprehension, fn, params) {
-      const fnName = fn.name;
-      switch (fnName) {
-          case map.name:
-          case filter.name:
-              if (size(comprehension.range) > 0 || isDefined(comprehension.count))
-                  return 2;
-              let fn = params[0];
-              if (!isFunction(fn)) {
-                  fn = iteratee(params[0]);
-              }
-              comprehension.goalSettings.push({ type: fnName, fn: fn });
-              break;
-          case reverse.name:
-              if (size(comprehension.range) < 1) {
-                  comprehension.forEachRight = !comprehension.forEachRight;
-              }
-              else {
-                  comprehension.reverse = !comprehension.reverse;
-              }
-              break;
-          case slice.name:
-              if (size(comprehension.range) > 0)
-                  return 2;
-              comprehension.range[0] = params[0];
-              comprehension.range[1] = params[1];
-              break;
-          case tail.name:
-              if (size(comprehension.range) > 0)
-                  return 2;
-              comprehension.range[0] = 1;
-              comprehension.range[1] = params[1];
-              break;
-          case take.name:
-              if (isUndefined(comprehension.count) || params[0] < comprehension.count) {
-                  comprehension.count = params[0];
-              }
-              break;
-          case first.name:
-          case first.name:
-              if (isUndefined(comprehension.count) || 1 < comprehension.count) {
-                  comprehension.count = 1;
-                  comprehension.returnEl = true;
-              }
-              break;
-          case last.name:
-              comprehension.count = 1;
-              comprehension.returnEl = true;
-              comprehension.forEachRight = true;
-              break;
-          case tap.name:
-              comprehension.tap = params[0];
-              break;
-          default:
-              return 1;
-      }
-      return 0;
-  }
-  function execComprehension(comprehension, collection) {
-      const targets = [];
-      let targetIndex = 0;
-      if (!comprehension.count && comprehension.range.length > 0) {
-          comprehension.count = comprehension.range[1] - comprehension.range[0];
-      }
-      const isReverse = comprehension.reverse;
-      const count = comprehension.count;
-      const gs = comprehension.goalSettings;
-      const gsLen = gs.length;
-      const range = comprehension.range;
-      const hasRange = range.length > 0;
-      const forEach = comprehension.forEachRight ? eachRight : each;
-      forEach(collection, (v, k) => {
-          let t = v;
-          // before save target
-          for (let i = 0; i < gsLen; i++) {
-              const setting = gs[i];
-              if (setting.type === map.name) {
-                  t = setting.fn(t, k);
-              }
-              else if (setting.type === filter.name) {
-                  if (!setting.fn(t, k)) {
-                      return;
-                  }
-              }
-          } // for end
-          if (hasRange && targetIndex++ < range[0])
-              return;
-          if (hasRange && targetIndex > range[1])
-              return false;
-          if (targets.length === count)
-              return false;
-          if (isReverse) {
-              targets.unshift(t);
-          }
-          else {
-              targets.push(t);
-          }
-      });
-      if (targets.length === 1 && comprehension.returnEl) {
-          return targets[0];
-      }
-      return targets;
-  }
 
   /* eslint-disable max-len */
   /**
@@ -6039,7 +5829,7 @@
               globalValues = paramAry[1];
           }
           globalKeys.push('_');
-          globalValues.push(myfx);
+          globalValues.push(self.myfx);
           const getRender = new Function(...globalKeys, '$options', `return function(${declarations}){
       const textQ=[];
       const print=(str)=>{
@@ -6217,10 +6007,10 @@
    * _.insert(data,0,...roots);
    * const tree = _.arrayToTree(data,'id','pid',{sortKey:'sortNo'});
    *
-   * _.walkTree(tree,(parentNode,node,chain)=>console.log('node',node.name,'sortNo',node.sortNo,'chain',_.map(chain,n=>n.name)))
+   * _.walkTree(tree,(node,parentNode,chain)=>console.log('node',node.name,'sortNo',node.sortNo,'chain',_.map(chain,n=>n.name)))
    *
    * @param treeNodes 一组节点或一个节点
-   * @param callback (parentNode,node,chain)回调函数，如果返回false则中断遍历，如果返回-1则停止分支遍历
+   * @param callback (node,parentNode,chain,level)回调函数，如果返回false则中断遍历，如果返回-1则停止分支遍历
    * @param options 自定义选项
    * @param options.childrenKey 包含子节点容器的key。默认'children'
    * @since 1.0.0
@@ -6233,10 +6023,10 @@
       const parentNode = rest[0];
       const chain = rest[1] || [];
       const childrenKey = options.childrenKey || 'children';
-      const data = isArray(treeNodes) ? treeNodes : [treeNodes];
+      const data = isArrayLike(treeNodes) ? treeNodes : [treeNodes];
       for (let i = 0; i < data.length; i++) {
           const node = data[i];
-          const rs = callback(parentNode, node, chain);
+          const rs = callback(node, parentNode, chain, chain.length);
           if (rs === false)
               return;
           if (rs === -1)
@@ -6289,7 +6079,7 @@
    *
    *
    * @param treeNodes 一组节点或一个节点
-   * @param predicate (node) 断言
+   * @param predicate (node,parentNode,chain,level) 断言
    * <br>当断言是函数时回调参数见定义
    * <br>其他类型请参考 {@link utils!iteratee}
    * @param options 自定义选项
@@ -6302,8 +6092,8 @@
       const callback = iteratee(predicate);
       const childrenKey = options.childrenKey || 'children';
       let nodes = [];
-      walkTree(treeNodes, (p, n, c) => {
-          const rs = callback(n);
+      walkTree(treeNodes, (n, p, c, l) => {
+          const rs = callback(n, p, c, l);
           if (rs) {
               c.forEach((node) => {
                   if (!includes(nodes, node)) {
@@ -6352,7 +6142,7 @@
    *
    *
    * @param treeNodes 一组节点或一个节点
-   * @param predicate (node) 断言
+   * @param predicate (node,parentNode,chain,level) 断言
    * <br>当断言是函数时回调参数见定义
    * <br>其他类型请参考 {@link utils!iteratee}
    * @param options 自定义选项
@@ -6363,8 +6153,8 @@
   function findTreeNode(treeNodes, predicate, options) {
       const callback = iteratee(predicate);
       let node;
-      walkTree(treeNodes, (p, n, c) => {
-          const rs = callback(n);
+      walkTree(treeNodes, (n, p, c, l) => {
+          const rs = callback(n, p, c, l);
           if (rs) {
               node = n;
               return false;
@@ -6408,7 +6198,7 @@
    *
    *
    * @param treeNodes 一组节点或一个节点
-   * @param predicate (node) 断言
+   * @param predicate (node,parentNode,chain,level) 断言
    * <br>当断言是函数时回调参数见定义
    * <br>其他类型请参考 {@link utils!iteratee}
    * @param options 自定义选项
@@ -6419,8 +6209,8 @@
   function findTreeNodes(treeNodes, predicate, options) {
       const callback = iteratee(predicate);
       const nodes = [];
-      walkTree(treeNodes, (p, n, c) => {
-          const rs = callback(n);
+      walkTree(treeNodes, (n, p, c, l) => {
+          const rs = callback(n, p, c, l);
           if (rs) {
               nodes.push(n);
           }
@@ -6497,6 +6287,397 @@
     walkTree: walkTree
   });
 
+  /**
+   * chain 函数集
+   */
+  class ChainFx {
+      append(...values) { return get(FuncChain.prototype, '_append').call(this, ...arguments); }
+      chunk(size = 1) { return get(FuncChain.prototype, '_chunk').call(this, ...arguments); }
+      compact() { return get(FuncChain.prototype, '_compact').call(this, ...arguments); }
+      concat() { return get(FuncChain.prototype, '_concat').call(this, ...arguments); }
+      except() { return get(FuncChain.prototype, '_except').call(this, ...arguments); }
+      fill(value, start = 0, end) { return get(FuncChain.prototype, '_fill').call(this, ...arguments); }
+      findIndex(predicate, fromIndex) { return get(FuncChain.prototype, '_findIndex').call(this, ...arguments); }
+      findLastIndex(predicate, fromIndex) { return get(FuncChain.prototype, '_findLastIndex').call(this, ...arguments); }
+      first() { return get(FuncChain.prototype, '_first').call(this, ...arguments); }
+      flat(depth = 1) { return get(FuncChain.prototype, '_flat').call(this, ...arguments); }
+      flatDeep() { return get(FuncChain.prototype, '_flatDeep').call(this, ...arguments); }
+      initial() { return get(FuncChain.prototype, '_initial').call(this, ...arguments); }
+      insert(index, ...values) { return get(FuncChain.prototype, '_insert').call(this, ...arguments); }
+      intersect() { return get(FuncChain.prototype, '_intersect').call(this, ...arguments); }
+      join(separator) { return get(FuncChain.prototype, '_join').call(this, ...arguments); }
+      last() { return get(FuncChain.prototype, '_last').call(this, ...arguments); }
+      pop(index) { return get(FuncChain.prototype, '_pop').call(this, ...arguments); }
+      pull(...values) { return get(FuncChain.prototype, '_pull').call(this, ...arguments); }
+      range(end, step) { return get(FuncChain.prototype, '_range').call(this, ...arguments); }
+      remove(predicate) { return get(FuncChain.prototype, '_remove').call(this, ...arguments); }
+      reverse() { return get(FuncChain.prototype, '_reverse').call(this, ...arguments); }
+      slice(begin, end) { return get(FuncChain.prototype, '_slice').call(this, ...arguments); }
+      sortedIndex(value) { return get(FuncChain.prototype, '_sortedIndex').call(this, ...arguments); }
+      sortedIndexBy(value, itee) { return get(FuncChain.prototype, '_sortedIndexBy').call(this, ...arguments); }
+      tail() { return get(FuncChain.prototype, '_tail').call(this, ...arguments); }
+      take(length) { return get(FuncChain.prototype, '_take').call(this, ...arguments); }
+      takeRight(length) { return get(FuncChain.prototype, '_takeRight').call(this, ...arguments); }
+      union() { return get(FuncChain.prototype, '_union').call(this, ...arguments); }
+      uniq() { return get(FuncChain.prototype, '_uniq').call(this, ...arguments); }
+      uniqBy(itee) { return get(FuncChain.prototype, '_uniqBy').call(this, ...arguments); }
+      unzip() { return get(FuncChain.prototype, '_unzip').call(this, ...arguments); }
+      without(...values) { return get(FuncChain.prototype, '_without').call(this, ...arguments); }
+      zip() { return get(FuncChain.prototype, '_zip').call(this, ...arguments); }
+      zipObject(values) { return get(FuncChain.prototype, '_zipObject').call(this, ...arguments); }
+      zipWith() { return get(FuncChain.prototype, '_zipWith').call(this, ...arguments); }
+      countBy(itee) { return get(FuncChain.prototype, '_countBy').call(this, ...arguments); }
+      every(predicate) { return get(FuncChain.prototype, '_every').call(this, ...arguments); }
+      filter(predicate) { return get(FuncChain.prototype, '_filter').call(this, ...arguments); }
+      find(predicate) { return get(FuncChain.prototype, '_find').call(this, ...arguments); }
+      findLast(predicate) { return get(FuncChain.prototype, '_findLast').call(this, ...arguments); }
+      flatMap(itee, depth) { return get(FuncChain.prototype, '_flatMap').call(this, ...arguments); }
+      flatMapDeep(itee) { return get(FuncChain.prototype, '_flatMapDeep').call(this, ...arguments); }
+      groupBy(itee) { return get(FuncChain.prototype, '_groupBy').call(this, ...arguments); }
+      includes(value, fromIndex) { return get(FuncChain.prototype, '_includes').call(this, ...arguments); }
+      keyBy(itee) { return get(FuncChain.prototype, '_keyBy').call(this, ...arguments); }
+      map(itee) { return get(FuncChain.prototype, '_map').call(this, ...arguments); }
+      partition(predicate) { return get(FuncChain.prototype, '_partition').call(this, ...arguments); }
+      reduce(callback, initialValue) { return get(FuncChain.prototype, '_reduce').call(this, ...arguments); }
+      reject(predicate) { return get(FuncChain.prototype, '_reject').call(this, ...arguments); }
+      sample() { return get(FuncChain.prototype, '_sample').call(this, ...arguments); }
+      sampleSize(count) { return get(FuncChain.prototype, '_sampleSize').call(this, ...arguments); }
+      shuffle() { return get(FuncChain.prototype, '_shuffle').call(this, ...arguments); }
+      size() { return get(FuncChain.prototype, '_size').call(this, ...arguments); }
+      some(predicate) { return get(FuncChain.prototype, '_some').call(this, ...arguments); }
+      sort(comparator) { return get(FuncChain.prototype, '_sort').call(this, ...arguments); }
+      sortBy(itee) { return get(FuncChain.prototype, '_sortBy').call(this, ...arguments); }
+      toArray() { return get(FuncChain.prototype, '_toArray').call(this, ...arguments); }
+      addTime(amount, type) { return get(FuncChain.prototype, '_addTime').call(this, ...arguments); }
+      compareDate(date2, type) { return get(FuncChain.prototype, '_compareDate').call(this, ...arguments); }
+      formatDate(pattern) { return get(FuncChain.prototype, '_formatDate').call(this, ...arguments); }
+      getDayOfYear() { return get(FuncChain.prototype, '_getDayOfYear').call(this, ...arguments); }
+      getWeekOfMonth() { return get(FuncChain.prototype, '_getWeekOfMonth').call(this, ...arguments); }
+      getWeekOfYear() { return get(FuncChain.prototype, '_getWeekOfYear').call(this, ...arguments); }
+      isLeapYear() { return get(FuncChain.prototype, '_isLeapYear').call(this, ...arguments); }
+      isSameDay(date2) { return get(FuncChain.prototype, '_isSameDay').call(this, ...arguments); }
+      now() { return get(FuncChain.prototype, '_now').call(this, ...arguments); }
+      toDate() { return get(FuncChain.prototype, '_toDate').call(this, ...arguments); }
+      after(count) { return get(FuncChain.prototype, '_after').call(this, ...arguments); }
+      alt(interceptor1, interceptor2) { return get(FuncChain.prototype, '_alt').call(this, ...arguments); }
+      bind(thisArg, ...args) { return get(FuncChain.prototype, '_bind').call(this, ...arguments); }
+      bindAll(...methodNames) { return get(FuncChain.prototype, '_bindAll').call(this, ...arguments); }
+      call(...args) { return get(FuncChain.prototype, '_call').call(this, ...arguments); }
+      compose() { return get(FuncChain.prototype, '_compose').call(this, ...arguments); }
+      delay(wait, ...args) { return get(FuncChain.prototype, '_delay').call(this, ...arguments); }
+      fval(args) { return get(FuncChain.prototype, '_fval').call(this, ...arguments); }
+      once() { return get(FuncChain.prototype, '_once').call(this, ...arguments); }
+      partial(...args) { return get(FuncChain.prototype, '_partial').call(this, ...arguments); }
+      tap(interceptor) { return get(FuncChain.prototype, '_tap').call(this, ...arguments); }
+      isArray() { return get(FuncChain.prototype, '_isArray').call(this, ...arguments); }
+      isArrayLike() { return get(FuncChain.prototype, '_isArrayLike').call(this, ...arguments); }
+      isBlank() { return get(FuncChain.prototype, '_isBlank').call(this, ...arguments); }
+      isBoolean() { return get(FuncChain.prototype, '_isBoolean').call(this, ...arguments); }
+      isDate() { return get(FuncChain.prototype, '_isDate').call(this, ...arguments); }
+      isDefined() { return get(FuncChain.prototype, '_isDefined').call(this, ...arguments); }
+      isElement() { return get(FuncChain.prototype, '_isElement').call(this, ...arguments); }
+      isEmpty() { return get(FuncChain.prototype, '_isEmpty').call(this, ...arguments); }
+      isEqual(b) { return get(FuncChain.prototype, '_isEqual').call(this, ...arguments); }
+      isEqualWith(b, comparator) { return get(FuncChain.prototype, '_isEqualWith').call(this, ...arguments); }
+      isError() { return get(FuncChain.prototype, '_isError').call(this, ...arguments); }
+      isFinite() { return get(FuncChain.prototype, '_isFinite').call(this, ...arguments); }
+      isFunction() { return get(FuncChain.prototype, '_isFunction').call(this, ...arguments); }
+      isInteger() { return get(FuncChain.prototype, '_isInteger').call(this, ...arguments); }
+      isMap() { return get(FuncChain.prototype, '_isMap').call(this, ...arguments); }
+      isMatch(props) { return get(FuncChain.prototype, '_isMatch').call(this, ...arguments); }
+      isMatchWith(props, comparator = eq$1) { return get(FuncChain.prototype, '_isMatchWith').call(this, ...arguments); }
+      isNaN() { return get(FuncChain.prototype, '_isNaN').call(this, ...arguments); }
+      isNil() { return get(FuncChain.prototype, '_isNil').call(this, ...arguments); }
+      isNull() { return get(FuncChain.prototype, '_isNull').call(this, ...arguments); }
+      isNumber() { return get(FuncChain.prototype, '_isNumber').call(this, ...arguments); }
+      isObject() { return get(FuncChain.prototype, '_isObject').call(this, ...arguments); }
+      isPlainObject() { return get(FuncChain.prototype, '_isPlainObject').call(this, ...arguments); }
+      isRegExp() { return get(FuncChain.prototype, '_isRegExp').call(this, ...arguments); }
+      isSafeInteger() { return get(FuncChain.prototype, '_isSafeInteger').call(this, ...arguments); }
+      isSet() { return get(FuncChain.prototype, '_isSet').call(this, ...arguments); }
+      isString() { return get(FuncChain.prototype, '_isString').call(this, ...arguments); }
+      isSymbol() { return get(FuncChain.prototype, '_isSymbol').call(this, ...arguments); }
+      isUndefined() { return get(FuncChain.prototype, '_isUndefined').call(this, ...arguments); }
+      isWeakMap() { return get(FuncChain.prototype, '_isWeakMap').call(this, ...arguments); }
+      isWeakSet() { return get(FuncChain.prototype, '_isWeakSet').call(this, ...arguments); }
+      add(b) { return get(FuncChain.prototype, '_add').call(this, ...arguments); }
+      divide(b) { return get(FuncChain.prototype, '_divide').call(this, ...arguments); }
+      max() { return get(FuncChain.prototype, '_max').call(this, ...arguments); }
+      mean() { return get(FuncChain.prototype, '_mean').call(this, ...arguments); }
+      min() { return get(FuncChain.prototype, '_min').call(this, ...arguments); }
+      minmax(max, value) { return get(FuncChain.prototype, '_minmax').call(this, ...arguments); }
+      multiply(b) { return get(FuncChain.prototype, '_multiply').call(this, ...arguments); }
+      randf(max) { return get(FuncChain.prototype, '_randf').call(this, ...arguments); }
+      randi(max) { return get(FuncChain.prototype, '_randi').call(this, ...arguments); }
+      subtract(b) { return get(FuncChain.prototype, '_subtract').call(this, ...arguments); }
+      sum() { return get(FuncChain.prototype, '_sum').call(this, ...arguments); }
+      formatNumber(pattern = '#,##0.00') { return get(FuncChain.prototype, '_formatNumber').call(this, ...arguments); }
+      gt(b) { return get(FuncChain.prototype, '_gt').call(this, ...arguments); }
+      gte(b) { return get(FuncChain.prototype, '_gte').call(this, ...arguments); }
+      inRange(start, end) { return get(FuncChain.prototype, '_inRange').call(this, ...arguments); }
+      lt(b) { return get(FuncChain.prototype, '_lt').call(this, ...arguments); }
+      lte(b) { return get(FuncChain.prototype, '_lte').call(this, ...arguments); }
+      toInteger() { return get(FuncChain.prototype, '_toInteger').call(this, ...arguments); }
+      toNumber() { return get(FuncChain.prototype, '_toNumber').call(this, ...arguments); }
+      assign(...sources) { return get(FuncChain.prototype, '_assign').call(this, ...arguments); }
+      assignWith(...sources) { return get(FuncChain.prototype, '_assignWith').call(this, ...arguments); }
+      clone() { return get(FuncChain.prototype, '_clone').call(this, ...arguments); }
+      cloneDeep() { return get(FuncChain.prototype, '_cloneDeep').call(this, ...arguments); }
+      cloneDeepWith(handler) { return get(FuncChain.prototype, '_cloneDeepWith').call(this, ...arguments); }
+      cloneWith(handler = identity) { return get(FuncChain.prototype, '_cloneWith').call(this, ...arguments); }
+      defaults(...sources) { return get(FuncChain.prototype, '_defaults').call(this, ...arguments); }
+      defaultsDeep(...sources) { return get(FuncChain.prototype, '_defaultsDeep').call(this, ...arguments); }
+      eq(b) { return get(FuncChain.prototype, '_eq').call(this, ...arguments); }
+      findKey(predicate) { return get(FuncChain.prototype, '_findKey').call(this, ...arguments); }
+      fromPairs() { return get(FuncChain.prototype, '_fromPairs').call(this, ...arguments); }
+      functions() { return get(FuncChain.prototype, '_functions').call(this, ...arguments); }
+      get(path, defaultValue) { return get(FuncChain.prototype, '_get').call(this, ...arguments); }
+      has(key) { return get(FuncChain.prototype, '_has').call(this, ...arguments); }
+      keys() { return get(FuncChain.prototype, '_keys').call(this, ...arguments); }
+      keysIn() { return get(FuncChain.prototype, '_keysIn').call(this, ...arguments); }
+      merge(...sources) { return get(FuncChain.prototype, '_merge').call(this, ...arguments); }
+      mergeWith(...sources) { return get(FuncChain.prototype, '_mergeWith').call(this, ...arguments); }
+      omit(...props) { return get(FuncChain.prototype, '_omit').call(this, ...arguments); }
+      omitBy(predicate) { return get(FuncChain.prototype, '_omitBy').call(this, ...arguments); }
+      pick(...props) { return get(FuncChain.prototype, '_pick').call(this, ...arguments); }
+      pickBy(predicate) { return get(FuncChain.prototype, '_pickBy').call(this, ...arguments); }
+      prop() { return get(FuncChain.prototype, '_prop').call(this, ...arguments); }
+      set(path, value) { return get(FuncChain.prototype, '_set').call(this, ...arguments); }
+      toObject() { return get(FuncChain.prototype, '_toObject').call(this, ...arguments); }
+      toPairs() { return get(FuncChain.prototype, '_toPairs').call(this, ...arguments); }
+      unset(path) { return get(FuncChain.prototype, '_unset').call(this, ...arguments); }
+      values() { return get(FuncChain.prototype, '_values').call(this, ...arguments); }
+      valuesIn() { return get(FuncChain.prototype, '_valuesIn').call(this, ...arguments); }
+      camelCase() { return get(FuncChain.prototype, '_camelCase').call(this, ...arguments); }
+      capitalize() { return get(FuncChain.prototype, '_capitalize').call(this, ...arguments); }
+      endsWith(searchStr, position) { return get(FuncChain.prototype, '_endsWith').call(this, ...arguments); }
+      escapeRegExp() { return get(FuncChain.prototype, '_escapeRegExp').call(this, ...arguments); }
+      indexOf(search, fromIndex) { return get(FuncChain.prototype, '_indexOf').call(this, ...arguments); }
+      kebabCase() { return get(FuncChain.prototype, '_kebabCase').call(this, ...arguments); }
+      lastIndexOf(search, fromIndex) { return get(FuncChain.prototype, '_lastIndexOf').call(this, ...arguments); }
+      lowerCase() { return get(FuncChain.prototype, '_lowerCase').call(this, ...arguments); }
+      lowerFirst() { return get(FuncChain.prototype, '_lowerFirst').call(this, ...arguments); }
+      padEnd(len, padString) { return get(FuncChain.prototype, '_padEnd').call(this, ...arguments); }
+      padStart(len, padString) { return get(FuncChain.prototype, '_padStart').call(this, ...arguments); }
+      padZ(len) { return get(FuncChain.prototype, '_padZ').call(this, ...arguments); }
+      pascalCase() { return get(FuncChain.prototype, '_pascalCase').call(this, ...arguments); }
+      repeat(count) { return get(FuncChain.prototype, '_repeat').call(this, ...arguments); }
+      replace(searchValue, replaceValue) { return get(FuncChain.prototype, '_replace').call(this, ...arguments); }
+      replaceAll(searchValue, replaceValue) { return get(FuncChain.prototype, '_replaceAll').call(this, ...arguments); }
+      snakeCase() { return get(FuncChain.prototype, '_snakeCase').call(this, ...arguments); }
+      split(separator, limit) { return get(FuncChain.prototype, '_split').call(this, ...arguments); }
+      startsWith(searchStr, position) { return get(FuncChain.prototype, '_startsWith').call(this, ...arguments); }
+      substring(indexStart, indexEnd) { return get(FuncChain.prototype, '_substring').call(this, ...arguments); }
+      test(pattern, flags) { return get(FuncChain.prototype, '_test').call(this, ...arguments); }
+      toFixed(scale) { return get(FuncChain.prototype, '_toFixed').call(this, ...arguments); }
+      toString() { return get(FuncChain.prototype, '_toString').call(this, ...arguments); }
+      trim() { return get(FuncChain.prototype, '_trim').call(this, ...arguments); }
+      trimEnd() { return get(FuncChain.prototype, '_trimEnd').call(this, ...arguments); }
+      trimStart() { return get(FuncChain.prototype, '_trimStart').call(this, ...arguments); }
+      truncate(len, options) { return get(FuncChain.prototype, '_truncate').call(this, ...arguments); }
+      upperCase() { return get(FuncChain.prototype, '_upperCase').call(this, ...arguments); }
+      upperFirst() { return get(FuncChain.prototype, '_upperFirst').call(this, ...arguments); }
+      arrayToTree(idKey = 'id', pidKey, options = {}) { return get(FuncChain.prototype, '_arrayToTree').call(this, ...arguments); }
+      closest(predicate, parentKey) { return get(FuncChain.prototype, '_closest').call(this, ...arguments); }
+      filterTree(predicate, options) { return get(FuncChain.prototype, '_filterTree').call(this, ...arguments); }
+      findTreeNode(predicate, options) { return get(FuncChain.prototype, '_findTreeNode').call(this, ...arguments); }
+      findTreeNodes(predicate, options) { return get(FuncChain.prototype, '_findTreeNodes').call(this, ...arguments); }
+      alphaId() { return get(FuncChain.prototype, '_alphaId').call(this, ...arguments); }
+      defaultTo(defaultValue) { return get(FuncChain.prototype, '_defaultTo').call(this, ...arguments); }
+      matcher() { return get(FuncChain.prototype, '_matcher').call(this, ...arguments); }
+      noConflict() { return get(FuncChain.prototype, '_noConflict').call(this, ...arguments); }
+      snowflakeId(epoch) { return get(FuncChain.prototype, '_snowflakeId').call(this, ...arguments); }
+      times(iteratee) { return get(FuncChain.prototype, '_times').call(this, ...arguments); }
+      toPath() { return get(FuncChain.prototype, '_toPath').call(this, ...arguments); }
+      uniqueId() { return get(FuncChain.prototype, '_uniqueId').call(this, ...arguments); }
+      uuid() { return get(FuncChain.prototype, '_uuid').call(this, ...arguments); }
+  }
+
+  /* eslint-disable no-invalid-this */
+  /* eslint-disable require-jsdoc */
+  /* eslint-disable max-len */
+  /**
+   * 函数链操作相关函数
+   * @author holyhigh
+   */
+  /**
+   * 用于定义FuncChain对象并构造函数链
+   * 注意，该类仅用于内部构造函数链
+   */
+  class FuncChain extends ChainFx {
+      /**
+       * @internal
+       */
+      constructor(v) {
+          super();
+          this._wrappedValue = v;
+          this._chain = [];
+      }
+      /**
+       * 惰性计算。执行函数链并返回计算结果
+       * @example
+       * //2-4
+       * console.log(_([1,2,3,4]).map(v=>v+1).filter(v=>v%2===0).take(2).join('-').value())
+       * //[1,2,2,1]
+       * console.log(_(["{a:1,b:2}","{a:2,b:1}"]).map((v) => _.fval(v)).map(v=>[v.a,v.b]).join().value())
+       * //[1,2,3,4]
+       * console.log(_([1,2,3,4]).value())
+       *
+       * @returns 执行函数链返回的值
+       */
+      value() {
+          let comprehension = isArrayLike(this._wrappedValue)
+              ? createComprehension()
+              : null;
+          const maxChainIndex = this._chain.length - 1;
+          return this._chain.reduce((acc, v, i) => {
+              const params = [acc, ...v.params];
+              if (comprehension) {
+                  let rs;
+                  const sig = buildComprehension(comprehension, v.fn, v.params);
+                  if (sig > 0 || (!sig && maxChainIndex === i)) {
+                      rs = execComprehension(comprehension, acc);
+                      if (comprehension.tap) {
+                          comprehension.tap(rs);
+                      }
+                      comprehension = null;
+                  }
+                  if (sig > 1) {
+                      comprehension = createComprehension(v.fn, v.params);
+                  }
+                  if (rs) {
+                      return sig !== 1 ? rs : v.fn(...[rs, ...v.params]);
+                  }
+                  return acc;
+              }
+              if (CAN_COMPREHENSIONS.includes(v.fn.name)) {
+                  comprehension = createComprehension();
+                  return v.fn(...[acc, ...v.params]);
+              }
+              return v.fn(...params);
+          }, this._wrappedValue);
+      }
+  }
+  const CAN_COMPREHENSIONS = [split.name, toArray.name, range.name];
+  function createComprehension(fn, params) {
+      const comprehension = {
+          forEachRight: false,
+          goalSettings: [],
+          range: [],
+          reverse: false,
+          count: undefined,
+          tap: undefined,
+          returnEl: false,
+      };
+      if (fn && params) {
+          buildComprehension(comprehension, fn, params);
+      }
+      return comprehension;
+  }
+  function buildComprehension(comprehension, fn, params) {
+      const fnName = fn.name;
+      switch (fnName) {
+          case map.name:
+          case filter.name:
+              if (size(comprehension.range) > 0 || isDefined(comprehension.count))
+                  return 2;
+              let fn = params[0];
+              if (!isFunction(fn)) {
+                  fn = iteratee(params[0]);
+              }
+              comprehension.goalSettings.push({ type: fnName, fn: fn });
+              break;
+          case reverse.name:
+              if (size(comprehension.range) < 1) {
+                  comprehension.forEachRight = !comprehension.forEachRight;
+              }
+              else {
+                  comprehension.reverse = !comprehension.reverse;
+              }
+              break;
+          case slice.name:
+              if (size(comprehension.range) > 0)
+                  return 2;
+              comprehension.range[0] = params[0];
+              comprehension.range[1] = params[1];
+              break;
+          case tail.name:
+              if (size(comprehension.range) > 0)
+                  return 2;
+              comprehension.range[0] = 1;
+              comprehension.range[1] = params[1];
+              break;
+          case take.name:
+              if (isUndefined(comprehension.count) || params[0] < comprehension.count) {
+                  comprehension.count = params[0];
+              }
+              break;
+          case first.name:
+          case first.name:
+              if (isUndefined(comprehension.count) || 1 < comprehension.count) {
+                  comprehension.count = 1;
+                  comprehension.returnEl = true;
+              }
+              break;
+          case last.name:
+              comprehension.count = 1;
+              comprehension.returnEl = true;
+              comprehension.forEachRight = true;
+              break;
+          case tap.name:
+              comprehension.tap = params[0];
+              break;
+          default:
+              return 1;
+      }
+      return 0;
+  }
+  function execComprehension(comprehension, collection) {
+      const targets = [];
+      let targetIndex = 0;
+      if (!comprehension.count && comprehension.range.length > 0) {
+          comprehension.count = comprehension.range[1] - comprehension.range[0];
+      }
+      const isReverse = comprehension.reverse;
+      const count = comprehension.count;
+      const gs = comprehension.goalSettings;
+      const gsLen = gs.length;
+      const range = comprehension.range;
+      const hasRange = range.length > 0;
+      const forEach = comprehension.forEachRight ? eachRight : each;
+      forEach(collection, (v, k) => {
+          let t = v;
+          // before save target
+          for (let i = 0; i < gsLen; i++) {
+              const setting = gs[i];
+              if (setting.type === map.name) {
+                  t = setting.fn(t, k);
+              }
+              else if (setting.type === filter.name) {
+                  if (!setting.fn(t, k)) {
+                      return;
+                  }
+              }
+          } // for end
+          if (hasRange && targetIndex++ < range[0])
+              return;
+          if (hasRange && targetIndex > range[1])
+              return false;
+          if (targets.length === count)
+              return false;
+          if (isReverse) {
+              targets.unshift(t);
+          }
+          else {
+              targets.push(t);
+          }
+      });
+      if (targets.length === 1 && comprehension.returnEl) {
+          return targets[0];
+      }
+      return targets;
+  }
+
   /* eslint-disable require-jsdoc */
   /* eslint-disable no-invalid-this */
   /* eslint-disable max-len */
@@ -6514,21 +6695,6 @@
       ...template,
       ...tree,
   });
-  mixin(myfx, {
-      ...str,
-      ...num,
-      ...datetime,
-      ...is,
-      ...object,
-      ...collection,
-      ...math,
-      ...utils,
-      ...functions,
-      ...array,
-      ...template,
-      ...tree,
-  });
-  myfx.VERSION = '1.1.0'; //version
   /**
    * 显式开启myfx的函数链，返回一个包裹了参数v的myfx链式对象。
    * <p>
@@ -6541,13 +6707,83 @@
    * @param v
    * @returns myfx对象
    */
-  myfx.chain = myfx;
+  // (myfx as any).chain = myfx
+  const myfx = {
+      VERSION: '1.1.0',
+      /**
+     * 返回一个包裹了参数v的FuncChain对象，并隐式开始函数链。函数链可以链接Myfx提供的所有函数，如
+    
+    ```js
+     _([1,2,3,4]).map(v=>v+1).filter(v=>v%2===0).take(2).join('-').value()
+    ```
+    
+     * 函数链与直接调用方法的区别不仅在于可以链式调用，更在于函数链是基于惰性求值的。
+     * 上式中必须通过显式调用`value()`方法才能获取结果，
+     * 而只有在`value()`方法调用时整个函数链才进行求值。
+     *
+     *
+     * 惰性求值允许FuncChain实现捷径融合(shortcut fusion) —— 一项基于已有函数对数组循环次数进行大幅减少以提升性能的优化技术。
+     * 下面的例子演示了原生函数链和Myfx函数链的性能差异
+     * @example
+     * let ary = _.range(20000000);
+    console.time('native');
+    let c = 0;
+    let a = ary.map((v)=>{
+        c++;
+        return v+1;
+      }).filter((v) => {
+        c++;
+        return v%2==0;
+      })
+      .reverse()
+      .slice(1, 4)
+    console.timeEnd('native');
+    console.log(a, c, '次');//大约600ms左右，循环 40000000 次
+    
+    //Myfx
+    ary = _.range(20000000);
+    console.time('Myfx');
+    let x = 0;
+    let targets = _(ary)
+      .map((v) => {
+        x++;
+        return v+1;
+      })
+      .filter((v) => {
+        x++;
+        return v%2==0;
+      })
+      .reverse()
+      .slice(1, 4)
+      .value();
+    console.timeEnd('Myfx');
+    console.log(targets, x, '次');//大约0.5ms左右，循环 18 次
+     *
+     * @param v
+     * @returns Myfx对象
+     */
+      chain: function (v) {
+          return v instanceof FuncChain ? v : new FuncChain(v);
+      },
+      ...str,
+      ...num,
+      ...datetime,
+      ...is,
+      ...object,
+      ...collection,
+      ...math,
+      ...utils,
+      ...functions,
+      ...array,
+      ...template,
+      ...tree,
+  };
   //bind _
   const ctx = globalThis;
-  if (ctx.myfx) {
+  if (ctx.myff) {
       setTimeout(function () {
           ctx.__f_prev = ctx._;
-          ctx._ = myfx;
+          ctx._ = ctx.myfx = myfx;
       }, 0);
   }
 

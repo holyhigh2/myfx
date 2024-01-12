@@ -4,7 +4,6 @@
  * @packageDocumentation
  */
 
-
 /**
  * 列表类型
  */

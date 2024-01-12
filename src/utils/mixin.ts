@@ -25,16 +25,16 @@ import functions from "../object/functions"
 function mixin(target: Record<any, any>,obj: Record<string, Function>): void {
     functions(obj).forEach((fnName) => {
         const fn: Function = obj[fnName]
-        if (isFunction(target)){
-            (target as any)[fnName] = fn
-        }else{
-            target.prototype[fnName] = function (...rest: any[]) {
+        if (target.prototype && target.prototype.constructor.name === 'FuncChain'){
+            target.prototype['_'+fnName] = function (...rest: any[]) {
                 this._chain.push({
                     fn: fn,
                     params: rest,
                 })
                 return this
             }
+        }else{
+            (target as any)['_'+fnName] = fn
         }
     })
 }

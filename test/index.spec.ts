@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import _,{merge,initial,last,isArray,isObject} from '../src/index'
+import myfx,{merge,initial,last,isArray,isObject} from '../src/index'
 import CasesIs from './cases.is'
 import CasesString from './cases.string'
 import CasesArray from './cases.array'
@@ -11,6 +11,7 @@ import CasesMath from './cases.math'
 import CasesNumber from './cases.number'
 import CasesObject from './cases.object'
 import CasesFunction from './cases.function'
+
 
 const Cases = merge(
   CasesIs,
@@ -53,9 +54,9 @@ for (let fnName in Cases) {
         JSON.stringify(result),
       async () => {
         if (isArray(result) || isObject(result)) {
-          expect((_ as any)[fnName](...paramsAry)).toEqual(result)
+          expect((myfx as any)[fnName](...paramsAry)).toEqual(result)
         } else {
-          expect((_ as any)[fnName](...paramsAry)).toBe(result)
+          expect((myfx as any)[fnName](...paramsAry)).toBe(result)
         }
       }
     )

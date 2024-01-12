@@ -13,7 +13,6 @@ import compact from "../array/compact"
 import last from "../array/last"
 import takeRight from "../array/takeRight"
 import unzip from "../array/unzip"
-import {myfx} from '../_modules/func'
 import each from '../collection/each'
 import includes from '../collection/includes'
 import map from '../collection/map'
@@ -29,9 +28,9 @@ import { INode, IOptions, UnknownMapKey } from '../types'
 import toPairs from "../object/toPairs"
 
 /**
- * 使用FTL(Fun.js Template Language)编译字符串模板，并返回编译后的render函数
+ * 使用MTL(Myfx Template Language)编译字符串模板，并返回编译后的render函数
  * 
- * ### 一个FTL模板由如下部分组成：
+ * ### 一个MTL模板由如下部分组成：
  * - **文本** 原样内容输出
  * - **注释** `[%-- 注释 --%]` 仅在模板中显示，编译后不存在也不会输出
  * - **插值** `[%= 插值内容 %]` 输出表达式的结果，支持js语法
@@ -56,11 +55,11 @@ import toPairs from "../object/toPairs"
  * console.log(render())
  *
  * @param string 模板字符串
- * @param options FTL参数
+ * @param options MTL参数
  * @param options.delimiters 分隔符，默认 ['[%' , '%]']
  * @param options.mixins 混入对象。\{名称:模板字符串\}
  * @param options.globals 全局变量对象，可以在任意位置引用。模板内置的全局对象有两个：`print(content)`函数、`_` 对象，Myfx的命名空间
- * @param options.stripWhite 是否剔除空白，默认false。剔除发生在编译期间，渲染时不会受到影响。剔除规则：如果一行只有一个FTL注释或语句，则该行所占空白会被移除。
+ * @param options.stripWhite 是否剔除空白，默认false。剔除发生在编译期间，渲染时不会受到影响。剔除规则：如果一行只有一个MTL注释或语句，则该行所占空白会被移除。
  * @returns 编译后的执行函数。该函数需要传递一个对象类型的参数作为运行时参数
  * @since 1.0.0
  */
@@ -152,7 +151,7 @@ function parse(
           if (prevNode?.comment) {
             tokens.push(prevTextNode)
           } else {
-            // FTL标签之间都是\s\n，可以合并
+            // MTL标签之间都是\s\n，可以合并
             const lastToken = last(tokens)
             const merge1 = prevText.replace(/\n|\s/g, '')
             const merge2 = lastToken
@@ -298,7 +297,7 @@ function compile(tokens: INode[], options: IOptions): Function {
       globalValues = paramAry[1]
     }
     globalKeys.push('_')
-    globalValues.push(myfx)
+    globalValues.push((self as any).myfx)
 
     const getRender = new Function(
       ...globalKeys,

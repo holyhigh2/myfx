@@ -19,7 +19,7 @@ import { NonFuncItee, UnknownMapKey } from "../types";
  */
 function uniqBy<T>(
   array: T[],
-  itee: ((value: T, index: UnknownMapKey) => boolean) | NonFuncItee
+  itee?: ((value: T, index: UnknownMapKey) => boolean) | NonFuncItee
 ): T[] {
   const cb = _iteratee(itee || _identity)
   const keyMap = new Map()

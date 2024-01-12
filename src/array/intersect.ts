@@ -27,7 +27,7 @@ import isFunction from "../is/isFunction"
  * 算法进行值比较。如果为空，直接使用值自身比较
  * @returns 交集元素组成的新数组
  */
-function intersect(...params: any) {
+function intersect<T>(...params: any):T[] {
   let comparator
   let list = params
   const sl = params.length

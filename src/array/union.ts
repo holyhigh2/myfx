@@ -24,7 +24,7 @@ import flat from './flat'
  * 算法进行值比较。如果为空，直接使用值自身比较
  * @returns 并集元素组成的新数组
  */
-function union(...params: any): any[] {
+function union<T>(...params: any): T[] {
   let comparator: any
   let list = params
   const sl = params.length

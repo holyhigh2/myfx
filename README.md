@@ -48,5 +48,5 @@ import _ from 'https://cdn.skypack.dev/myfx'
 
 ## Development
 1. use `test` to do jest 
-2. use `build` to rollup func.js
+2. use `build` to rollup myfx
 3. use `doc` to gen tsdoc

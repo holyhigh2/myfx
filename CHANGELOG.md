@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.0] - 2024/1/14
+### Add
+- ChainFx -> 用于函数链提示
+### Change
+- 部分函数新增泛型
+- 必须用chain()函数开启函数链
+- 修复mixin逻辑错误
+
 ## [1.2.0] - 2024/1/3
 ### Add
 - datetime -> formatDate(new patterns)
