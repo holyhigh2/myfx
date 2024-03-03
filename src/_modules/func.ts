@@ -220,10 +220,10 @@ closest<T = Record<UnknownMapKey, any>>(predicate: (node: Record<UnknownMapKey, 
 filterTree(predicate: (node: Record<UnknownMapKey, any>, parentNode: Record<UnknownMapKey, any>, chain: Record<UnknownMapKey, any>[], level: number) => boolean | NonFuncItee,options?: {
     childrenKey?: string;
 }):FuncChain<any>{return get<Function>(FuncChain.prototype,'_filterTree').call(this,...arguments)}
-findTreeNode(predicate: (node: Record<UnknownMapKey, any>, parentNode: Record<UnknownMapKey, any>, chain: Record<UnknownMapKey, any>[], level: number) => boolean | NonFuncItee,options?: {
+findTreeNode(predicate: (node: Record<UnknownMapKey, any>, parentNode: Record<UnknownMapKey, any>, chain: Record<UnknownMapKey, any>[], level: number, index: number) => boolean | NonFuncItee,options?: {
     childrenKey?: string;
 }):FuncChain<any>{return get<Function>(FuncChain.prototype,'_findTreeNode').call(this,...arguments)}
-findTreeNodes(predicate: (node: Record<UnknownMapKey, any>, parentNode: Record<UnknownMapKey, any>, chain: Record<UnknownMapKey, any>[], level: number) => boolean | NonFuncItee,options?: {
+findTreeNodes(predicate: (node: Record<UnknownMapKey, any>, parentNode: Record<UnknownMapKey, any>, chain: Record<UnknownMapKey, any>[], level: number, index: number) => boolean | NonFuncItee,options?: {
     childrenKey?: string;
 }):FuncChain<any>{return get<Function>(FuncChain.prototype,'_findTreeNodes').call(this,...arguments)}
 alphaId():FuncChain<any>{return get<Function>(FuncChain.prototype,'_alphaId').call(this,...arguments)}

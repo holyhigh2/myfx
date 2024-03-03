@@ -37,7 +37,7 @@ import walkTree from './walkTree'
  *
  *
  * @param treeNodes 一组节点或一个节点
- * @param predicate (node,parentNode,chain,level) 断言
+ * @param predicate (node,parentNode,chain,level,index) 断言
  * <br>当断言是函数时回调参数见定义
  * <br>其他类型请参考 {@link utils!iteratee}
  * @param options 自定义选项
@@ -47,18 +47,21 @@ import walkTree from './walkTree'
  */
 function findTreeNode(
   treeNodes: Record<UnknownMapKey, any> | Record<UnknownMapKey, any>[],
-  predicate: (node: Record<UnknownMapKey, any>,
+  predicate: (
+    node: Record<UnknownMapKey, any>,
     parentNode: Record<UnknownMapKey, any>,
     chain: Record<UnknownMapKey, any>[],
-    level:number) => boolean | NonFuncItee,
+    level:number,
+    index:number
+  ) => boolean | NonFuncItee,
   options?: { childrenKey?: string }
 ): Record<UnknownMapKey, any> | undefined {
   const callback = _iteratee(predicate)
   let node
   walkTree(
     treeNodes,
-    (n,p, c,l) => {
-      const rs = callback(n,p, c,l)
+    (n,p, c,l,i) => {
+      const rs = callback(n,p, c,l,i)
       if (rs) {
         node = n
         return false

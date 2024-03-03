@@ -31,7 +31,7 @@ export * from "./_modules/function";
 export * from "./_modules/tree";
 export * from "./_modules/template";
 
-export const VERSION = "1.3.1"; //#ver
+export const VERSION = "1.3.2"; //#ver
 
 /**
 * 显式开启myfx的函数链，返回一个包裹了参数v的myfx链式对象。函数链可以链接Myfx提供的所有函数，如
@@ -107,7 +107,7 @@ mixin(FuncChain, {
 });
 
 const myfx = {
-  VERSION: "1.3.1", //#ver
+  VERSION: VERSION,
   chain,
   ...str,
   ...num,
