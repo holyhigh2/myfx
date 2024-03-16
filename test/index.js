@@ -5593,9 +5593,9 @@
    * @author holyhigh
    */
   /**
-   * 使用FTL(Fun.js Template Language)编译字符串模板，并返回编译后的render函数
+   * 使用MTL(Myfx Template Language)编译字符串模板，并返回编译后的render函数
    *
-   * ### 一个FTL模板由如下部分组成：
+   * ### 一个MTL模板由如下部分组成：
    * - **文本** 原样内容输出
    * - **注释** `[%-- 注释 --%]` 仅在模板中显示，编译后不存在也不会输出
    * - **插值** `[%= 插值内容 %]` 输出表达式的结果，支持js语法
@@ -5620,11 +5620,11 @@
    * console.log(render())
    *
    * @param string 模板字符串
-   * @param options FTL参数
+   * @param options MTL参数
    * @param options.delimiters 分隔符，默认 ['[%' , '%]']
    * @param options.mixins 混入对象。\{名称:模板字符串\}
    * @param options.globals 全局变量对象，可以在任意位置引用。模板内置的全局对象有两个：`print(content)`函数、`_` 对象，Myfx的命名空间
-   * @param options.stripWhite 是否剔除空白，默认false。剔除发生在编译期间，渲染时不会受到影响。剔除规则：如果一行只有一个FTL注释或语句，则该行所占空白会被移除。
+   * @param options.stripWhite 是否剔除空白，默认false。剔除发生在编译期间，渲染时不会受到影响。剔除规则：如果一行只有一个MTL注释或语句，则该行所占空白会被移除。
    * @returns 编译后的执行函数。该函数需要传递一个对象类型的参数作为运行时参数
    * @since 1.0.0
    */
@@ -5700,7 +5700,7 @@
                           tokens.push(prevTextNode);
                       }
                       else {
-                          // FTL标签之间都是\s\n，可以合并
+                          // MTL标签之间都是\s\n，可以合并
                           const lastToken = last(tokens);
                           const merge1 = prevText.replace(/\n|\s/g, '');
                           const merge2 = lastToken
@@ -6010,7 +6010,7 @@
    * _.walkTree(tree,(node,parentNode,chain)=>console.log('node',node.name,'sortNo',node.sortNo,'chain',_.map(chain,n=>n.name)))
    *
    * @param treeNodes 一组节点或一个节点
-   * @param callback (node,parentNode,chain,level)回调函数，如果返回false则中断遍历，如果返回-1则停止分支遍历
+   * @param callback (node,parentNode,chain,level,index)回调函数，如果返回false则中断遍历，如果返回-1则停止分支遍历
    * @param options 自定义选项
    * @param options.childrenKey 包含子节点容器的key。默认'children'
    * @since 1.0.0
@@ -6026,7 +6026,7 @@
       const data = isArrayLike(treeNodes) ? treeNodes : [treeNodes];
       for (let i = 0; i < data.length; i++) {
           const node = data[i];
-          const rs = callback(node, parentNode, chain, chain.length);
+          const rs = callback(node, parentNode, chain, chain.length, i);
           if (rs === false)
               return;
           if (rs === -1)
@@ -6142,7 +6142,7 @@
    *
    *
    * @param treeNodes 一组节点或一个节点
-   * @param predicate (node,parentNode,chain,level) 断言
+   * @param predicate (node,parentNode,chain,level,index) 断言
    * <br>当断言是函数时回调参数见定义
    * <br>其他类型请参考 {@link utils!iteratee}
    * @param options 自定义选项
@@ -6153,8 +6153,8 @@
   function findTreeNode(treeNodes, predicate, options) {
       const callback = iteratee(predicate);
       let node;
-      walkTree(treeNodes, (n, p, c, l) => {
-          const rs = callback(n, p, c, l);
+      walkTree(treeNodes, (n, p, c, l, i) => {
+          const rs = callback(n, p, c, l, i);
           if (rs) {
               node = n;
               return false;
@@ -6198,7 +6198,7 @@
    *
    *
    * @param treeNodes 一组节点或一个节点
-   * @param predicate (node,parentNode,chain,level) 断言
+   * @param predicate (node,parentNode,chain,level,index) 断言
    * <br>当断言是函数时回调参数见定义
    * <br>其他类型请参考 {@link utils!iteratee}
    * @param options 自定义选项
@@ -6209,8 +6209,8 @@
   function findTreeNodes(treeNodes, predicate, options) {
       const callback = iteratee(predicate);
       const nodes = [];
-      walkTree(treeNodes, (n, p, c, l) => {
-          const rs = callback(n, p, c, l);
+      walkTree(treeNodes, (n, p, c, l, i) => {
+          const rs = callback(n, p, c, l, i);
           if (rs) {
               nodes.push(n);
           }
@@ -6287,6 +6287,13 @@
     walkTree: walkTree
   });
 
+  /* eslint-disable no-invalid-this */
+  /* eslint-disable require-jsdoc */
+  /* eslint-disable max-len */
+  /**
+   * 函数链操作相关函数
+   * @author holyhigh
+   */
   /**
    * chain 函数集
    */
@@ -6491,15 +6498,7 @@
       toPath() { return get(FuncChain.prototype, '_toPath').call(this, ...arguments); }
       uniqueId() { return get(FuncChain.prototype, '_uniqueId').call(this, ...arguments); }
       uuid() { return get(FuncChain.prototype, '_uuid').call(this, ...arguments); }
-  }
-
-  /* eslint-disable no-invalid-this */
-  /* eslint-disable require-jsdoc */
-  /* eslint-disable max-len */
-  /**
-   * 函数链操作相关函数
-   * @author holyhigh
-   */
+  } //#cfx
   /**
    * 用于定义FuncChain对象并构造函数链
    * 注意，该类仅用于内部构造函数链
@@ -6681,6 +6680,64 @@
   /* eslint-disable require-jsdoc */
   /* eslint-disable no-invalid-this */
   /* eslint-disable max-len */
+  const VERSION = "1.3.2"; //#ver
+  /**
+  * 显式开启myfx的函数链，返回一个包裹了参数v的myfx链式对象。函数链可以链接Myfx提供的所有函数，如
+   <p>
+  * 函数链使用惰性计算 —— 直到显示调用value()方法时，函数链才会进行计算并返回结果
+  * </p>
+  ```js
+  _.chain([1,2,3,4]).map(v=>v+1).filter(v=>v%2===0).take(2).join('-').value()
+  ```
+
+  * 函数链与直接调用方法的区别不仅在于可以链式调用，更在于函数链是基于惰性求值的。
+  * 上式中必须通过显式调用`value()`方法才能获取结果，
+  * 而只有在`value()`方法调用时整个函数链才进行求值。
+  *
+  *
+  * 惰性求值允许FuncChain实现捷径融合(shortcut fusion) —— 一项基于已有函数对数组循环次数进行大幅减少以提升性能的优化技术。
+  * 下面的例子演示了原生函数链和Myfx函数链的性能差异
+  * @example
+  * let ary = _.range(20000000);
+  console.time('native');
+  let c = 0;
+  let a = ary.map((v)=>{
+     c++;
+     return v+1;
+   }).filter((v) => {
+     c++;
+     return v%2==0;
+   })
+   .reverse()
+   .slice(1, 4)
+  console.timeEnd('native');
+  console.log(a, c, '次');//大约600ms左右，循环 40000000 次
+
+  //Myfx
+  ary = _.range(20000000);
+  console.time('Myfx');
+  let x = 0;
+  let targets = _(ary)
+   .map((v) => {
+     x++;
+     return v+1;
+   })
+   .filter((v) => {
+     x++;
+     return v%2==0;
+   })
+   .reverse()
+   .slice(1, 4)
+   .value();
+  console.timeEnd('Myfx');
+  console.log(targets, x, '次');//大约0.5ms左右，循环 18 次
+  *
+  * @param v
+  * @returns Myfx对象
+  */
+  function chain(v) {
+      return v instanceof FuncChain ? v : new FuncChain(v);
+  }
   mixin(FuncChain, {
       ...str,
       ...num,
@@ -6695,76 +6752,9 @@
       ...template,
       ...tree,
   });
-  /**
-   * 显式开启myfx的函数链，返回一个包裹了参数v的myfx链式对象。
-   * <p>
-   * 函数链使用惰性计算 —— 直到显示调用value()方法时，函数链才会进行计算并返回结果
-   * </p>
-   * @example
-   * //3-5
-   * console.log(_.chain([1,2,3,4]).map(v=>v+1).filter(v=>v%2!==0).take(2).join('-').value())
-   *
-   * @param v
-   * @returns myfx对象
-   */
-  // (myfx as any).chain = myfx
   const myfx = {
-      VERSION: '1.1.0',
-      /**
-     * 返回一个包裹了参数v的FuncChain对象，并隐式开始函数链。函数链可以链接Myfx提供的所有函数，如
-    
-    ```js
-     _([1,2,3,4]).map(v=>v+1).filter(v=>v%2===0).take(2).join('-').value()
-    ```
-    
-     * 函数链与直接调用方法的区别不仅在于可以链式调用，更在于函数链是基于惰性求值的。
-     * 上式中必须通过显式调用`value()`方法才能获取结果，
-     * 而只有在`value()`方法调用时整个函数链才进行求值。
-     *
-     *
-     * 惰性求值允许FuncChain实现捷径融合(shortcut fusion) —— 一项基于已有函数对数组循环次数进行大幅减少以提升性能的优化技术。
-     * 下面的例子演示了原生函数链和Myfx函数链的性能差异
-     * @example
-     * let ary = _.range(20000000);
-    console.time('native');
-    let c = 0;
-    let a = ary.map((v)=>{
-        c++;
-        return v+1;
-      }).filter((v) => {
-        c++;
-        return v%2==0;
-      })
-      .reverse()
-      .slice(1, 4)
-    console.timeEnd('native');
-    console.log(a, c, '次');//大约600ms左右，循环 40000000 次
-    
-    //Myfx
-    ary = _.range(20000000);
-    console.time('Myfx');
-    let x = 0;
-    let targets = _(ary)
-      .map((v) => {
-        x++;
-        return v+1;
-      })
-      .filter((v) => {
-        x++;
-        return v%2==0;
-      })
-      .reverse()
-      .slice(1, 4)
-      .value();
-    console.timeEnd('Myfx');
-    console.log(targets, x, '次');//大约0.5ms左右，循环 18 次
-     *
-     * @param v
-     * @returns Myfx对象
-     */
-      chain: function (v) {
-          return v instanceof FuncChain ? v : new FuncChain(v);
-      },
+      VERSION: VERSION,
+      chain,
       ...str,
       ...num,
       ...datetime,
@@ -6787,6 +6777,7 @@
       }, 0);
   }
 
+  exports.VERSION = VERSION;
   exports.add = add;
   exports.addTime = addTime;
   exports.after = after;
@@ -6801,6 +6792,7 @@
   exports.call = call;
   exports.camelCase = camelCase;
   exports.capitalize = capitalize;
+  exports.chain = chain;
   exports.chunk = chunk;
   exports.clone = clone;
   exports.cloneDeep = cloneDeep;

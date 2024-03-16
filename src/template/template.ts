@@ -116,22 +116,12 @@ function parse(
 ): INode[] {
   let indicator = 0
   let lastSegLength = 0
-  const tokens: INode[] = []
   const fullStack = []
   let prevText = null
   let prevNode = null
   while (true) {
     const rs = splitExp.exec(str)
     if (rs == null) {
-      const node = getText(str.substring(indicator + lastSegLength, str.length))
-
-      if (prevText) {
-        tokens.push(getText(prevText))
-      }
-      if (prevNode) {
-        tokens.push(prevNode)
-      }
-      tokens.push(node)
       break
     } else {
       let text = str.substring(indicator + lastSegLength, rs.index)
@@ -140,34 +130,12 @@ function parse(
         if (stripWhite) {
           const stripStart = prevText.replace(/\n\s*$/, '\n')
           const stripEnd = text.replace(/^\s*\n/, '')
-          const prevTextNode = getText(stripStart)
           if (
             stripStart.length !== prevText.length &&
             stripEnd.length !== text.length
           ) {
             text = stripEnd
           }
-
-          if (prevNode?.comment) {
-            tokens.push(prevTextNode)
-          } else {
-            // MTL标签之间都是\s\n，可以合并
-            const lastToken = last(tokens)
-            const merge1 = prevText.replace(/\n|\s/g, '')
-            const merge2 = lastToken
-              ? lastToken.source.replace(/\n|\s/g, '')
-              : true
-            if (!merge1 && !merge2 && lastToken) {
-              lastToken.source = ''
-            } else {
-              tokens.push(getText(prevText))
-            }
-
-            if (prevNode) tokens.push(prevNode)
-          }
-        } else {
-          tokens.push(getText(prevText))
-          if (prevNode) tokens.push(prevNode)
         }
       }
       prevText = text
@@ -194,13 +162,13 @@ function parse(
         )
 
         console.error('...', tipInfo + '\n' + tipIndicator + '\n', error)
-        return tokens
+        return fullStack
       }
 
       lastSegLength = rs[0].length
     }
   }
-  return tokens
+  return fullStack
 }
 
 function getText(str: string) {
