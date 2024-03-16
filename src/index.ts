@@ -31,7 +31,7 @@ export * from "./_modules/function";
 export * from "./_modules/tree";
 export * from "./_modules/template";
 
-export const VERSION = "1.3.2"; //#ver
+export const VERSION = "#ver#"; //#ver
 
 /**
 * 显式开启myfx的函数链，返回一个包裹了参数v的myfx链式对象。函数链可以链接Myfx提供的所有函数，如
@@ -128,8 +128,9 @@ const ctx = globalThis as any;
 if (ctx.myff) {
   setTimeout(function () {
     ctx.__f_prev = ctx._;
-    ctx._ = ctx.myfx = myfx;
+    ctx._ = myfx;
   }, 0);
 }
+ctx.myfx = myfx
 
 export default myfx;

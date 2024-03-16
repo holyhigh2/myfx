@@ -118,7 +118,6 @@ function parse(
   let lastSegLength = 0
   const fullStack = []
   let prevText = null
-  let prevNode = null
   while (true) {
     const rs = splitExp.exec(str)
     if (rs == null) {
@@ -145,7 +144,6 @@ function parse(
       fullStack.push(node)
       try {
         const node2 = parseNode(rs, mixins)
-        prevNode = node2
         fullStack.push(node2)
       } catch (error) {
         // 获取最近信息
@@ -264,8 +262,10 @@ function compile(tokens: INode[], options: IOptions): Function {
       globalKeys = paramAry[0]
       globalValues = paramAry[1]
     }
-    globalKeys.push('_')
-    globalValues.push((self as any).myfx)
+    if(!globalKeys.includes('_') && (self as any).myfx){
+      globalKeys.push('_')
+      globalValues.push((self as any).myfx)
+    }
 
     const getRender = new Function(
       ...globalKeys,
