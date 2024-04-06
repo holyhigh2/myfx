@@ -6,30 +6,29 @@
  */
 
 /**
- * 
+ *
  * @author holyhigh
  */
-import compact from "../array/compact"
-import last from "../array/last"
-import takeRight from "../array/takeRight"
-import unzip from "../array/unzip"
-import each from '../collection/each'
-import includes from '../collection/includes'
-import map from '../collection/map'
-import size from '../collection/size'
-import keys from "../object/keys"
-import toObject from "../object/toObject"
-import lastIndexOf from "../string/lastIndexOf"
-import padStart from "../string/padStart"
-import replace from "../string/replace"
-import substring from "../string/substring"
-import trim from "../string/trim"
-import { INode, IOptions, UnknownMapKey } from '../types'
-import toPairs from "../object/toPairs"
+import compact from "../array/compact";
+import takeRight from "../array/takeRight";
+import unzip from "../array/unzip";
+import each from "../collection/each";
+import includes from "../collection/includes";
+import map from "../collection/map";
+import size from "../collection/size";
+import keys from "../object/keys";
+import toObject from "../object/toObject";
+import lastIndexOf from "../string/lastIndexOf";
+import padStart from "../string/padStart";
+import replace from "../string/replace";
+import substring from "../string/substring";
+import trim from "../string/trim";
+import { INode, IOptions, UnknownMapKey } from "../types";
+import toPairs from "../object/toPairs";
 
 /**
  * 使用MTL(Myfx Template Language)编译字符串模板，并返回编译后的render函数
- * 
+ *
  * ### 一个MTL模板由如下部分组成：
  * - **文本** 原样内容输出
  * - **注释** `[%-- 注释 --%]` 仅在模板中显示，编译后不存在也不会输出
@@ -64,35 +63,38 @@ import toPairs from "../object/toPairs"
  * @since 1.0.0
  */
 function template(string: string, options?: IOptions) {
-  const delimiters = map<string>(template.settings.delimiters, (d) => {
-    const letters = replace(d, /\//gim, '')
-    return map(letters, (l) => {
-      return includes(ESCAPES, l) ? '\\' + l : l
-    }).join('')
-  })
-  options = toObject(options)
-  const mixins = options.mixins
-  const stripWhite = options.stripWhite || false
+  let delimiters = map<string>(
+    options?.delimiters || template.settings.delimiters,
+    (d) => {
+      const letters = replace(d, /\//gim, "");
+      return map(letters, (l) => {
+        return includes(ESCAPES, l) ? "\\" + l : l;
+      }).join("");
+    }
+  );
+  options = toObject(options);
+  const mixins = options.mixins;
+  const stripWhite = options.stripWhite || false;
 
-  const comment = delimiters[0] + template.settings.comment + delimiters[1]
+  const comment = delimiters[0] + template.settings.comment + delimiters[1];
   const interpolate =
-    delimiters[0] + template.settings.interpolate + delimiters[1]
-  const evaluate = delimiters[0] + template.settings.evaluate + delimiters[1]
-  const mixin = delimiters[0] + template.settings.mixin + delimiters[1]
+    delimiters[0] + template.settings.interpolate + delimiters[1];
+  const evaluate = delimiters[0] + template.settings.evaluate + delimiters[1];
+  const mixin = delimiters[0] + template.settings.mixin + delimiters[1];
 
   const splitExp = new RegExp(
     `(?:${comment})|(?:${mixin})|(?:${interpolate})|(?:${evaluate})`,
-    'mg'
-  )
+    "mg"
+  );
 
   // ///////////////////////////////----拆分表达式与文本
   // 1. 对指令及插值进行分段
-  const tokens = parse(string, splitExp, mixins, stripWhite)
+  const tokens = parse(string, splitExp, mixins, stripWhite,delimiters);
   // 2. 编译render函数
-  const render = compile(tokens, options)
-  return render
+  const render = compile(tokens, options);
+  return render;
 }
-const ESCAPES = ['[', ']', '{', '}', '$']
+const ESCAPES = ["[", "]", "{", "}", "$"];
 
 /**
  * 模板设置对象
@@ -101,131 +103,141 @@ template.settings = {
   /**
    * @defaultValue ['[%', '%]']
    */
-  delimiters: ['[%', '%]'],
-  interpolate: '=([\\s\\S]+?)',
-  comment: '--[\\s\\S]+?--',
-  mixin: '@([a-zA-Z_$][\\w_$]*)([\\s\\S]+?)',
-  evaluate: '([\\s\\S]+?)',
-}
+  delimiters: ["[%", "%]"],
+  interpolate: "=([\\s\\S]+?)",
+  comment: "--[\\s\\S]+?--",
+  mixin: "@([a-zA-Z_$][\\w_$]*)([\\s\\S]+?)",
+  evaluate: "([\\s\\S]+?)",
+};
 
 function parse(
   str: string,
   splitExp: RegExp,
   mixins: Record<UnknownMapKey, any> | undefined,
-  stripWhite: boolean
+  stripWhite: boolean,
+  delimiters:Array<string>
 ): INode[] {
-  let indicator = 0
-  let lastSegLength = 0
-  const fullStack = []
-  let prevText = null
+  let indicator = 0;
+  let lastSegLength = 0;
+  const fullStack = [];
+  let prevText = null;
   while (true) {
-    const rs = splitExp.exec(str)
+    const rs = splitExp.exec(str);
     if (rs == null) {
-      break
+      break;
     } else {
-      let text = str.substring(indicator + lastSegLength, rs.index)
+      let text = str.substring(indicator + lastSegLength, rs.index);
       if (prevText) {
         // check strip white
         if (stripWhite) {
-          const stripStart = prevText.replace(/\n\s*$/, '\n')
-          const stripEnd = text.replace(/^\s*\n/, '')
+          const stripStart = prevText.replace(/\n\s*$/, "\n");
+          const stripEnd = text.replace(/^\s*\n/, "");
           if (
             stripStart.length !== prevText.length &&
             stripEnd.length !== text.length
           ) {
-            text = stripEnd
+            text = stripEnd;
           }
         }
       }
-      prevText = text
-      indicator = rs.index
+      prevText = text;
+      indicator = rs.index;
+      if (text) {
+        const node = getText(text);
+        fullStack.push(node);
+      }
 
-      const node = getText(text)
-      fullStack.push(node)
       try {
-        const node2 = parseNode(rs, mixins)
-        fullStack.push(node2)
+        const node2 = parseNode(rs, mixins,delimiters);
+        fullStack.push(node2);
       } catch (error) {
         // 获取最近信息
-        const recInfo = takeRight(fullStack, 5)
-        const tipInfo = map(recInfo, 'source').join('') + rs[0]
-        let tipIndicator = map(rs[0], () => '^').join('')
+        const recInfo = takeRight(fullStack, 5);
+        const tipInfo = map(recInfo, "source").join("") + rs[0];
+        let tipIndicator = map(rs[0], () => "^").join("");
 
         const tipLineStartIndex =
-          lastIndexOf(substring(str, 0, rs.index), '\n') + 1
+          lastIndexOf(substring(str, 0, rs.index), "\n") + 1;
         tipIndicator = padStart(
           tipIndicator,
           rs.index - tipLineStartIndex + tipIndicator.length,
-          ' '
-        )
+          " "
+        );
 
-        console.error('...', tipInfo + '\n' + tipIndicator + '\n', error)
-        return fullStack
+        console.error("...", tipInfo + "\n" + tipIndicator + "\n", error);
+        return fullStack;
       }
 
-      lastSegLength = rs[0].length
+      lastSegLength = rs[0].length;
     }
   }
-  return fullStack
+
+  let lastText = trim(str.substring(indicator + lastSegLength));
+  if (lastText) {
+    const node = getText(lastText);
+    fullStack.push(node);
+  }
+  return fullStack;
 }
 
 function getText(str: string) {
   return {
     text: true,
     source: str,
-  }
+  };
 }
 
 function parseNode(
   rs: RegExpExecArray,
-  mixins: Record<UnknownMapKey, any> | undefined
+  mixins: Record<UnknownMapKey, any> | undefined,
+  delimiters:Array<string>
 ): INode {
-  const parts = compact(rs)
-  const src = parts[0]
-  const modifier = src.replace(template.settings.delimiters[0], '')[0]
+  const parts = compact(rs);
+  const src = parts[0];
+  const modifier = src.replace(new RegExp(delimiters[0]), "")[0];
   switch (modifier) {
-    case '-':
+    case "-":
       return {
         comment: true,
         source: src,
-      }
-    case '=':
+      };
+    case "=":
       return {
         interpolate: true,
         source: src,
         expression: parts[1],
-      }
-    case '@':
-      const mixin = parts[1]
+      };
+    case "@":
+      const mixin = parts[1];
       if (!mixins || !mixins[mixin]) {
         throw new SyntaxError(
           `The mixin '${mixin}' does not exist, check if the options.mixins has been set`
-        )
+        );
       }
-      let paramters = trim(parts[2])
+      let paramters = trim(parts[2]);
       if (paramters) {
         const matcher = paramters.match(
           /\{(?:,?[a-zA-Z_$][a-zA-Z0-9_$]*(?::.*?)?)+\}/gm
-        )
+        );
         if (!matcher) {
           throw new SyntaxError(
             `Invalid mixin paramters '${parts[2]}', must be JSON form`
-          )
+          );
         }
-        paramters = matcher[0]
+        paramters = matcher[0];
       }
       return {
         mixin: true,
         source: src,
         tmpl: mixins[mixin],
         paramters,
-      }
+      };
     default:
       return {
         evaluate: true,
         source: src,
         expression: parts[1],
-      }
+      };
   }
 }
 
@@ -233,43 +245,43 @@ function parseNode(
 // 函数中不能出现异步代码，否则会导致render失败
 // 默认全局变量 print() / _
 function compile(tokens: INode[], options: IOptions): Function {
-  let funcStr = ''
+  let funcStr = "";
   each<INode>(tokens, (token) => {
-    if (token.comment) return
+    if (token.comment) return;
 
     if (token.text) {
-      funcStr += '\nprint(`' + token.source + '`);'
+      funcStr += "\nprint(`" + token.source + "`);";
     } else if (token.interpolate) {
-      funcStr += `\nprint(${token.expression});`
+      funcStr += `\nprint(${token.expression});`;
     } else if (token.evaluate) {
-      funcStr += '\n' + token.expression
+      funcStr += "\n" + token.expression;
     } else if (token.mixin) {
       funcStr += `\nprint(_.template(${JSON.stringify(token.tmpl)},$options)(${
         token.paramters
-      }));`
+      }));`;
     }
-  })
+  });
 
   return (obj: Record<UnknownMapKey, any>) => {
-    let declarations = keys(obj).join(',')
+    let declarations = keys(obj).join(",");
     if (declarations) {
-      declarations = '{' + declarations + '}'
+      declarations = "{" + declarations + "}";
     }
-    let globalKeys = []
-    let globalValues = []
-    const paramAry = unzip(toPairs(options.globals!))
+    let globalKeys = [];
+    let globalValues = [];
+    const paramAry = unzip(toPairs(options.globals!));
     if (size(paramAry) > 0) {
-      globalKeys = paramAry[0]
-      globalValues = paramAry[1]
+      globalKeys = paramAry[0];
+      globalValues = paramAry[1];
     }
-    if(!globalKeys.includes('_') && (self as any).myfx){
-      globalKeys.push('_')
-      globalValues.push((self as any).myfx)
+    if (!globalKeys.includes("_") && (self as any).myfx) {
+      globalKeys.push("_");
+      globalValues.push((self as any).myfx);
     }
 
     const getRender = new Function(
       ...globalKeys,
-      '$options',
+      "$options",
       `return function(${declarations}){
       const textQ=[];
       const print=(str)=>{
@@ -277,10 +289,10 @@ function compile(tokens: INode[], options: IOptions): Function {
       };` +
         funcStr +
         ';return textQ.join("")}'
-    )(...globalValues, options)
+    )(...globalValues, options);
 
-    return getRender(obj)
-  }
+    return getRender(obj);
+  };
 }
 
-export default template
+export default template;
