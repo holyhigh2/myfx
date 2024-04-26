@@ -68,7 +68,7 @@ includes(value: any,fromIndex?: number):FuncChain<any>{return get<Function>(Func
 keyBy<V,K extends string | number | symbol>(itee?: ((value: V) => K) | NonFuncItee):FuncChain<any>{return get<Function>(FuncChain.prototype,'_keyBy').call(this,...arguments)}
 map<V,K extends string | number | symbol,U>(itee: ((value: V, index: K, collection: Collection<V>) => U | Promise<any>) | NonFuncItee):FuncChain<any>{return get<Function>(FuncChain.prototype,'_map').call(this,...arguments)}
 partition<V,K extends string | number | symbol>(predicate: ((value: V, index: K, collection: Collection<V>) => boolean) | NonFuncItee):FuncChain<any>{return get<Function>(FuncChain.prototype,'_partition').call(this,...arguments)}
-reduce<T>(callback: (accumulator: T, value: T, key: UnknownMapKey, collection: Collection<T>) => T,initialValue: T):FuncChain<any>{return get<Function>(FuncChain.prototype,'_reduce').call(this,...arguments)}
+reduce<T,U>(callback: (accumulator: U, value: T, key: UnknownMapKey, collection: Collection<T>) => U,initialValue: U):FuncChain<any>{return get<Function>(FuncChain.prototype,'_reduce').call(this,...arguments)}
 reject<V,K extends string | number | symbol>(predicate: ((value: V, index: K, collection: Collection<V>) => boolean) | NonFuncItee):FuncChain<any>{return get<Function>(FuncChain.prototype,'_reject').call(this,...arguments)}
 sample<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_sample').call(this,...arguments)}
 sampleSize<T>(count?: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_sampleSize').call(this,...arguments)}

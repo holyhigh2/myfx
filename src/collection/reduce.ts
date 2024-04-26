@@ -25,16 +25,6 @@ import each from "./each";
  * @param [initialValue] 第一次调用 callback函数时的第一个参数的值
  * @returns 汇总值
  */
-function reduce<T,U>(
-  collection: Collection<T>,
-  callback: (
-    accumulator: U,
-    value: T,
-    key: UnknownMapKey,
-    collection: Collection<T>
-  ) => U,
-  initialValue: U
-): U 
 function reduce<T>(
   collection: Collection<T>,
   callback: (
@@ -44,14 +34,34 @@ function reduce<T>(
     collection: Collection<T>
   ) => T,
   initialValue: T
-): T {
+): T 
+function reduce<T,U>(
+  collection: Collection<T>,
+  callback: (
+    accumulator: U,
+    value: T,
+    key: UnknownMapKey,
+    collection: Collection<T>
+  ) => U,
+  initialValue: U
+): U
+function reduce<T,U>(
+  collection: Collection<T>,
+  callback: (
+    accumulator: U,
+    value: T,
+    key: UnknownMapKey,
+    collection: Collection<T>
+  ) => U,
+  initialValue: U
+): U {
   let accumulator = initialValue
   let hasInitVal = initialValue !== undefined
   each<T, UnknownMapKey>(collection, (v, k, c) => {
     if (hasInitVal) {
       accumulator = callback(accumulator, v, k, c)
     } else {
-      accumulator = v
+      accumulator = v as any
       hasInitVal = true
     }
   })
