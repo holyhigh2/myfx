@@ -94,11 +94,16 @@ bind(thisArg: any,...args: any[]):FuncChain<any>{return get<Function>(FuncChain.
 bindAll<T extends Record<UnknownMapKey, any>>(...methodNames: (string | string[])[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_bindAll').call(this,...arguments)}
 call(...args: any):FuncChain<any>{return get<Function>(FuncChain.prototype,'_call').call(this,...arguments)}
 compose():FuncChain<any>{return get<Function>(FuncChain.prototype,'_compose').call(this,...arguments)}
+debounce(wait: number,immediate: boolean = false):FuncChain<any>{return get<Function>(FuncChain.prototype,'_debounce').call(this,...arguments)}
 delay(wait?: number,...args: any[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_delay').call(this,...arguments)}
 fval<T>(args?: Record<string, any>):FuncChain<any>{return get<Function>(FuncChain.prototype,'_fval').call(this,...arguments)}
 once():FuncChain<any>{return get<Function>(FuncChain.prototype,'_once').call(this,...arguments)}
 partial(...args: any[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_partial').call(this,...arguments)}
 tap<T>(interceptor: Function):FuncChain<any>{return get<Function>(FuncChain.prototype,'_tap').call(this,...arguments)}
+throttle(wait: number,options?: {
+    leading?: boolean;
+    trailing?: boolean;
+}):FuncChain<any>{return get<Function>(FuncChain.prototype,'_throttle').call(this,...arguments)}
 isArray():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isArray').call(this,...arguments)}
 isArrayLike():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isArrayLike').call(this,...arguments)}
 isBlank():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isBlank').call(this,...arguments)}

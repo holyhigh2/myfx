@@ -7,7 +7,7 @@ import sortBy from '../collection/sortBy'
 import sortedIndexBy from '../array/sortedIndexBy'
 
 /**
- * 使用高性能算法，将array结构数据变为tree结构数据
+ * 使用高性能算法，将array结构数据变为tree结构数据。*注意，会修改原始数据*
  * @example
  * //生成测试数据
  * function addChildren(count,parent){
@@ -74,6 +74,7 @@ function arrayToTree(
   const roots: Record<any, any>[] = []
   const nodeMap: { [key: string | number]: any } = {}
   const sortMap: { [key: string | number]: any } = {}
+  const initParentMap:{ [key: string | number]: boolean } = {}
 
   array.forEach((record) => {
     const nodeId = record[idKey || 'id']
@@ -96,8 +97,9 @@ function arrayToTree(
     const parentNode = nodeMap[parentId]
     if (parentNode) {
       let children = parentNode[childrenKey]
-      if (!children) {
+      if(!initParentMap[parentId]){
         children = parentNode[childrenKey] = []
+        initParentMap[parentId] = true
       }
       if (hasAttrMap) {
         each<any, string>(attrMap, (v, k) => (record[k] = record[v]))

@@ -1,9 +1,6 @@
 /**
  * 启动计时器，并在倒计时为0后调用函数。
- * 内部使用setTimeout进行倒计时，如需中断延迟可以使用clearTimeout函数
- * <div class="alert alert-secondary">
-      注意，函数并不提供防抖逻辑。如果需要处理重复调用必须自己处理计时器id
-    </div>
+ * 内部使用setTimeout进行倒计时，如需中断延迟可以使用clearTimeout函数。*注意，该函数并不提供防抖逻辑*
  *
  * @example
  * //1000ms 后显示some text !

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.4.0] - 2024/4/26
+### Add
+- function -> debounce, throttle
+### Change
+- arrayToTree 总是会初始化childrenKey属性
+
 ## [1.3.0] - 2024/1/14
 ### Add
 - ChainFx -> 用于函数链提示

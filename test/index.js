@@ -3667,6 +3667,16 @@
    * @param [initialValue] 第一次调用 callback函数时的第一个参数的值
    * @returns 汇总值
    */
+  // function reduce<T,U>(
+  //   collection: Collection<T>,
+  //   callback: (
+  //     accumulator: U,
+  //     value: T,
+  //     key: UnknownMapKey,
+  //     collection: Collection<T>
+  //   ) => U,
+  //   initialValue: U
+  // ): U 
   function reduce(collection, callback, initialValue) {
       let accumulator = initialValue;
       let hasInitVal = initialValue !== undefined;
@@ -5477,11 +5487,48 @@
   }
 
   /**
+   * 创建一个包含指定函数逻辑的防抖函数并返回。在防抖函数执行后的下一次调用会在 `wait` 间隔结束后执行，如果等待期间调用函数则会重置wait时间。
+   * 对于一些需要等待过程停止后执行的场景非常有用，如输入结束时的查询、窗口resize后的计算等等
+   *
+   * @example
+   * //2
+   * let log = _.debounce(console.log);
+   * console.log(log(1),log(2))
+   *
+   * @param fn 需要调用的函数
+   * @param wait 抖动间隔，ms
+   * @param immediate 立即执行一次
+   * @returns 包装后的函数
+   * @since 1.4.0
+   */
+  function debounce(fn, wait, immediate = false) {
+      let proxy = fn;
+      let timer = null;
+      let counting = false;
+      if (immediate) {
+          return (...args) => {
+              if (!counting)
+                  proxy(...args);
+              counting = true;
+              clearTimeout(timer);
+              timer = setTimeout(() => {
+                  counting = false;
+              }, wait);
+          };
+      }
+      else {
+          return (...args) => {
+              clearTimeout(timer);
+              timer = setTimeout(() => {
+                  proxy(...args);
+              }, wait);
+          };
+      }
+  }
+
+  /**
    * 启动计时器，并在倒计时为0后调用函数。
-   * 内部使用setTimeout进行倒计时，如需中断延迟可以使用clearTimeout函数
-   * <div class="alert alert-secondary">
-        注意，函数并不提供防抖逻辑。如果需要处理重复调用必须自己处理计时器id
-      </div>
+   * 内部使用setTimeout进行倒计时，如需中断延迟可以使用clearTimeout函数。*注意，该函数并不提供防抖逻辑*
    *
    * @example
    * //1000ms 后显示some text !
@@ -5567,6 +5614,58 @@
       return v;
   }
 
+  /**
+   * 创建一个包含指定函数逻辑的节流函数并返回。每当节流函数执行后都会等待`wait`间隔归零才可再次调用，等待期间调用函数无效。
+   * 对于一些需要降低执行频率的场景非常有用，如onmousemove、onscroll等事件中
+   *
+   * @example
+   * //每隔1秒输出当前时间
+   * let log = _.throttle(console.log,1000);
+   * setInterval(()=>log(new Date().toTimeString()),100)
+   *
+   * @param fn 需要调用的函数
+   * @param wait 抖动间隔，ms
+   * @param options 执行选项
+   * @param options.leading 首次是否执行，默认true
+   * @param options.trailing 最后一次是否执行，默认true
+   * @returns 包装后的函数
+   * @since 1.4.0
+   */
+  function throttle(fn, wait, options) {
+      let proxy = fn;
+      let lastExec = 0;
+      let timer = null;
+      let timeoutArgs;
+      options = options || { leading: true, trailing: true };
+      options.leading = options.leading === undefined ? true : options.leading;
+      options.trailing = options.trailing === undefined ? true : options.trailing;
+      function timeout() {
+          if (options?.trailing)
+              proxy(...timeoutArgs);
+          lastExec = Date.now();
+          timer = null;
+          timeoutArgs = [];
+      }
+      return (...args) => {
+          timeoutArgs = args;
+          let now = Date.now();
+          let remaining = wait - (now - lastExec);
+          if (remaining <= 0) {
+              if (timer) {
+                  clearTimeout(timer);
+                  timer = null;
+              }
+              if (options?.leading) {
+                  proxy(...args);
+              }
+              lastExec = now;
+          }
+          else if (!timer) {
+              timer = setTimeout(timeout, remaining);
+          }
+      };
+  }
+
   var functions = /*#__PURE__*/Object.freeze({
     __proto__: null,
     after: after,
@@ -5575,11 +5674,13 @@
     bindAll: bindAll,
     call: call,
     compose: compose,
+    debounce: debounce,
     delay: delay,
     fval: fval,
     once: once,
     partial: partial,
-    tap: tap
+    tap: tap,
+    throttle: throttle
   });
 
   /* eslint-disable max-len */
@@ -5629,11 +5730,11 @@
    * @since 1.0.0
    */
   function template$1(string, options) {
-      const delimiters = map(template$1.settings.delimiters, (d) => {
-          const letters = replace(d, /\//gim, '');
+      let delimiters = map(options?.delimiters || template$1.settings.delimiters, (d) => {
+          const letters = replace(d, /\//gim, "");
           return map(letters, (l) => {
-              return includes(ESCAPES, l) ? '\\' + l : l;
-          }).join('');
+              return includes(ESCAPES, l) ? "\\" + l : l;
+          }).join("");
       });
       options = toObject(options);
       const mixins = options.mixins;
@@ -5642,15 +5743,15 @@
       const interpolate = delimiters[0] + template$1.settings.interpolate + delimiters[1];
       const evaluate = delimiters[0] + template$1.settings.evaluate + delimiters[1];
       const mixin = delimiters[0] + template$1.settings.mixin + delimiters[1];
-      const splitExp = new RegExp(`(?:${comment})|(?:${mixin})|(?:${interpolate})|(?:${evaluate})`, 'mg');
+      const splitExp = new RegExp(`(?:${comment})|(?:${mixin})|(?:${interpolate})|(?:${evaluate})`, "mg");
       // ///////////////////////////////----拆分表达式与文本
       // 1. 对指令及插值进行分段
-      const tokens = parse(string, splitExp, mixins, stripWhite);
+      const tokens = parse(string, splitExp, mixins, stripWhite, delimiters);
       // 2. 编译render函数
       const render = compile(tokens, options);
       return render;
   }
-  const ESCAPES = ['[', ']', '{', '}', '$'];
+  const ESCAPES = ["[", "]", "{", "}", "$"];
   /**
    * 模板设置对象
    */
@@ -5658,30 +5759,20 @@
       /**
        * @defaultValue ['[%', '%]']
        */
-      delimiters: ['[%', '%]'],
-      interpolate: '=([\\s\\S]+?)',
-      comment: '--[\\s\\S]+?--',
-      mixin: '@([a-zA-Z_$][\\w_$]*)([\\s\\S]+?)',
-      evaluate: '([\\s\\S]+?)',
+      delimiters: ["[%", "%]"],
+      interpolate: "=([\\s\\S]+?)",
+      comment: "--[\\s\\S]+?--",
+      mixin: "@([a-zA-Z_$][\\w_$]*)([\\s\\S]+?)",
+      evaluate: "([\\s\\S]+?)",
   };
-  function parse(str, splitExp, mixins, stripWhite) {
+  function parse(str, splitExp, mixins, stripWhite, delimiters) {
       let indicator = 0;
       let lastSegLength = 0;
-      const tokens = [];
       const fullStack = [];
       let prevText = null;
-      let prevNode = null;
       while (true) {
           const rs = splitExp.exec(str);
           if (rs == null) {
-              const node = getText(str.substring(indicator + lastSegLength, str.length));
-              if (prevText) {
-                  tokens.push(getText(prevText));
-              }
-              if (prevNode) {
-                  tokens.push(prevNode);
-              }
-              tokens.push(node);
               break;
           }
           else {
@@ -5689,62 +5780,43 @@
               if (prevText) {
                   // check strip white
                   if (stripWhite) {
-                      const stripStart = prevText.replace(/\n\s*$/, '\n');
-                      const stripEnd = text.replace(/^\s*\n/, '');
-                      const prevTextNode = getText(stripStart);
+                      const stripStart = prevText.replace(/\n\s*$/, "\n");
+                      const stripEnd = text.replace(/^\s*\n/, "");
                       if (stripStart.length !== prevText.length &&
                           stripEnd.length !== text.length) {
                           text = stripEnd;
                       }
-                      if (prevNode?.comment) {
-                          tokens.push(prevTextNode);
-                      }
-                      else {
-                          // MTL标签之间都是\s\n，可以合并
-                          const lastToken = last(tokens);
-                          const merge1 = prevText.replace(/\n|\s/g, '');
-                          const merge2 = lastToken
-                              ? lastToken.source.replace(/\n|\s/g, '')
-                              : true;
-                          if (!merge1 && !merge2 && lastToken) {
-                              lastToken.source = '';
-                          }
-                          else {
-                              tokens.push(getText(prevText));
-                          }
-                          if (prevNode)
-                              tokens.push(prevNode);
-                      }
-                  }
-                  else {
-                      tokens.push(getText(prevText));
-                      if (prevNode)
-                          tokens.push(prevNode);
                   }
               }
               prevText = text;
               indicator = rs.index;
-              const node = getText(text);
-              fullStack.push(node);
+              if (text) {
+                  const node = getText(text);
+                  fullStack.push(node);
+              }
               try {
-                  const node2 = parseNode(rs, mixins);
-                  prevNode = node2;
+                  const node2 = parseNode(rs, mixins, delimiters);
                   fullStack.push(node2);
               }
               catch (error) {
                   // 获取最近信息
                   const recInfo = takeRight(fullStack, 5);
-                  const tipInfo = map(recInfo, 'source').join('') + rs[0];
-                  let tipIndicator = map(rs[0], () => '^').join('');
-                  const tipLineStartIndex = lastIndexOf(substring(str, 0, rs.index), '\n') + 1;
-                  tipIndicator = padStart(tipIndicator, rs.index - tipLineStartIndex + tipIndicator.length, ' ');
-                  console.error('...', tipInfo + '\n' + tipIndicator + '\n', error);
-                  return tokens;
+                  const tipInfo = map(recInfo, "source").join("") + rs[0];
+                  let tipIndicator = map(rs[0], () => "^").join("");
+                  const tipLineStartIndex = lastIndexOf(substring(str, 0, rs.index), "\n") + 1;
+                  tipIndicator = padStart(tipIndicator, rs.index - tipLineStartIndex + tipIndicator.length, " ");
+                  console.error("...", tipInfo + "\n" + tipIndicator + "\n", error);
+                  return fullStack;
               }
               lastSegLength = rs[0].length;
           }
       }
-      return tokens;
+      let lastText = trim(str.substring(indicator + lastSegLength));
+      if (lastText) {
+          const node = getText(lastText);
+          fullStack.push(node);
+      }
+      return fullStack;
   }
   function getText(str) {
       return {
@@ -5752,23 +5824,23 @@
           source: str,
       };
   }
-  function parseNode(rs, mixins) {
+  function parseNode(rs, mixins, delimiters) {
       const parts = compact(rs);
       const src = parts[0];
-      const modifier = src.replace(template$1.settings.delimiters[0], '')[0];
+      const modifier = src.replace(new RegExp(delimiters[0]), "")[0];
       switch (modifier) {
-          case '-':
+          case "-":
               return {
                   comment: true,
                   source: src,
               };
-          case '=':
+          case "=":
               return {
                   interpolate: true,
                   source: src,
                   expression: parts[1],
               };
-          case '@':
+          case "@":
               const mixin = parts[1];
               if (!mixins || !mixins[mixin]) {
                   throw new SyntaxError(`The mixin '${mixin}' does not exist, check if the options.mixins has been set`);
@@ -5799,27 +5871,27 @@
   // 函数中不能出现异步代码，否则会导致render失败
   // 默认全局变量 print() / _
   function compile(tokens, options) {
-      let funcStr = '';
+      let funcStr = "";
       each(tokens, (token) => {
           if (token.comment)
               return;
           if (token.text) {
-              funcStr += '\nprint(`' + token.source + '`);';
+              funcStr += "\nprint(`" + token.source + "`);";
           }
           else if (token.interpolate) {
               funcStr += `\nprint(${token.expression});`;
           }
           else if (token.evaluate) {
-              funcStr += '\n' + token.expression;
+              funcStr += "\n" + token.expression;
           }
           else if (token.mixin) {
               funcStr += `\nprint(_.template(${JSON.stringify(token.tmpl)},$options)(${token.paramters}));`;
           }
       });
       return (obj) => {
-          let declarations = keys(obj).join(',');
+          let declarations = keys(obj).join(",");
           if (declarations) {
-              declarations = '{' + declarations + '}';
+              declarations = "{" + declarations + "}";
           }
           let globalKeys = [];
           let globalValues = [];
@@ -5828,9 +5900,11 @@
               globalKeys = paramAry[0];
               globalValues = paramAry[1];
           }
-          globalKeys.push('_');
-          globalValues.push(self.myfx);
-          const getRender = new Function(...globalKeys, '$options', `return function(${declarations}){
+          if (!globalKeys.includes("_") && self.myfx) {
+              globalKeys.push("_");
+              globalValues.push(self.myfx);
+          }
+          const getRender = new Function(...globalKeys, "$options", `return function(${declarations}){
       const textQ=[];
       const print=(str)=>{
         textQ.push(str)
@@ -5847,7 +5921,7 @@
   });
 
   /**
-   * 使用高性能算法，将array结构数据变为tree结构数据
+   * 使用高性能算法，将array结构数据变为tree结构数据。*注意，会修改原始数据*
    * @example
    * //生成测试数据
    * function addChildren(count,parent){
@@ -5904,6 +5978,7 @@
       const roots = [];
       const nodeMap = {};
       const sortMap = {};
+      const initParentMap = {};
       array.forEach((record) => {
           const nodeId = record[idKey || 'id'];
           nodeMap[nodeId] = record;
@@ -5923,8 +5998,9 @@
           const parentNode = nodeMap[parentId];
           if (parentNode) {
               let children = parentNode[childrenKey];
-              if (!children) {
+              if (!initParentMap[parentId]) {
                   children = parentNode[childrenKey] = [];
+                  initParentMap[parentId] = true;
               }
               if (hasAttrMap) {
                   each(attrMap, (v, k) => (record[k] = record[v]));
@@ -6371,11 +6447,13 @@
       bindAll(...methodNames) { return get(FuncChain.prototype, '_bindAll').call(this, ...arguments); }
       call(...args) { return get(FuncChain.prototype, '_call').call(this, ...arguments); }
       compose() { return get(FuncChain.prototype, '_compose').call(this, ...arguments); }
+      debounce(wait, immediate = false) { return get(FuncChain.prototype, '_debounce').call(this, ...arguments); }
       delay(wait, ...args) { return get(FuncChain.prototype, '_delay').call(this, ...arguments); }
       fval(args) { return get(FuncChain.prototype, '_fval').call(this, ...arguments); }
       once() { return get(FuncChain.prototype, '_once').call(this, ...arguments); }
       partial(...args) { return get(FuncChain.prototype, '_partial').call(this, ...arguments); }
       tap(interceptor) { return get(FuncChain.prototype, '_tap').call(this, ...arguments); }
+      throttle(wait, immediate = false) { return get(FuncChain.prototype, '_throttle').call(this, ...arguments); }
       isArray() { return get(FuncChain.prototype, '_isArray').call(this, ...arguments); }
       isArrayLike() { return get(FuncChain.prototype, '_isArrayLike').call(this, ...arguments); }
       isBlank() { return get(FuncChain.prototype, '_isBlank').call(this, ...arguments); }
@@ -6680,7 +6758,7 @@
   /* eslint-disable require-jsdoc */
   /* eslint-disable no-invalid-this */
   /* eslint-disable max-len */
-  const VERSION = "1.3.2"; //#ver
+  const VERSION = "#ver#"; //#ver
   /**
   * 显式开启myfx的函数链，返回一个包裹了参数v的myfx链式对象。函数链可以链接Myfx提供的所有函数，如
    <p>
@@ -6773,9 +6851,10 @@
   if (ctx.myff) {
       setTimeout(function () {
           ctx.__f_prev = ctx._;
-          ctx._ = ctx.myfx = myfx;
+          ctx._ = myfx;
       }, 0);
   }
+  ctx.myfx = myfx;
 
   exports.VERSION = VERSION;
   exports.add = add;
@@ -6804,6 +6883,7 @@
   exports.compose = compose;
   exports.concat = concat;
   exports.countBy = countBy;
+  exports.debounce = debounce;
   exports.default = myfx;
   exports.defaultTo = defaultTo;
   exports.defaults = defaults;
@@ -6960,6 +7040,7 @@
   exports.tap = tap;
   exports.template = template$1;
   exports.test = test;
+  exports.throttle = throttle;
   exports.times = times;
   exports.toArray = toArray;
   exports.toDate = toDate;
