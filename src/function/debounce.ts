@@ -9,7 +9,7 @@
  *
  * @param fn 需要调用的函数
  * @param wait 抖动间隔，ms
- * @param immediate 立即执行一次
+ * @param immediate 立即执行一次，默认false
  * @returns 包装后的函数
  * @since 1.4.0
  */
@@ -18,9 +18,9 @@ function debounce(fn: any, wait: number, immediate:boolean=false): Function {
   let timer: any = null
   let counting = false
   if(immediate){
-    return (...args: any[]) => {
+    return function(...args: any[]) {
       if(!counting)
-        proxy(...args)
+        proxy.apply(this,args)
       counting = true;
 
       clearTimeout(timer)
@@ -29,10 +29,10 @@ function debounce(fn: any, wait: number, immediate:boolean=false): Function {
       }, wait);
     }
   }else{
-    return (...args: any[]) => {
+    return function(...args: any[]) {
       clearTimeout(timer)
       timer = setTimeout(() => {
-        proxy(...args)
+        proxy.apply(this,args)
       }, wait);
     }
   }  
