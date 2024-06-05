@@ -22,15 +22,15 @@ import _cloneBuiltInObject from "../_cloneBuiltInObject";
  * @param  {Function} [handler=identity] (obj[k],k) 自定义赋值处理器，返回赋予新对象[k]的值
  * @returns 被复制的新对象
  */
-function cloneWith(
+function cloneWith<T>(
   obj: Record<UnknownMapKey, any>,
   handler: (v: any, k: string | number | symbol) => any = _identity
-) {
+):T {
   if (!isObject(obj)) return obj
-  if (isFunction(obj)) return obj
+  if (isFunction(obj)) return <T>obj
 
   let copy = _cloneBuiltInObject(obj)
-  if (copy !== null) return copy
+  if (copy !== null) return <T>copy
   copy = new (obj as any).constructor()
   return assignWith(
     copy as Record<UnknownMapKey, any>,

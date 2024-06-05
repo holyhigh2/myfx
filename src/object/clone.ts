@@ -14,8 +14,8 @@ import cloneWith from "./cloneWith";
  * @param obj
  * @returns 被复制的新对象
  */
-function clone(obj: Record<UnknownMapKey, any>) {
-  return cloneWith(obj, _identity)
+function clone<T>(obj: Record<UnknownMapKey, any>):T {
+  return cloneWith<T>(obj, _identity)
 }
 
 export default clone

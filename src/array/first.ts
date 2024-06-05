@@ -11,6 +11,8 @@ import toArray from "../collection/toArray";
  * @param array 数组
  * @returns 数组中第一个元素
  */
+function first<T>(array: T[]): T
+function first<T,V>(array: T[]): V
 function first<T>(array: T[]): T {
   return toArray<T>(array)[0]
 }

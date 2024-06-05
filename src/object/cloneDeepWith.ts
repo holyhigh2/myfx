@@ -18,15 +18,15 @@ import isFunction from "../is/isFunction";
  * @param handler (obj[k],k,obj) 自定义赋值处理器，返回赋予新对象[k]的值。默认 `identity`
  * @returns 被复制的新对象
  */
-function cloneDeepWith(
+function cloneDeepWith<T>(
   obj: Record<UnknownMapKey, any>,
   handler?: (v: any, k: UnknownMapKey, obj: Record<UnknownMapKey, any>) => any
-): any {
+): T {
   if (!isObject(obj)) return obj
-  if (isFunction(obj)) return obj
+  if (isFunction(obj)) return <T>obj
 
   let copy = _cloneBuiltInObject(obj)
-  if (copy !== null) return copy
+  if (copy !== null) return <T>copy
 
   copy = new (obj as any).constructor()
   const propNames = Object.keys(obj)
@@ -41,7 +41,7 @@ function cloneDeepWith(
     } catch (e) { }
   })
 
-  return copy
+  return <T>copy
 }
 
 export default cloneDeepWith

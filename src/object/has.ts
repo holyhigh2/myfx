@@ -1,7 +1,7 @@
 import { UnknownMapKey } from "../types"
 import _identity from "../_identity"
 /**
- * 检查指定key是否存在于指定的obj中
+ * 检查指定key是否存在于指定的obj中（不含prototype中）
  *
  * @example
  * //true

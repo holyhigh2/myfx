@@ -15,10 +15,10 @@ import cloneDeepWith from "./cloneDeepWith";
  * @param obj
  * @returns 被复制的新对象
  */
-function cloneDeep(
+function cloneDeep<T>(
   obj: Record<UnknownMapKey, any>
-): Record<UnknownMapKey, any> {
-  return cloneDeepWith(obj, _identity)
+): T {
+  return cloneDeepWith<T>(obj, _identity)
 }
 
 export default cloneDeep

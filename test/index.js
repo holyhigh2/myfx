@@ -3645,38 +3645,6 @@
       return [matched, mismatched];
   }
 
-  /**
-   * 对集合中的每个元素执行一次reducer函数，并将其结果汇总为单个值返回。
-   * <p>
-   * 如果没有提供initialValue，reduce 会从集合索引1开始执行 callback 方法。如果提供initialValue则从索引0开始。
-   * </p>
-   * <p>
-   * 注意，对于Object类型的对象，如果未提供initialValue，则accumulator会是索引0元素的value，而不是key
-   * </p>
-   *
-   * @example
-   * //25
-   * console.log(_.reduce([1,3,5,7,9],(a,v)=>a+v))
-   * //35
-   * console.log(_.reduce([1,3,5,7,9],(a,v)=>a+v,10))
-   * //x-y-z
-   * console.log(_.reduce({x:1,y:2,z:3},(a,v,k)=>a+'-'+k,'').substr(1))
-   *
-   * @param collection
-   * @param callback (accumulator,value[,key|index[,collection]]);reducer函数
-   * @param [initialValue] 第一次调用 callback函数时的第一个参数的值
-   * @returns 汇总值
-   */
-  // function reduce<T,U>(
-  //   collection: Collection<T>,
-  //   callback: (
-  //     accumulator: U,
-  //     value: T,
-  //     key: UnknownMapKey,
-  //     collection: Collection<T>
-  //   ) => U,
-  //   initialValue: U
-  // ): U 
   function reduce(collection, callback, initialValue) {
       let accumulator = initialValue;
       let hasInitVal = initialValue !== undefined;
@@ -5497,7 +5465,7 @@
    *
    * @param fn 需要调用的函数
    * @param wait 抖动间隔，ms
-   * @param immediate 立即执行一次
+   * @param immediate 立即执行一次，默认false
    * @returns 包装后的函数
    * @since 1.4.0
    */
@@ -5506,9 +5474,9 @@
       let timer = null;
       let counting = false;
       if (immediate) {
-          return (...args) => {
+          return function (...args) {
               if (!counting)
-                  proxy(...args);
+                  proxy.apply(this, args);
               counting = true;
               clearTimeout(timer);
               timer = setTimeout(() => {
@@ -5517,10 +5485,10 @@
           };
       }
       else {
-          return (...args) => {
+          return function (...args) {
               clearTimeout(timer);
               timer = setTimeout(() => {
-                  proxy(...args);
+                  proxy.apply(this, args);
               }, wait);
           };
       }
@@ -5617,6 +5585,7 @@
   /**
    * 创建一个包含指定函数逻辑的节流函数并返回。每当节流函数执行后都会等待`wait`间隔归零才可再次调用，等待期间调用函数无效。
    * 对于一些需要降低执行频率的场景非常有用，如onmousemove、onscroll等事件中
+   * *注意*，如果节流函数作为事件回调时，尾部执行会导致event参数target属性丢失
    *
    * @example
    * //每隔1秒输出当前时间
@@ -5636,27 +5605,28 @@
       let lastExec = 0;
       let timer = null;
       let timeoutArgs;
+      let timeoutContext;
       options = options || { leading: true, trailing: true };
       options.leading = options.leading === undefined ? true : options.leading;
       options.trailing = options.trailing === undefined ? true : options.trailing;
       function timeout() {
           if (options?.trailing)
-              proxy(...timeoutArgs);
+              proxy.apply(timeoutContext, timeoutArgs);
           lastExec = Date.now();
-          timer = null;
-          timeoutArgs = [];
+          timeoutArgs = timer = null;
       }
-      return (...args) => {
+      return function (...args) {
           timeoutArgs = args;
+          timeoutContext = this;
           let now = Date.now();
           let remaining = wait - (now - lastExec);
           if (remaining <= 0) {
               if (timer) {
                   clearTimeout(timer);
-                  timer = null;
+                  timeoutArgs = timer = null;
               }
               if (options?.leading) {
-                  proxy(...args);
+                  proxy.apply(this, args);
               }
               lastExec = now;
           }
@@ -6453,7 +6423,7 @@
       once() { return get(FuncChain.prototype, '_once').call(this, ...arguments); }
       partial(...args) { return get(FuncChain.prototype, '_partial').call(this, ...arguments); }
       tap(interceptor) { return get(FuncChain.prototype, '_tap').call(this, ...arguments); }
-      throttle(wait, immediate = false) { return get(FuncChain.prototype, '_throttle').call(this, ...arguments); }
+      throttle(wait, options) { return get(FuncChain.prototype, '_throttle').call(this, ...arguments); }
       isArray() { return get(FuncChain.prototype, '_isArray').call(this, ...arguments); }
       isArrayLike() { return get(FuncChain.prototype, '_isArrayLike').call(this, ...arguments); }
       isBlank() { return get(FuncChain.prototype, '_isBlank').call(this, ...arguments); }

@@ -156,10 +156,10 @@ toInteger():FuncChain<any>{return get<Function>(FuncChain.prototype,'_toInteger'
 toNumber():FuncChain<any>{return get<Function>(FuncChain.prototype,'_toNumber').call(this,...arguments)}
 assign(...sources: any[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_assign').call(this,...arguments)}
 assignWith(...sources: any[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_assignWith').call(this,...arguments)}
-clone():FuncChain<any>{return get<Function>(FuncChain.prototype,'_clone').call(this,...arguments)}
-cloneDeep():FuncChain<any>{return get<Function>(FuncChain.prototype,'_cloneDeep').call(this,...arguments)}
-cloneDeepWith(handler?: (v: any, k: UnknownMapKey, obj: Record<UnknownMapKey, any>) => any):FuncChain<any>{return get<Function>(FuncChain.prototype,'_cloneDeepWith').call(this,...arguments)}
-cloneWith(handler: (v: any, k: string | number | symbol) => any = _identity):FuncChain<any>{return get<Function>(FuncChain.prototype,'_cloneWith').call(this,...arguments)}
+clone<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_clone').call(this,...arguments)}
+cloneDeep<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_cloneDeep').call(this,...arguments)}
+cloneDeepWith<T>(handler?: (v: any, k: UnknownMapKey, obj: Record<UnknownMapKey, any>) => any):FuncChain<any>{return get<Function>(FuncChain.prototype,'_cloneDeepWith').call(this,...arguments)}
+cloneWith<T>(handler: (v: any, k: string | number | symbol) => any = _identity):FuncChain<any>{return get<Function>(FuncChain.prototype,'_cloneWith').call(this,...arguments)}
 defaults<T extends Record<UnknownMapKey, any>>(...sources: any[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_defaults').call(this,...arguments)}
 defaultsDeep<T extends Record<UnknownMapKey, any>>(...sources: any[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_defaultsDeep').call(this,...arguments)}
 eq(b: unknown):FuncChain<any>{return get<Function>(FuncChain.prototype,'_eq').call(this,...arguments)}
