@@ -21,7 +21,7 @@ import partial from "./partial";
  * @since 0.17.0
  */
 function bind(fn: any, thisArg: any, ...args: any[]): Function {
-  return partial(fn.bind(thisArg), ...args)
+  return partial((fn||(()=>{})).bind(thisArg), ...args)
 }
 
 export default bind

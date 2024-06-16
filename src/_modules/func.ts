@@ -96,7 +96,7 @@ call(...args: any):FuncChain<any>{return get<Function>(FuncChain.prototype,'_cal
 compose():FuncChain<any>{return get<Function>(FuncChain.prototype,'_compose').call(this,...arguments)}
 debounce(wait: number,immediate: boolean = false):FuncChain<any>{return get<Function>(FuncChain.prototype,'_debounce').call(this,...arguments)}
 delay(wait?: number,...args: any[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_delay').call(this,...arguments)}
-fval<T>(args?: Record<string, any>):FuncChain<any>{return get<Function>(FuncChain.prototype,'_fval').call(this,...arguments)}
+fval<T>(args?: Record<string, any>,context?: any):FuncChain<any>{return get<Function>(FuncChain.prototype,'_fval').call(this,...arguments)}
 once():FuncChain<any>{return get<Function>(FuncChain.prototype,'_once').call(this,...arguments)}
 partial(...args: any[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_partial').call(this,...arguments)}
 tap<T>(interceptor: Function):FuncChain<any>{return get<Function>(FuncChain.prototype,'_tap').call(this,...arguments)}

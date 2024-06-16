@@ -14,9 +14,11 @@ function once(fn: any): Function {
   return (...args: any[]) => {
     let rtn
     if (proxy) {
-      rtn = proxy(...args)
+      let m = proxy; 
+      (proxy as any) = null;
+      rtn = m(...args)
     }
-    ; (proxy as any) = null
+    
     return rtn
   }
 }

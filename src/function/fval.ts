@@ -15,13 +15,14 @@ import values from "../object/values"
  * console.log(_.fval('1+x-b',{x:2,b:3}))
  *
  * @param expression 计算表达式
- * @param args 参数对象
+ * @param args 可选参数对象
+ * @param context 可选上下文
  * @returns 表达式计算结果
  */
-function fval<T>(expression: string,args?:Record<string,any>): T {
+function fval<T>(expression: string,args?:Record<string,any>,context?:any): T {
   const ks = keys(args)
   const val = values(args)
-  return Function(...ks,'"use strict";return ' + expression)(...val)
+  return Function(...ks,'"use strict";return ' + expression).call(context,...val)
 }
 
 export default fval
