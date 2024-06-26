@@ -26,6 +26,7 @@ function debounce(fn: any, wait: number, immediate:boolean=false): Function {
       clearTimeout(timer)
       timer = setTimeout(() => {
         counting = false;
+        proxy.apply(this,args)
       }, wait);
     }
   }else{
