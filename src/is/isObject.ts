@@ -23,7 +23,7 @@ const PRIMITIVE_TYPES = [
  * @param v value
  * @returns 是否对象。如果值是null返回false，即使typeof null === 'object'
  */
-function isObject(v: unknown): v is Record<string | number | symbol, any> {
+function isObject<T extends object>(v: unknown): v is T {
   return null !== v && PRIMITIVE_TYPES.indexOf(typeof v) < 0
 }
 

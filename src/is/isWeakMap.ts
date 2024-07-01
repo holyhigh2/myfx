@@ -10,7 +10,7 @@
  * @param v
  * @returns
  */
-function isWeakMap(v: unknown): v is WeakMap<any, any> {
+function isWeakMap<K extends object,V>(v: unknown): v is WeakMap<K, V> {
   return v instanceof WeakMap
 }
 

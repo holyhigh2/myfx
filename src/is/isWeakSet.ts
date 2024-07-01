@@ -10,7 +10,7 @@
  * @param v
  * @returns
  */
-function isWeakSet(v: unknown): v is WeakSet<any> {
+function isWeakSet<T extends object>(v: unknown): v is WeakSet<T> {
   return v instanceof WeakSet
 }
 

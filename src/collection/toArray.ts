@@ -32,16 +32,16 @@ import values from "../object/values";
  * @returns 转换后的数组对象
  */
 function toArray<T>(collection: any): T[] {
-  if (isArray(collection)) return collection.concat()
+  if (isArray<T>(collection)) return collection.concat()
   if (isFunction(collection)) return [collection as T]
 
-  if (isSet(collection)) {
+  if (isSet<T>(collection)) {
     return Array.from(collection)
   } else if (isString(collection)) {
     return collection.split('') as T[]
   } else if (isArrayLike(collection)) {
     return Array.from(collection as any)
-  } else if (isMap(collection)) {
+  } else if (isMap<any,any>(collection)) {
     return Array.from(collection.values())
   } else if (isObject(collection)) {
     return values(collection)

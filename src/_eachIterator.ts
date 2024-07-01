@@ -75,13 +75,13 @@ function _eachIterator<V, K extends string | number | symbol>(
     if (forRight) {
       while (size--) {
         const k = keys[size]
-        const r = callback(collection[k] as V, k as K, collection)
+        const r = callback((collection as any)[k] as V, k as K, collection)
         if (r === false) return
       }
     } else {
       for (let i = 0; i < size; i++) {
         const k = keys[i]
-        const r = callback(collection[k] as V, k as K, collection)
+        const r = callback((collection as any)[k] as V, k as K, collection)
         if (r === false) return
       }
     }

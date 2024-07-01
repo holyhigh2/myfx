@@ -16,7 +16,7 @@ import { ArrayLike ,IList} from "../types";
  * @param v
  * @returns
  */
-function isArrayLike(v: unknown): v is ArrayLike {
+function isArrayLike<T>(v: unknown): v is ArrayLike<T> {
   if (isString(v) && v.length > 0) return true
   if (!isObject(v)) return false
   // 具有length属性

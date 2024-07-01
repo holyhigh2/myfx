@@ -26,7 +26,7 @@ function isMatch<T extends Record<string | number | symbol, any>>(
   object: T,
   props: T
 ): boolean {
-  return isMatchWith(object, props, _eq)
+  return isMatchWith<T>(object, props, _eq)
 }
 
 export default isMatch

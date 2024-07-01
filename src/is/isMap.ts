@@ -10,7 +10,7 @@
  * @param v
  * @returns
  */
-function isMap(v: unknown): v is Map<any, any> {
+function isMap<K,V>(v: unknown): v is Map<K, V> {
   return v instanceof Map
 }
 

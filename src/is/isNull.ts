@@ -10,7 +10,7 @@
  * @param v
  * @returns
  */
-function isNull(v: unknown): boolean {
+function isNull(v: unknown): v is null {
   return null === v
 }
 

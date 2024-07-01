@@ -10,7 +10,7 @@
  * @param v
  * @returns
  */
-function isSet(v: unknown): v is Set<any> {
+function isSet<T>(v: unknown): v is Set<T> {
   return v instanceof Set
 }
 

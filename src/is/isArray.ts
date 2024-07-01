@@ -10,7 +10,7 @@
  * @param v
  * @returns
  */
-function isArray(v: unknown): v is any[] {
+function isArray<T>(v: unknown): v is T[] {
   // 使用 instanceof Array 无法鉴别某些场景，比如
   // Array.prototype instanceof Array => false
   // Array.isArray(Array.prototype) => true

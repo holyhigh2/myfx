@@ -26,7 +26,7 @@ function isMatchWith<T extends Record<string | number | symbol, any>>(
   target: T,
   props: T,
   comparator: Function = _eq
-) {
+):boolean {
   if (isNil(props)) return true
   const ks = Object.keys(props)
   if (!isObject(target)) return false

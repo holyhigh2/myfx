@@ -56,7 +56,7 @@ function sortTree(
 ): void {
   options = options || {}
   const childrenKey = options.childrenKey || 'children'
-  const data: Record<UnknownMapKey, any>[] = isArray(treeNodes)
+  const data: Record<UnknownMapKey, any>[] = isArray<any>(treeNodes)
     ? treeNodes
     : [treeNodes]
   data.sort((a, b) => comparator(a, b))

@@ -16,7 +16,7 @@ function iteratee(value: Function | NonFuncItee): Function {
     return value
   } else if (isString(value)) {
     return prop(value)
-  } else if (isArray(value)) {
+  } else if (isArray<string|number>(value)) {
     return prop(toPath(value))
   } else if (isObject(value)) {
     return matcher(value)

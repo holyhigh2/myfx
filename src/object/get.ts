@@ -29,14 +29,14 @@ function get<V>(
 ): V {
   if (!isObject(obj)) return defaultValue
   const chain = _toPath(path)
-  let target = obj
+  let target = obj as any
   for (let i = 0; i < chain.length; i++) {
     const seg = chain[i]
     target = target[seg]
     if (!target) break
   }
   if (target === undefined) target = defaultValue
-  return target
+  return target as V
 }
 
 export default get

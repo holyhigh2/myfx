@@ -104,8 +104,8 @@ throttle(wait: number,options?: {
     leading?: boolean;
     trailing?: boolean;
 }):FuncChain<any>{return get<Function>(FuncChain.prototype,'_throttle').call(this,...arguments)}
-isArray():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isArray').call(this,...arguments)}
-isArrayLike():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isArrayLike').call(this,...arguments)}
+isArray<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isArray').call(this,...arguments)}
+isArrayLike<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isArrayLike').call(this,...arguments)}
 isBlank():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isBlank').call(this,...arguments)}
 isBoolean():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isBoolean').call(this,...arguments)}
 isDate():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isDate').call(this,...arguments)}
@@ -118,23 +118,23 @@ isError():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isError').ca
 isFinite():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isFinite').call(this,...arguments)}
 isFunction():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isFunction').call(this,...arguments)}
 isInteger():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isInteger').call(this,...arguments)}
-isMap():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isMap').call(this,...arguments)}
+isMap<K,V>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isMap').call(this,...arguments)}
 isMatch<T extends Record<string | number | symbol, any>>(props: T):FuncChain<any>{return get<Function>(FuncChain.prototype,'_isMatch').call(this,...arguments)}
 isMatchWith<T extends Record<string | number | symbol, any>>(props: T,comparator: Function = _eq):FuncChain<any>{return get<Function>(FuncChain.prototype,'_isMatchWith').call(this,...arguments)}
 isNaN():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isNaN').call(this,...arguments)}
 isNil():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isNil').call(this,...arguments)}
 isNull():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isNull').call(this,...arguments)}
 isNumber():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isNumber').call(this,...arguments)}
-isObject():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isObject').call(this,...arguments)}
+isObject<T extends object>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isObject').call(this,...arguments)}
 isPlainObject():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isPlainObject').call(this,...arguments)}
 isRegExp():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isRegExp').call(this,...arguments)}
 isSafeInteger():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isSafeInteger').call(this,...arguments)}
-isSet():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isSet').call(this,...arguments)}
+isSet<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isSet').call(this,...arguments)}
 isString():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isString').call(this,...arguments)}
 isSymbol():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isSymbol').call(this,...arguments)}
 isUndefined():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isUndefined').call(this,...arguments)}
-isWeakMap():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isWeakMap').call(this,...arguments)}
-isWeakSet():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isWeakSet').call(this,...arguments)}
+isWeakMap<K extends object,V>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isWeakMap').call(this,...arguments)}
+isWeakSet<T extends object>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isWeakSet').call(this,...arguments)}
 add(b: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_add').call(this,...arguments)}
 divide(b: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_divide').call(this,...arguments)}
 max():FuncChain<any>{return get<Function>(FuncChain.prototype,'_max').call(this,...arguments)}
