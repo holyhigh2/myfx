@@ -27,8 +27,8 @@ const PLACEHOLDER = void 0
  * @param args 参数可以使用undefined作为占位符，以此来确定不同的实参位置
  * @returns 部分应用后的新函数
  */
-function partial(fn: any, ...args: any[]): Function {
-  return function (...params: any[]) {
+function partial<T extends (...args:any[])=>any>(fn: any, ...args: any[]): T {
+  return ((...params: any[])=> {
     let p = 0
     const applyArgs = args.map((v) => (v === PLACEHOLDER ? params[p++] : v))
     if (params.length > p) {
@@ -37,7 +37,7 @@ function partial(fn: any, ...args: any[]): Function {
       }
     }
     return fn(...applyArgs)
-  }
+  }) as T
 }
 
 export default partial

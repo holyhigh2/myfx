@@ -20,8 +20,8 @@ import partial from "./partial";
  * @returns 绑定thisArg的新函数
  * @since 0.17.0
  */
-function bind(fn: any, thisArg: any, ...args: any[]): Function {
-  return partial((fn||(()=>{})).bind(thisArg), ...args)
+function bind<T extends (...args: any[]) => any>(fn: any, thisArg: any, ...args: any[]): T {
+  return partial<T>((fn||(()=>{})).bind(thisArg), ...args)
 }
 
 export default bind
