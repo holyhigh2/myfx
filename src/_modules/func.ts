@@ -63,7 +63,7 @@ find<V,K extends string | number | symbol>(predicate: ((value: V, index: K, coll
 findLast<V,K extends string | number | symbol>(predicate: ((value: V, index: K, collection: Collection<V>) => boolean) | NonFuncItee):FuncChain<any>{return get<Function>(FuncChain.prototype,'_findLast').call(this,...arguments)}
 flatMap<V,K extends string | number | symbol,U>(itee: ((value: V, index: K, collection: Collection<V>) => U | Promise<any>) | NonFuncItee,depth?: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_flatMap').call(this,...arguments)}
 flatMapDeep<V,K extends string | number | symbol,U>(itee: ((value: V, index: K, collection: Collection<V>) => U) | NonFuncItee):FuncChain<any>{return get<Function>(FuncChain.prototype,'_flatMapDeep').call(this,...arguments)}
-groupBy<v>(itee?: ((value: v) => UnknownMapKey) | NonFuncItee):FuncChain<any>{return get<Function>(FuncChain.prototype,'_groupBy').call(this,...arguments)}
+groupBy<V,U>(itee?: ((value: V) => UnknownMapKey) | NonFuncItee):FuncChain<any>{return get<Function>(FuncChain.prototype,'_groupBy').call(this,...arguments)}
 includes(value: any,fromIndex?: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_includes').call(this,...arguments)}
 keyBy<V,K extends string | number | symbol>(itee?: ((value: V) => K) | NonFuncItee):FuncChain<any>{return get<Function>(FuncChain.prototype,'_keyBy').call(this,...arguments)}
 map<V,K extends string | number | symbol,U>(itee: ((value: V, index: K, collection: Collection<V>) => U | Promise<any>) | NonFuncItee):FuncChain<any>{return get<Function>(FuncChain.prototype,'_map').call(this,...arguments)}
@@ -158,8 +158,8 @@ assign(...sources: any[]):FuncChain<any>{return get<Function>(FuncChain.prototyp
 assignWith(...sources: any[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_assignWith').call(this,...arguments)}
 clone<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_clone').call(this,...arguments)}
 cloneDeep<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_cloneDeep').call(this,...arguments)}
-cloneDeepWith<T>(handler?: (v: any, k: UnknownMapKey, obj: Record<UnknownMapKey, any>) => any):FuncChain<any>{return get<Function>(FuncChain.prototype,'_cloneDeepWith').call(this,...arguments)}
-cloneWith<T>(handler: (v: any, k: string | number | symbol) => any = _identity):FuncChain<any>{return get<Function>(FuncChain.prototype,'_cloneWith').call(this,...arguments)}
+cloneDeepWith<T>(handler?: (v: any, k: UnknownMapKey, obj: Record<UnknownMapKey, any>) => any,skip: (v: any, k: string | number | symbol) => boolean = () => false):FuncChain<any>{return get<Function>(FuncChain.prototype,'_cloneDeepWith').call(this,...arguments)}
+cloneWith<T>(handler: (v: any, k: string | number | symbol) => any = _identity,skip: (v: any, k: string | number | symbol) => boolean = () => false):FuncChain<any>{return get<Function>(FuncChain.prototype,'_cloneWith').call(this,...arguments)}
 defaults<T extends Record<UnknownMapKey, any>>(...sources: any[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_defaults').call(this,...arguments)}
 defaultsDeep<T extends Record<UnknownMapKey, any>>(...sources: any[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_defaultsDeep').call(this,...arguments)}
 eq(b: unknown):FuncChain<any>{return get<Function>(FuncChain.prototype,'_eq').call(this,...arguments)}

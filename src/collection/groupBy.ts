@@ -25,10 +25,18 @@ import each from "./each";
  * @returns 统计对象
  * @since 1.0.0
  */
-function groupBy<v>(
-  collection: Collection<v>,
-  itee?: ((value: v) => UnknownMapKey) | NonFuncItee
-): Record<UnknownMapKey, unknown[]> {
+function groupBy<V>(
+  collection: Collection<V>,
+  itee?: ((value: V) => UnknownMapKey) | NonFuncItee
+): Record<UnknownMapKey, unknown[]> 
+function groupBy<V,U>(
+  collection: Collection<V>,
+  itee?: ((value: V) => UnknownMapKey) | NonFuncItee
+): U 
+function groupBy<V,U>(
+  collection: Collection<V>,
+  itee?: ((value: V) => UnknownMapKey) | NonFuncItee
+): U {
   const stat: Record<UnknownMapKey, unknown[]> = {}
   const cb = _iteratee(itee || _identity)
   each(collection, (el) => {
@@ -37,7 +45,7 @@ function groupBy<v>(
 
     stat[key].push(el)
   })
-  return stat
+  return <U>stat
 }
 
 export default groupBy
