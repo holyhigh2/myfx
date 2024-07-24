@@ -1,4 +1,5 @@
 import toArray from "../collection/toArray";
+import { Collection } from "../types";
 /**
  * 从起始位置获取指定数量的元素并放入新数组后返回
  *
@@ -12,7 +13,7 @@ import toArray from "../collection/toArray";
  * @param [length] 获取元素数量，默认数组长度
  * @returns 新数组
  */
-function take<T>(array: T[], length?: number): T[] {
+function take<T>(array: Collection<T>, length?: number): T[] {
   const rs = toArray<T>(array)
   return rs.slice(0, length)
 }

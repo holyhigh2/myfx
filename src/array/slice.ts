@@ -15,7 +15,7 @@ import { ArrayLike } from "../types";
  * @param [end] 切片结束下标，<b>不包含</b>下标位置元素
  * @returns 切片元素组成的新数组
  */
-function slice<T>(array: T[] | ArrayLike, begin?: number, end?: number): T[] {
+function slice<T>(array: Set<T> | ArrayLike, begin?: number, end?: number): T[] {
   return toArray<T>(array).slice(begin || 0, end)
 }
 

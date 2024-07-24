@@ -27,6 +27,7 @@ export type ArrayLike<V = unknown> =
   | NodeList
   | HTMLCollection
   | IList
+  | NodeListOf<Node>
 
 /**
  * 集合类型

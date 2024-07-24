@@ -10,7 +10,6 @@
  * @author holyhigh
  */
 import compact from "../array/compact";
-import takeRight from "../array/takeRight";
 import unzip from "../array/unzip";
 import each from "../collection/each";
 import includes from "../collection/includes";
@@ -25,6 +24,7 @@ import substring from "../string/substring";
 import trim from "../string/trim";
 import { INode, IOptions, UnknownMapKey } from "../types";
 import toPairs from "../object/toPairs";
+import takeRight from "../collection/takeRight";
 
 /**
  * 使用MTL(Myfx Template Language)编译字符串模板，并返回编译后的render函数

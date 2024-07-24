@@ -9,8 +9,8 @@
 import _eq from '../_eq'
 import { Collection, NonFuncItee, UnknownMapKey } from '../types'
 import _identity from '../utils/identity'
-import { first, head, last, range, reverse, slice, tail, take } from './array'
-import { size, toArray, map, filter, eachRight, each } from './collection'
+import { range, reverse, slice } from './array'
+import { size, toArray, map, filter, eachRight, each, tail, take, first, head, last } from './collection'
 import { tap } from './function'
 import { isArrayLike, isDefined, isFunction, isUndefined } from './is'
 import { get } from './object'
@@ -29,14 +29,11 @@ except<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_except').c
 fill<T>(value: any,start: number = 0,end?: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_fill').call(this,...arguments)}
 findIndex<T>(predicate: ((value: T, index: string | number, array: T[]) => boolean) | NonFuncItee,fromIndex?: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_findIndex').call(this,...arguments)}
 findLastIndex<T>(predicate: ((value: T, index: string | number, array: T[]) => boolean) | NonFuncItee,fromIndex?: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_findLastIndex').call(this,...arguments)}
-first<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_first').call(this,...arguments)}
 flat<T>(depth: number = 1):FuncChain<any>{return get<Function>(FuncChain.prototype,'_flat').call(this,...arguments)}
 flatDeep<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_flatDeep').call(this,...arguments)}
-initial<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_initial').call(this,...arguments)}
 insert<T>(index: number,...values: any[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_insert').call(this,...arguments)}
 intersect<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_intersect').call(this,...arguments)}
 join(separator?: string):FuncChain<any>{return get<Function>(FuncChain.prototype,'_join').call(this,...arguments)}
-last<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_last').call(this,...arguments)}
 pop<T>(index?: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_pop').call(this,...arguments)}
 pull<T>(...values: T[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_pull').call(this,...arguments)}
 range(end?: number,step?: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_range').call(this,...arguments)}
@@ -45,9 +42,6 @@ reverse<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_reverse')
 slice<T>(begin?: number,end?: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_slice').call(this,...arguments)}
 sortedIndex<T>(value: any):FuncChain<any>{return get<Function>(FuncChain.prototype,'_sortedIndex').call(this,...arguments)}
 sortedIndexBy<T>(value: any,itee?: ((value: any) => any) | NonFuncItee):FuncChain<any>{return get<Function>(FuncChain.prototype,'_sortedIndexBy').call(this,...arguments)}
-tail<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_tail').call(this,...arguments)}
-take<T>(length?: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_take').call(this,...arguments)}
-takeRight<T>(length?: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_takeRight').call(this,...arguments)}
 union<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_union').call(this,...arguments)}
 uniq<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_uniq').call(this,...arguments)}
 uniqBy<T>(itee?: ((value: T, index: UnknownMapKey) => boolean) | NonFuncItee):FuncChain<any>{return get<Function>(FuncChain.prototype,'_uniqBy').call(this,...arguments)}
@@ -61,11 +55,14 @@ every<V,K extends string | number | symbol>(predicate: ((value: V, index: K, col
 filter<V,K extends string | number | symbol>(predicate: ((value: V, index: K, collection: Collection<V>) => boolean) | NonFuncItee):FuncChain<any>{return get<Function>(FuncChain.prototype,'_filter').call(this,...arguments)}
 find<V,K extends string | number | symbol>(predicate: ((value: V, index: K, collection: Collection<V>) => boolean) | NonFuncItee):FuncChain<any>{return get<Function>(FuncChain.prototype,'_find').call(this,...arguments)}
 findLast<V,K extends string | number | symbol>(predicate: ((value: V, index: K, collection: Collection<V>) => boolean) | NonFuncItee):FuncChain<any>{return get<Function>(FuncChain.prototype,'_findLast').call(this,...arguments)}
+first<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_first').call(this,...arguments)}
 flatMap<V,K extends string | number | symbol,U>(itee: ((value: V, index: K, collection: Collection<V>) => U | Promise<any>) | NonFuncItee,depth?: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_flatMap').call(this,...arguments)}
 flatMapDeep<V,K extends string | number | symbol,U>(itee: ((value: V, index: K, collection: Collection<V>) => U) | NonFuncItee):FuncChain<any>{return get<Function>(FuncChain.prototype,'_flatMapDeep').call(this,...arguments)}
 groupBy<V,U>(itee?: ((value: V) => UnknownMapKey) | NonFuncItee):FuncChain<any>{return get<Function>(FuncChain.prototype,'_groupBy').call(this,...arguments)}
 includes(value: any,fromIndex?: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_includes').call(this,...arguments)}
+initial<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_initial').call(this,...arguments)}
 keyBy<V,K extends string | number | symbol>(itee?: ((value: V) => K) | NonFuncItee):FuncChain<any>{return get<Function>(FuncChain.prototype,'_keyBy').call(this,...arguments)}
+last<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_last').call(this,...arguments)}
 map<V,K extends string | number | symbol,U>(itee: ((value: V, index: K, collection: Collection<V>) => U | Promise<any>) | NonFuncItee):FuncChain<any>{return get<Function>(FuncChain.prototype,'_map').call(this,...arguments)}
 partition<V,K extends string | number | symbol>(predicate: ((value: V, index: K, collection: Collection<V>) => boolean) | NonFuncItee):FuncChain<any>{return get<Function>(FuncChain.prototype,'_partition').call(this,...arguments)}
 reduce<T,U>(callback: (accumulator: U, value: T, key: UnknownMapKey, collection: Collection<T>) => U,initialValue: U):FuncChain<any>{return get<Function>(FuncChain.prototype,'_reduce').call(this,...arguments)}
@@ -77,6 +74,9 @@ size():FuncChain<any>{return get<Function>(FuncChain.prototype,'_size').call(thi
 some<V,K extends string | number | symbol>(predicate: ((value: V, index: K, collection: Collection<V>) => boolean) | NonFuncItee):FuncChain<any>{return get<Function>(FuncChain.prototype,'_some').call(this,...arguments)}
 sort<T>(comparator?: (a: T, b: T) => number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_sort').call(this,...arguments)}
 sortBy<V,K extends string | number | symbol>(itee?: ((value: V, index: K) => any) | NonFuncItee):FuncChain<any>{return get<Function>(FuncChain.prototype,'_sortBy').call(this,...arguments)}
+tail<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_tail').call(this,...arguments)}
+take<T>(length?: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_take').call(this,...arguments)}
+takeRight<T>(length?: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_takeRight').call(this,...arguments)}
 toArray<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_toArray').call(this,...arguments)}
 addTime(amount: number,type?: string):FuncChain<any>{return get<Function>(FuncChain.prototype,'_addTime').call(this,...arguments)}
 compareDate(date2: Date | string | number,type?: string):FuncChain<any>{return get<Function>(FuncChain.prototype,'_compareDate').call(this,...arguments)}

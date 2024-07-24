@@ -1,4 +1,5 @@
 import toArray from "../collection/toArray";
+import { Collection } from "../types";
 /**
  * 从数组末尾位置获取指定数量的元素放入新数组并返回
  *
@@ -13,7 +14,7 @@ import toArray from "../collection/toArray";
  * @returns 新数组
  * @since 1.0.0
  */
-function takeRight<T>(array: T[], length?: number): T[] {
+function takeRight<T>(array: Collection<T>, length?: number): T[] {
   const rs = toArray<T>(array)
   const maxLength = rs.length
   return rs.slice(maxLength - (length || maxLength), maxLength)

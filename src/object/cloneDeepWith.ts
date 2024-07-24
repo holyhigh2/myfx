@@ -4,6 +4,7 @@ import _cloneBuiltInObject from "../_cloneBuiltInObject"
 import isObject from "../is/isObject";
 import isFunction from "../is/isFunction";
 import isElement from "../is/isElement";
+import clone from "./clone";
 /**
  * 完整复制对象,可以保持被复制属性的原有类型。支持赋值处理器
  *
@@ -17,7 +18,7 @@ import isElement from "../is/isElement";
  * console.log(_.cloneDeepWith({d:new Date}).d instanceof Date)
  *
  * @param obj
- * @param handler (value,key,obj) 自定义赋值处理器，返回赋予新对象[k]的值，当返回对象且返回值与被复制值相同引用则跳过深度复制。默认 `identity`
+ * @param handler (value,key,obj) 自定义赋值处理器，返回赋予新对象[k]的值，当返回对象且返回值与被复制值相同引用则跳过深度复制。默认 `clone`
  * @param skip (value,key) 返回true 跳过clone该属性
  * @returns 被复制的新对象
  */
@@ -39,7 +40,7 @@ function cloneDeepWith<T>(
     let skipTag = skip(obj[p], p)
     if(skipTag)return;
 
-    let newProp = (handler || _identity)(obj[p], p, obj)
+    let newProp = (handler || clone)(obj[p], p, obj)
     if (isObject(newProp) && newProp !== obj[p]) {
       newProp = cloneDeepWith(newProp, handler)
     }

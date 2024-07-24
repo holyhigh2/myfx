@@ -1,4 +1,5 @@
 import toArray from "../collection/toArray";
+import { Collection } from "../types";
 /**
  * 获取数组中的最后一个元素
  *
@@ -9,9 +10,9 @@ import toArray from "../collection/toArray";
  * @param array 数组
  * @returns 数组中最后一个元素
  */
-function last<T>(array: T[]): T
-function last<T,V>(array: T[]): V
-function last<T>(array: T[]): T {
+function last<T>(array: Collection<T>): T
+function last<T,V>(array: Collection<T>): V
+function last<T>(array: Collection<T>): T {
   const ary = toArray<T>(array)
   return ary[ary.length - 1]
 }

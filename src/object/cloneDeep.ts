@@ -1,6 +1,7 @@
 import { UnknownMapKey } from "../types"
 import _identity from "../_identity"
 import cloneDeepWith from "./cloneDeepWith";
+import clone from "./clone";
 /**
  * 完整复制对象,可以保持被复制属性的原有类型
  *
@@ -18,7 +19,7 @@ import cloneDeepWith from "./cloneDeepWith";
 function cloneDeep<T>(
   obj: Record<UnknownMapKey, any>
 ): T {
-  return cloneDeepWith<T>(obj, _identity)
+  return cloneDeepWith<T>(obj, clone)
 }
 
 export default cloneDeep

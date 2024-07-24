@@ -9,7 +9,7 @@ import _identity from '../_identity'
  * @param array 数组
  * @returns 转换后的新数组对象
  */
-function compact<T>(array: T[]): T[] {
+function compact<T>(array: T[]|Set<T>): T[] {
   return toArray(array).filter<T>(_identity as any)
 }
 
