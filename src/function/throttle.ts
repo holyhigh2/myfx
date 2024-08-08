@@ -16,7 +16,7 @@
  * @returns 包装后的函数
  * @since 1.4.0
  */
-function throttle(fn: any, wait: number, options?:{leading?:boolean,trailing?:boolean}): Function {
+function throttle<T extends (...args:any[])=>any>(fn: T, wait: number, options?:{leading?:boolean,trailing?:boolean}): T {
   let proxy = fn
   let lastExec = 0
   let timer: any = null
@@ -34,7 +34,7 @@ function throttle(fn: any, wait: number, options?:{leading?:boolean,trailing?:bo
     timeoutArgs = timer = null;
   }
 
-  return function(...args: any[]){
+  return (function(...args: any[]){
     timeoutArgs = args
     timeoutContext = this
     let now = Date.now()
@@ -52,7 +52,7 @@ function throttle(fn: any, wait: number, options?:{leading?:boolean,trailing?:bo
     } else if (!timer) {
       timer = setTimeout(timeout, remaining);
     }
-  }
+  }) as T
 }
 
 export default throttle

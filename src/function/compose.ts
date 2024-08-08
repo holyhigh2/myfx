@@ -17,8 +17,8 @@ import isFunction from "../is/isFunction";
  * @param  {...function} fns
  * @returns 组合后的入口函数
  */
-function compose(...fns: Function[]): Function {
-  return function (...args: any[]) {
+function compose<T extends (...args:any[])=>any>(...fns: any[]): T {
+  return (function (...args: any[]) {
     let rs = fns[0](...args)
     for (let i = 1; i < fns.length; i++) {
       if (isFunction(fns[i])) {
@@ -26,7 +26,7 @@ function compose(...fns: Function[]): Function {
       }
     }
     return rs
-  }
+  }) as T
 }
 
 export default compose

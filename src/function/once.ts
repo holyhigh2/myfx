@@ -9,9 +9,9 @@
  * @param fn 需要调用的函数
  * @returns 包装后的函数
  */
-function once(fn: any): Function {
+function once<T extends (...args:any[])=>any>(fn: T): T {
   let proxy = fn
-  return (...args: any[]) => {
+  return ((...args: any[]) => {
     let rtn
     if (proxy) {
       let m = proxy; 
@@ -20,7 +20,7 @@ function once(fn: any): Function {
     }
     
     return rtn
-  }
+  }) as T
 }
 
 export default once

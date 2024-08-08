@@ -11,17 +11,17 @@
  * @param [count=0] 计数
  * @returns 包装后的函数
  */
-function after(fn: any, count?: number): Function {
+function after<T extends (...args:any[])=>any>(fn: T, count?: number): T {
   const proxy = fn
   let i = count || 0
   let rtn: any
-  return (...args: any[]) => {
+  return ((...args: any[]) => {
     if (i === 0) {
       rtn = proxy(...args)
     }
     if (i > 0) i--
     return rtn
-  }
+  }) as T
 }
 
 export default after

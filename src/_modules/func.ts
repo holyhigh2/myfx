@@ -88,19 +88,19 @@ isLeapYear():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isLeapYea
 isSameDay(date2: Date | string | number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_isSameDay').call(this,...arguments)}
 now():FuncChain<any>{return get<Function>(FuncChain.prototype,'_now').call(this,...arguments)}
 toDate():FuncChain<any>{return get<Function>(FuncChain.prototype,'_toDate').call(this,...arguments)}
-after(count?: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_after').call(this,...arguments)}
+after<T extends (...args: any[]) => any>(count?: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_after').call(this,...arguments)}
 alt(interceptor1: Function,interceptor2: Function):FuncChain<any>{return get<Function>(FuncChain.prototype,'_alt').call(this,...arguments)}
 bind<T extends (...args: any[]) => any>(thisArg: any,...args: any[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_bind').call(this,...arguments)}
 bindAll<T extends Record<UnknownMapKey, any>>(...methodNames: (string | string[])[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_bindAll').call(this,...arguments)}
 call(...args: any):FuncChain<any>{return get<Function>(FuncChain.prototype,'_call').call(this,...arguments)}
-compose():FuncChain<any>{return get<Function>(FuncChain.prototype,'_compose').call(this,...arguments)}
-debounce(wait: number,immediate: boolean = false):FuncChain<any>{return get<Function>(FuncChain.prototype,'_debounce').call(this,...arguments)}
+compose<T extends (...args: any[]) => any>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_compose').call(this,...arguments)}
+debounce<T extends (...args: any[]) => any>(wait: number,immediate: boolean = false):FuncChain<any>{return get<Function>(FuncChain.prototype,'_debounce').call(this,...arguments)}
 delay(wait?: number,...args: any[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_delay').call(this,...arguments)}
 fval<T>(args?: Record<string, any>,context?: any):FuncChain<any>{return get<Function>(FuncChain.prototype,'_fval').call(this,...arguments)}
-once():FuncChain<any>{return get<Function>(FuncChain.prototype,'_once').call(this,...arguments)}
+once<T extends (...args: any[]) => any>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_once').call(this,...arguments)}
 partial<T extends (...args: any[]) => any>(...args: any[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_partial').call(this,...arguments)}
 tap<T>(interceptor: Function):FuncChain<any>{return get<Function>(FuncChain.prototype,'_tap').call(this,...arguments)}
-throttle(wait: number,options?: {
+throttle<T extends (...args: any[]) => any>(wait: number,options?: {
     leading?: boolean;
     trailing?: boolean;
 }):FuncChain<any>{return get<Function>(FuncChain.prototype,'_throttle').call(this,...arguments)}

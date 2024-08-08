@@ -13,12 +13,12 @@
  * @returns 包装后的函数
  * @since 1.4.0
  */
-function debounce(fn: any, wait: number, immediate:boolean=false): Function {
+function debounce<T extends (...args:any[])=>any>(fn: T, wait: number, immediate:boolean=false): T {
   let proxy = fn
   let timer: any = null
   let counting = false
   if(immediate){
-    return function(...args: any[]) {
+    return (function(...args: any[]) {
       if(!counting)
         proxy.apply(this,args)
       counting = true;
@@ -28,14 +28,14 @@ function debounce(fn: any, wait: number, immediate:boolean=false): Function {
         counting = false;
         proxy.apply(this,args)
       }, wait);
-    }
+    }) as T
   }else{
-    return function(...args: any[]) {
+    return (function(...args: any[]) {
       clearTimeout(timer)
       timer = setTimeout(() => {
         proxy.apply(this,args)
       }, wait);
-    }
+    }) as T
   }  
 }
 
