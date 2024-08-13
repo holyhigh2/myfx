@@ -13,7 +13,7 @@ import { Collection } from "../types";
  * @returns 数组中第一个元素
  */
 function first<T>(array: Collection<T>): T
-function first<T,V>(array: Collection<T>): V
+function first<T,U>(array: Collection<T>): U
 function first<T>(array: Collection<T>): T {
   return toArray<T>(array)[0]
 }

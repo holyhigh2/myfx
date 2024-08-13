@@ -15,7 +15,7 @@ import map from '../collection/map'
  * @since 1.0.0
  */
 function mean(values: Set<string | number> | Array<string | number> ):number{
-  const vals = map<any>(values, v => isNil(v) ? 0 : v)
+  const vals = map<any>(values, v => v ?? 0)
   let f64a = new Float64Array(vals)
   let rs = 0
   f64a.forEach(v=>{

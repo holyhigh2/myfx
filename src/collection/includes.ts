@@ -33,7 +33,7 @@ import { Collection } from "../types";
  * @param [fromIndex=0] 从集合的fromIndex 索引处开始查找。如果集合是map/object对象，无效
  * @returns 如果包含返回true否则返回false
  */
-function includes(collection: Collection<any>, value: any, fromIndex?: number) {
+function includes(collection: Collection<any>, value: any, fromIndex?: number):boolean {
   let rs = false
   fromIndex = fromIndex || 0
   if (isString(collection)) {

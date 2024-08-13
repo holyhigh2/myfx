@@ -22,21 +22,27 @@ import each from "./each";
  * @since 1.0.0
  */
 function reject<V>(
-  collection: Collection<V>,
+  collection: Set<V> | ArrayLike<V>,
   predicate:
-    | ((value: V, index: UnknownMapKey, collection: Collection<V>) => boolean)
+    | ((value: V, index: number, collection: Collection<V>) => boolean)
+    | NonFuncItee
+): V[]
+function reject<V>(
+  collection: Record<string, V> | Map<string, V>,
+  predicate:
+    | ((value: V, index: string, collection: Collection<V,string>) => boolean)
     | NonFuncItee
 ): V[]
 function reject<V, K extends string | number | symbol>(
-  collection: Collection<V>,
+  collection: Collection<V,K>,
   predicate:
-    | ((value: V, index: K, collection: Collection<V>) => boolean)
+    | ((value: V, index: K, collection: Collection<V,K>) => boolean)
     | NonFuncItee
 ): V[]
 function reject<V, K extends string | number | symbol>(
-  collection: Collection<V>,
+  collection: Collection<V,K>,
   predicate:
-    | ((value: V, index: K, collection: Collection<V>) => boolean)
+    | ((value: V, index: K, collection: Collection<V,K>) => boolean)
     | NonFuncItee
 ): V[] {
   const rs: V[] = []

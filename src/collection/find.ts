@@ -30,24 +30,54 @@ import each from "./each";
  * <br>其他类型请参考 {@link utils!iteratee}
  * @returns 第一个匹配断言的元素或undefined
  */
-function find<V>(
-  collection: Collection<V>,
+function find<V,U extends V>(
+  collection: Set<V> | ArrayLike<V>,
   predicate:
     | ((
       value: V,
-      index: string | number | symbol,
+      index: number,
+      collection: Collection<V>
+    ) => boolean)
+    | NonFuncItee
+): U | undefined
+function find<V,U extends V>(
+  collection: Record<string, V> | Map<string, V>,
+  predicate:
+    | ((
+      value: V,
+      index: string,
+      collection: Collection<V,string>
+    ) => boolean)
+    | NonFuncItee
+): U | undefined
+function find<V>(
+  collection: Set<V> | ArrayLike<V>,
+  predicate:
+    | ((
+      value: V,
+      index: number,
       collection: Collection<V>
     ) => boolean)
     | NonFuncItee
 ): V | undefined
+function find<V>(
+  collection: Record<string, V> | Map<string, V>,
+  predicate:
+    | ((
+      value: V,
+      index: string,
+      collection: Collection<V,string>
+    ) => boolean)
+    | NonFuncItee
+): V | undefined
 function find<V, K extends string | number | symbol>(
-  collection: Collection<V>,
+  collection: Collection<V,K>,
   predicate:
     | ((value: V, index: K, collection: Collection<V>) => boolean)
     | NonFuncItee
 ): V | undefined
 function find<V, K extends string | number | symbol>(
-  collection: Collection<V>,
+  collection: Collection<V,K>,
   predicate:
     | ((value: V, index: K, collection: Collection<V>) => boolean)
     | NonFuncItee

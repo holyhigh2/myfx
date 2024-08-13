@@ -21,28 +21,61 @@ import flat from "../array/flat";
  * @since 1.0.0
  */
 function flatMap<V>(
-  collection: Collection<V>,
+  collection: Set<V> | ArrayLike<V>,
   itee:
     | ((
       value: V,
-      index: string | number | symbol,
+      index: number,
       collection: Collection<V>
-    ) => V | Promise<any>)
+    ) => V | Promise<V>)
     | NonFuncItee,
   depth?: number
 ): V[]
+function flatMap<V>(
+  collection: Record<string, V> | Map<string, V>,
+  itee:
+    | ((
+      value: V,
+      index: string,
+      collection: Collection<V,string>
+    ) => V | Promise<V>)
+    | NonFuncItee,
+  depth?: number
+): V[]
+function flatMap<V,U>(
+  collection: Set<V> | ArrayLike<V>,
+  itee:
+    | ((
+      value: V,
+      index: number,
+      collection: Collection<V>
+    ) => U | Promise<U>)
+    | NonFuncItee,
+  depth?: number
+): U[]
+function flatMap<V,U>(
+  collection: Record<string, V> | Map<string, V>,
+  itee:
+    | ((
+      value: V,
+      index: string,
+      collection: Collection<V,string>
+    ) => U | Promise<U>)
+    | NonFuncItee,
+  depth?: number
+): U[]
 function flatMap<V, K extends string | number | symbol>(
-  collection: Collection<V>,
+  collection: Collection<V,K>,
   itee: ((value: V, index: K, collection: Collection<V>) => V | Promise<any>) | NonFuncItee,
   depth?: number
 ): V[]
 function flatMap<V, K extends string | number | symbol, U>(
-  collection: Collection<V>,
+  collection: Collection<V,K>,
   itee: ((value: V, index: K, collection: Collection<V>) => U | Promise<any>) | NonFuncItee,
   depth?: number
 ): U[]
 function flatMap<V, K extends string | number | symbol, U>(
-  collection: Collection<V>,
+  collection: Collection<V,K>,
   itee: ((value: V, index: K, collection: Collection<V>) => U | Promise<any>) | NonFuncItee,
   depth?: number
 ): U[] {

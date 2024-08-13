@@ -25,41 +25,71 @@ import each from "./each";
  * @param [initialValue] 第一次调用 callback函数时的第一个参数的值
  * @returns 汇总值
  */
-function reduce<T>(
-  collection: Collection<T>,
-  callback: (
-    accumulator: T,
-    value: T,
-    key: UnknownMapKey,
-    collection: Collection<T>
-  ) => T,
-  initialValue: T
-): T 
-function reduce<T,U>(
-  collection: Collection<T>,
+function reduce<V,U>(
+  collection: Set<V> | ArrayLike<V>,
   callback: (
     accumulator: U,
-    value: T,
-    key: UnknownMapKey,
-    collection: Collection<T>
+    value: V,
+    key: number,
+    collection: Collection<V>
+  ) => U,
+  initialValue: U
+): U 
+function reduce<V,U>(
+  collection: Record<string, V> | Map<string, V>,
+  callback: (
+    accumulator: U,
+    value: V,
+    key: number,
+    collection: Collection<V,string>
+  ) => U,
+  initialValue: U
+): U 
+function reduce<V>(
+  collection: Set<V> | ArrayLike<V>,
+  callback: (
+    accumulator: V,
+    value: V,
+    key: number,
+    collection: Collection<V>
+  ) => V,
+  initialValue: V
+): V 
+function reduce<V>(
+  collection: Record<string, V> | Map<string, V>,
+  callback: (
+    accumulator: V,
+    value: V,
+    key: string,
+    collection: Collection<V,string>
+  ) => V,
+  initialValue: V
+): V 
+function reduce<V,K extends string | number | symbol,U>(
+  collection: Collection<V,K>,
+  callback: (
+    accumulator: U,
+    value: V,
+    key: K,
+    collection: Collection<V,K>
   ) => U,
   initialValue: U
 ): U
-function reduce<T,U>(
-  collection: Collection<T>,
+function reduce<V,K extends string | number | symbol,U>(
+  collection: Collection<V,K>,
   callback: (
     accumulator: U,
-    value: T,
-    key: UnknownMapKey,
-    collection: Collection<T>
+    value: V,
+    key: K,
+    collection: Collection<V,K>
   ) => U,
   initialValue: U
 ): U {
   let accumulator = initialValue
   let hasInitVal = initialValue !== undefined
-  each<T, UnknownMapKey>(collection, (v, k, c) => {
+  each<V, K>(collection, (v, k, c) => {
     if (hasInitVal) {
-      accumulator = callback(accumulator, v, k, c)
+      accumulator = callback(accumulator, v, k, c as any)
     } else {
       accumulator = v as any
       hasInitVal = true

@@ -33,21 +33,27 @@ import each from "./each";
  * @returns 只要有任意元素断言为真返回true，否则false。对于一个空集合，会返回false
  */
 function some<V>(
-  collection: Collection<V>,
+  collection: Set<V> | ArrayLike<V>,
   predicate:
-    | ((value: V, index: UnknownMapKey, collection: Collection<V>) => boolean)
+    | ((value: V, index: number, collection: Collection<V>) => boolean)
+    | NonFuncItee
+): boolean
+function some<V>(
+  collection: Record<string, V> | Map<string, V>,
+  predicate:
+    | ((value: V, index: string, collection: Collection<V,string>) => boolean)
     | NonFuncItee
 ): boolean
 function some<V, K extends string | number | symbol>(
-  collection: Collection<V>,
+  collection: Collection<V,K>,
   predicate:
-    | ((value: V, index: K, collection: Collection<V>) => boolean)
+    | ((value: V, index: K, collection: Collection<V,K>) => boolean)
     | NonFuncItee
 ): boolean
 function some<V, K extends string | number | symbol>(
-  collection: Collection<V>,
+  collection: Collection<V,K>,
   predicate:
-    | ((value: V, index: K, collection: Collection<V>) => boolean)
+    | ((value: V, index: K, collection: Collection<V,K>) => boolean)
     | NonFuncItee
 ): boolean {
   let rs = false

@@ -30,11 +30,11 @@ function keyBy<K extends string | number | symbol>(
   itee?: ((value: unknown) => K) | NonFuncItee
 ): Record<K, unknown>
 function keyBy<V,K extends string | number | symbol>(
-  collection: Collection<V>,
+  collection: Collection<V,K>,
   itee?: ((value: V) => K) | NonFuncItee
 ): Record<K, V>
 function keyBy<V,K extends string | number | symbol>(
-  collection: Collection<V>,
+  collection: Collection<V,K>,
   itee?: ((value: V) => K) | NonFuncItee
 ): Record<K, V> {
   const stat: Record<UnknownMapKey, unknown> = {}

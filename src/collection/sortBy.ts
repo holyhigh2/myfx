@@ -35,15 +35,19 @@ import toString from "../string/toString";
  * @since 1.0.0
  */
 function sortBy<V>(
-  collection: Collection<V>,
-  itee?: ((value: V, index: string | number | symbol) => any) | NonFuncItee
+  collection: Set<V> | ArrayLike<V>,
+  itee?: ((value: V, index: number) => any) | NonFuncItee
+): V[]
+function sortBy<V>(
+  collection: Record<string, V> | Map<string, V>,
+  itee?: ((value: V, index: string) => any) | NonFuncItee
 ): V[]
 function sortBy<V, K extends string | number | symbol>(
-  collection: Collection<V>,
+  collection: Collection<V,K>,
   itee?: ((value: V, index: K) => any) | NonFuncItee
 ): V[]
 function sortBy<V, K extends string | number | symbol>(
-  collection: Collection<V>,
+  collection: Collection<V,K>,
   itee?: ((value: V, index: K) => any) | NonFuncItee
 ): V[] {
   if (size(collection) < 1) return []

@@ -31,23 +31,33 @@ import eachRight from "./eachRight";
  * @returns 第一个匹配断言的元素或undefined
  */
 function findLast<V>(
-  collection: Collection<V>,
+  collection: Set<V> | ArrayLike<V>,
   predicate:
     | ((
       value: V,
-      index: string | number | symbol,
+      index: number,
       collection: Collection<V>
     ) => boolean)
     | NonFuncItee
 ): V | undefined
+function findLast<V>(
+  collection: Record<string, V> | Map<string, V>,
+  predicate:
+    | ((
+      value: V,
+      index: string,
+      collection: Collection<V,string>
+    ) => boolean)
+    | NonFuncItee
+): V | undefined
 function findLast<V, K extends string | number | symbol>(
-  collection: Collection<V>,
+  collection: Collection<V,K>,
   predicate:
     | ((value: V, index: K, collection: Collection<V>) => boolean)
     | NonFuncItee
 ): V | undefined
 function findLast<V, K extends string | number | symbol>(
-  collection: Collection<V>,
+  collection: Collection<V,K>,
   predicate:
     | ((value: V, index: K, collection: Collection<V>) => boolean)
     | NonFuncItee

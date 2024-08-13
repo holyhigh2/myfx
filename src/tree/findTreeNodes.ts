@@ -45,7 +45,7 @@ import walkTree from './walkTree'
  * @returns 找到的符合条件的所有节点或空数组
  * @since 1.0.0
  */
-function findTreeNodes(
+function findTreeNodes<U extends Record<UnknownMapKey, any>>(
   treeNodes: Record<UnknownMapKey, any> | Record<UnknownMapKey, any>[],
   predicate: (
     node: Record<UnknownMapKey, any>,
@@ -55,7 +55,29 @@ function findTreeNodes(
     index:number
   ) => boolean | NonFuncItee,
   options?: { childrenKey?: string }
-): Record<UnknownMapKey, any>[] {
+): U[]
+function findTreeNodes<V extends Record<UnknownMapKey, any>,U extends V>(
+  treeNodes: V | V[],
+  predicate: (
+    node: Record<UnknownMapKey, any>,
+    parentNode: Record<UnknownMapKey, any>,
+    chain: Record<UnknownMapKey, any>[],
+    level:number,
+    index:number
+  ) => boolean | NonFuncItee,
+  options?: { childrenKey?: string }
+): U[]
+function findTreeNodes<V extends Record<UnknownMapKey, any>,U extends V>(
+  treeNodes: V | V[],
+  predicate: (
+    node: Record<UnknownMapKey, any>,
+    parentNode: Record<UnknownMapKey, any>,
+    chain: Record<UnknownMapKey, any>[],
+    level:number,
+    index:number
+  ) => boolean | NonFuncItee,
+  options?: { childrenKey?: string }
+): U[] {
   const callback = _iteratee(predicate)
   const nodes: Record<UnknownMapKey, any>[] = []
   walkTree(

@@ -63,15 +63,15 @@ includes(value: any,fromIndex?: number):FuncChain<any>{return get<Function>(Func
 initial<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_initial').call(this,...arguments)}
 keyBy<V,K extends string | number | symbol>(itee?: ((value: V) => K) | NonFuncItee):FuncChain<any>{return get<Function>(FuncChain.prototype,'_keyBy').call(this,...arguments)}
 last<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_last').call(this,...arguments)}
-map<V,K extends string | number | symbol,U>(itee: ((value: V, index: K, collection: Collection<V>) => U | Promise<any>) | NonFuncItee):FuncChain<any>{return get<Function>(FuncChain.prototype,'_map').call(this,...arguments)}
-partition<V,K extends string | number | symbol>(predicate: ((value: V, index: K, collection: Collection<V>) => boolean) | NonFuncItee):FuncChain<any>{return get<Function>(FuncChain.prototype,'_partition').call(this,...arguments)}
-reduce<T,U>(callback: (accumulator: U, value: T, key: UnknownMapKey, collection: Collection<T>) => U,initialValue: U):FuncChain<any>{return get<Function>(FuncChain.prototype,'_reduce').call(this,...arguments)}
-reject<V,K extends string | number | symbol>(predicate: ((value: V, index: K, collection: Collection<V>) => boolean) | NonFuncItee):FuncChain<any>{return get<Function>(FuncChain.prototype,'_reject').call(this,...arguments)}
+map<V,K extends string | number | symbol,U>(itee: ((value: V, index: K, collection: Collection<V, K>) => U | Promise<any>) | NonFuncItee):FuncChain<any>{return get<Function>(FuncChain.prototype,'_map').call(this,...arguments)}
+partition<V,K extends string | number | symbol>(predicate: ((value: V, index: K, collection: Collection<V, K>) => boolean) | NonFuncItee):FuncChain<any>{return get<Function>(FuncChain.prototype,'_partition').call(this,...arguments)}
+reduce<V,K extends string | number | symbol,U>(callback: (accumulator: U, value: V, key: K, collection: Collection<V, K>) => U,initialValue: U):FuncChain<any>{return get<Function>(FuncChain.prototype,'_reduce').call(this,...arguments)}
+reject<V,K extends string | number | symbol>(predicate: ((value: V, index: K, collection: Collection<V, K>) => boolean) | NonFuncItee):FuncChain<any>{return get<Function>(FuncChain.prototype,'_reject').call(this,...arguments)}
 sample<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_sample').call(this,...arguments)}
 sampleSize<T>(count?: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_sampleSize').call(this,...arguments)}
 shuffle<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_shuffle').call(this,...arguments)}
 size():FuncChain<any>{return get<Function>(FuncChain.prototype,'_size').call(this,...arguments)}
-some<V,K extends string | number | symbol>(predicate: ((value: V, index: K, collection: Collection<V>) => boolean) | NonFuncItee):FuncChain<any>{return get<Function>(FuncChain.prototype,'_some').call(this,...arguments)}
+some<V,K extends string | number | symbol>(predicate: ((value: V, index: K, collection: Collection<V, K>) => boolean) | NonFuncItee):FuncChain<any>{return get<Function>(FuncChain.prototype,'_some').call(this,...arguments)}
 sort<T>(comparator?: (a: T, b: T) => number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_sort').call(this,...arguments)}
 sortBy<V,K extends string | number | symbol>(itee?: ((value: V, index: K) => any) | NonFuncItee):FuncChain<any>{return get<Function>(FuncChain.prototype,'_sortBy').call(this,...arguments)}
 tail<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_tail').call(this,...arguments)}
@@ -228,7 +228,7 @@ filterTree(predicate: (node: Record<UnknownMapKey, any>, parentNode: Record<Unkn
 findTreeNode(predicate: (node: Record<UnknownMapKey, any>, parentNode: Record<UnknownMapKey, any>, chain: Record<UnknownMapKey, any>[], level: number, index: number) => boolean | NonFuncItee,options?: {
     childrenKey?: string;
 }):FuncChain<any>{return get<Function>(FuncChain.prototype,'_findTreeNode').call(this,...arguments)}
-findTreeNodes(predicate: (node: Record<UnknownMapKey, any>, parentNode: Record<UnknownMapKey, any>, chain: Record<UnknownMapKey, any>[], level: number, index: number) => boolean | NonFuncItee,options?: {
+findTreeNodes<V extends Record<UnknownMapKey, any>,U extends V>(predicate: (node: Record<UnknownMapKey, any>, parentNode: Record<UnknownMapKey, any>, chain: Record<UnknownMapKey, any>[], level: number, index: number) => boolean | NonFuncItee,options?: {
     childrenKey?: string;
 }):FuncChain<any>{return get<Function>(FuncChain.prototype,'_findTreeNodes').call(this,...arguments)}
 alphaId():FuncChain<any>{return get<Function>(FuncChain.prototype,'_alphaId').call(this,...arguments)}

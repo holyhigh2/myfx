@@ -41,8 +41,8 @@ import isArrayLike from '../is/isArrayLike'
  * @param options.childrenKey 包含子节点容器的key。默认'children'
  * @since 1.0.0
  */
-function walkTree(
-  treeNodes: Record<UnknownMapKey, any> | Record<UnknownMapKey, any>[],
+function walkTree<V extends Record<UnknownMapKey, any>>(
+  treeNodes: V | V[],
   callback: (
     node: Record<UnknownMapKey, any>,
     parentNode: Record<UnknownMapKey, any>,
@@ -50,7 +50,7 @@ function walkTree(
     level:number,
     index:number
   ) => boolean | number | void,
-  options?: Record<UnknownMapKey, any>
+  options?: Record<string, any>
 ): void {
   _walkTree(treeNodes, callback, options)
 }

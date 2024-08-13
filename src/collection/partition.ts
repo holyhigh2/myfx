@@ -31,25 +31,35 @@ import each from "./each";
  * @since 0.17.0
  */
 function partition<V>(
-  collection: Collection<V>,
+  collection: Set<V> | ArrayLike<V>,
   predicate:
     | ((
       value: V,
-      index: string | number | symbol,
+      index: number,
       collection: Collection<V>
     ) => boolean)
     | NonFuncItee
 ): V[][]
-function partition<V, K extends string | number | symbol>(
-  collection: Collection<V>,
+function partition<V>(
+  collection: Record<string, V> | Map<string, V>,
   predicate:
-    | ((value: V, index: K, collection: Collection<V>) => boolean)
+    | ((
+      value: V,
+      index: string,
+      collection: Collection<V,string>
+    ) => boolean)
     | NonFuncItee
 ): V[][]
 function partition<V, K extends string | number | symbol>(
-  collection: Collection<V>,
+  collection: Collection<V,K>,
   predicate:
-    | ((value: V, index: K, collection: Collection<V>) => boolean)
+    | ((value: V, index: K, collection: Collection<V,K>) => boolean)
+    | NonFuncItee
+): V[][]
+function partition<V, K extends string | number | symbol>(
+  collection: Collection<V,K>,
+  predicate:
+    | ((value: V, index: K, collection: Collection<V,K>) => boolean)
     | NonFuncItee
 ): V[][] {
   const matched: V[] = []

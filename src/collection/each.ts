@@ -21,19 +21,27 @@ import _eachIterator from "../_eachIterator";
  * @param callback (value[,index|key[,collection]]);回调函数，如果返回false会立即中断遍历
  */
 function each<V>(
-  collection: Collection<V>,
+  collection: Set<V> | ArrayLike<V>,
   callback: (
     value: V,
-    index: UnknownMapKey,
+    index: number,
     collection: Collection<V>
   ) => boolean | void | Promise<void>
 ): void
+function each<V>(
+  collection: Record<string, V> | Map<string, V>,
+  callback: (
+    value: V,
+    index: string,
+    collection: Collection<V,string>
+  ) => boolean | void | Promise<void>
+): void
 function each<V, K extends string | number | symbol>(
-  collection: Collection<V>,
+  collection: Collection<V,K>,
   callback: (value: V, index: K, collection: Collection<V>) => boolean | void | Promise<void>
 ): void
 function each<V, K extends string | number | symbol>(
-  collection: Collection<V>,
+  collection: Collection<V,K>,
   callback: (value: V, index: K, collection: Collection<V>) => boolean | void | Promise<void>
 ): void {
   _eachIterator<V, K>(collection, callback, false)

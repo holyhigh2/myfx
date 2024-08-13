@@ -33,23 +33,41 @@ import each from "./each";
  * 如果是字符串，表示返回集中的对象类型的元素的key值
  * @returns 映射值的新数组
  */
-function map<V>(
-  collection: Collection<V>,
+function map<U>(
+  collection: Set<any> | ArrayLike<any>,
   itee:
-    | ((value: V, index: UnknownMapKey, collection: Collection<V>) => V | Promise<any>)
+    | ((value: any, index: number, collection: Collection<any>) => U | Promise<U>)
     | NonFuncItee
-): V[]
+): U[]
+function map<U>(
+  collection: Record<string, any> | Map<string, any>,
+  itee:
+    | ((value: any, index: string, collection: Collection<any,string>) => U | Promise<U>)
+    | NonFuncItee
+): U[]
+function map<V,U>(
+  collection: Set<V> | ArrayLike<V>,
+  itee:
+    | ((value: V, index: number, collection: Collection<V>) => U | Promise<U>)
+    | NonFuncItee
+): U[]
+function map<V,U>(
+  collection: Record<string, V> | Map<string, V>,
+  itee:
+    | ((value: V, index: string, collection: Collection<V,string>) => U | Promise<U>)
+    | NonFuncItee
+): U[]
 function map<V, K extends string | number | symbol>(
-  collection: Collection<V>,
-  itee: ((value: V, index: K, collection: Collection<V>) => V | Promise<any>) | NonFuncItee
+  collection: Collection<V,K>,
+  itee: ((value: V, index: K, collection: Collection<V,K>) => V | Promise<any>) | NonFuncItee
 ): V[]
 function map<V, K extends string | number | symbol, U>(
-  collection: Collection<V>,
-  itee: ((value: V, index: K, collection: Collection<V>) => U | Promise<any>) | NonFuncItee
+  collection: Collection<V,K>,
+  itee: ((value: V, index: K, collection: Collection<V,K>) => U | Promise<any>) | NonFuncItee
 ): U[]
 function map<V, K extends string | number | symbol, U>(
-  collection: Collection<V>,
-  itee: ((value: V, index: K, collection: Collection<V>) => U | Promise<any>) | NonFuncItee
+  collection: Collection<V,K>,
+  itee: ((value: V, index: K, collection: Collection<V,K>) => U | Promise<any>) | NonFuncItee
 ): U[] {
   const rs: U[] = []
   const cb = _iteratee(itee)
@@ -61,3 +79,9 @@ function map<V, K extends string | number | symbol, U>(
 }
 
 export default map
+
+function xx(){
+  let x = map({a:1,b:'3'},(v,k)=>{
+    return v+''
+  })
+}

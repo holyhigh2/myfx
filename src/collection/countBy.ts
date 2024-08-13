@@ -29,12 +29,12 @@ function countBy<V>(
   collection: Collection<V>,
   itee?: ((value: V) => string) | NonFuncItee
 ): Record<string, number>
-function countBy<V,K extends string | number | symbol>(
-  collection: Collection<V>,
+function countBy<V, K extends string | number | symbol>(
+  collection: Collection<V,K>,
   itee?: ((value: V) => K) | NonFuncItee
 ): Record<K, number>
-function countBy<V,K extends string | number | symbol>(
-  collection: Collection<V>,
+function countBy<V, K extends string | number | symbol>(
+  collection: Collection<V,K>,
   itee?: ((value: V) => K) | NonFuncItee
 ): Record<K, number> {
   const stat: Record<UnknownMapKey, any> = {}
