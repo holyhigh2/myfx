@@ -1,4 +1,4 @@
-import { Collection, NonFuncItee, UnknownMapKey } from "../types"
+import { ArrayLike, Collection, NonFuncItee } from "../types"
 import _eachIterator from "../_eachIterator";
 import _iteratee from "../_iteratee";
 import each from "./each";
