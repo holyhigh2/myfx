@@ -18,14 +18,21 @@ import padEnd from "./padEnd"
  *
  * @param v 数字或数字字符串
  * @param [scale=0] 小数位长度
- * @returns 填充后的字符串
+ * @returns 截取后的字符串
  */
 function toFixed(v: string | number, scale?: number): string {
   scale = scale || 0
   const num = parseFloat(v + '')
   if (isNaN(num)) return v as string
+  let numStr = num + ''
+  if (numStr.includes('e')) {
+    let [coefficient, power] = numStr.split('e')
+    let p = parseInt(power)
+    let cn = coefficient.replace('.', '')
+    numStr = p < 0 ? `0.${'0'.repeat(-p - 1)}${cn}` : `${cn}${'0'.repeat(p - cn.length + 1)}`
+  }
   const isNeg = num < 0 ? -1 : 1
-  const tmp = (num + '').split('.')
+  const tmp = numStr.split('.')
   const frac = tmp[1] || ''
   const diff = scale - frac.length
   let rs = ''
@@ -34,7 +41,7 @@ function toFixed(v: string | number, scale?: number): string {
     z = z ? '.' + z : z
     rs = tmp[0] + z
   } else if (diff === 0) {
-    rs = num + ''
+    rs = numStr
   } else {
     let integ = parseInt(tmp[0])
     const i = frac.length + diff

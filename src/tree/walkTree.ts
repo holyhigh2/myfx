@@ -1,6 +1,7 @@
 import {UnknownMapKey} from '../types'
 import isEmpty from '../is/isEmpty'
 import isArrayLike from '../is/isArrayLike'
+import isObject from '../is/isObject'
 
 /**
  * 以给定节点为根遍历所有子孙节点。深度优先
@@ -66,6 +67,7 @@ function _walkTree(
   options?: Record<UnknownMapKey, any>,
   ...rest: any[]
 ): boolean | void {
+  if(!isObject(treeNodes))return;
   options = options || {}
   const parentNode = rest[0]
   const chain = rest[1] || []
