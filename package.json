@@ -1,6 +1,6 @@
 {
   "name": "myfx",
-  "version": "1.4.13",
+  "version": "1.4.14",
   "description": "A modular utility library with more utils, higher performance and simpler declarations ...",
   "main": "index.umd.js",
   "module": "index.esm.js",
@@ -41,7 +41,7 @@
     "rollup-plugin-banner2": "1.2.2",
     "rollup-plugin-clear": "2.0.7",
     "rollup-plugin-copy": "3.4.0",
-    "rollup-plugin-dts": "^6.0.2",
+    "rollup-plugin-dts": "^6.1.1",
     "rollup-plugin-livereload": "^2.0.0",
     "rollup-plugin-serve": "^1.1",
     "rollup-plugin-typescript2": "0.36.0",
