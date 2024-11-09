@@ -1,6 +1,6 @@
-import isObject from "./isObject";
-import isNil from "./isNil";
 import _eq from "../_eq";
+import isNil from "./isNil";
+import isObject from "./isObject";
 /**
  * 检测props对象中的所有属性是否在object中存在并使用自定义比较器对属性值进行对比。可以用于对象的深度对比。
  * 当comparator参数是默认值时，与<code>isMath</code>函数相同
@@ -26,7 +26,7 @@ function isMatchWith<T extends Record<string | number | symbol, any>>(
   target: T,
   props: T,
   comparator: Function = _eq
-):boolean {
+): boolean {
   if (isNil(props)) return true
   const ks = Object.keys(props)
   if (!isObject(target)) return false

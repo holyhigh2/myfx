@@ -1,7 +1,4 @@
-import { UnknownMapKey } from "../types";
-import _checkTarget from "../_checkTarget";
-import _eachSources from "../_eachSources";
-import _noop from "../_noop";
+import type { UnknownMapKey } from "../types";
 import get from "./get";
 /**
  * 创建一个函数，该函数返回指定对象的path属性值

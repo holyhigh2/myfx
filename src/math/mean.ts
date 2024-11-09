@@ -1,4 +1,3 @@
-import isNil from '../is/isNil'
 import map from '../collection/map'
 /**
  * 对多个数字或数字列表计算平均值并返回结果
@@ -14,11 +13,11 @@ import map from '../collection/map'
  * @returns mean value
  * @since 1.0.0
  */
-function mean(values: Set<string | number> | Array<string | number> ):number{
+function mean(values: Set<string | number> | Array<string | number>): number {
   const vals = map<any>(values, v => v ?? 0)
   let f64a = new Float64Array(vals)
   let rs = 0
-  f64a.forEach(v=>{
+  f64a.forEach(v => {
     rs += v
   })
 

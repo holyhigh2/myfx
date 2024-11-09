@@ -1,7 +1,5 @@
-import { UnknownMapKey } from "../types";
-import _checkTarget from "../_checkTarget";
-import _eachSources from "../_eachSources";
 import _noop from "../_noop";
+import type { UnknownMapKey } from "../types";
 import mergeWith from "./mergeWith";
 /**
  * 类似<code>assign</code>，但会递归源对象的属性合并到目标对象。

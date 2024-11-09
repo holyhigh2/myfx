@@ -1,5 +1,5 @@
-import { UnknownMapKey } from "../types"
 import _identity from "../_identity";
+import type { UnknownMapKey } from "../types";
 /**
  * 同<code>omit</code>，但支持断言函数进行剔除
  * @example

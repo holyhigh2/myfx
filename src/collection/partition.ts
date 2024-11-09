@@ -1,6 +1,5 @@
-import { Collection, NonFuncItee } from "../types"
-import _eachIterator from "../_eachIterator";
 import _iteratee from "../_iteratee";
+import type { Collection, NonFuncItee } from "../types";
 import each from "./each";
 
 /**
@@ -46,20 +45,20 @@ function partition<V>(
     | ((
       value: V,
       index: string,
-      collection: Collection<V,string>
+      collection: Collection<V, string>
     ) => boolean)
     | NonFuncItee
 ): V[][]
 function partition<V, K extends string | number | symbol>(
-  collection: Collection<V,K>,
+  collection: Collection<V, K>,
   predicate:
-    | ((value: V, index: K, collection: Collection<V,K>) => boolean)
+    | ((value: V, index: K, collection: Collection<V, K>) => boolean)
     | NonFuncItee
 ): V[][]
 function partition<V, K extends string | number | symbol>(
-  collection: Collection<V,K>,
+  collection: Collection<V, K>,
   predicate:
-    | ((value: V, index: K, collection: Collection<V,K>) => boolean)
+    | ((value: V, index: K, collection: Collection<V, K>) => boolean)
     | NonFuncItee
 ): V[][] {
   const matched: V[] = []

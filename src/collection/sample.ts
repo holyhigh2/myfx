@@ -1,6 +1,6 @@
+import randi from '../math/randi';
+import type { Collection } from "../types";
 import toArray from "./toArray";
-import randi from '../math/randi'
-import { Collection } from "../types";
 
 /**
  * 返回对指定列表的唯一随机采样结果

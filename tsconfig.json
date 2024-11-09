@@ -7,10 +7,11 @@
         "preserveConstEnums": true,
         "esModuleInterop": true,
         "resolveJsonModule":true,
-        "moduleResolution": "Node",
+        "moduleResolution": "Bundler",
         "declaration": true,
         "skipLibCheck": true,
-        "strictNullChecks": true
+        "strictNullChecks": true,
+        "strict": true
     },
     "include": [
         "src/*.ts"    

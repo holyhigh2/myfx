@@ -1,5 +1,5 @@
-import { Collection, UnknownMapKey } from "../types"
 import _eachIterator from "../_eachIterator";
+import type { ArrayLike, Collection } from "../types";
 
 /**
  * 对集合元素进行顺序遍历，与 forEach 不同在于遍历顺序是从右到左
@@ -31,16 +31,16 @@ function eachRight<V>(
   callback: (
     value: V,
     index: string,
-    collection: Collection<V,string>
+    collection: Collection<V, string>
   ) => boolean | void | Promise<void>
 ): void
 function eachRight<V, K extends string | number | symbol>(
-  collection: Collection<V,K>,
-  callback: (value: V, index: K, collection: Collection<V>) => boolean | void
+  collection: Collection<V, K>,
+  callback: (value: V, index: K, collection: Collection<V>) => boolean | void | Promise<void>
 ): void
 function eachRight<V, K extends string | number | symbol>(
-  collection: Collection<V,K>,
-  callback: (value: V, index: K, collection: Collection<V>) => boolean | void
+  collection: Collection<V, K>,
+  callback: (value: V, index: K, collection: Collection<V>) => boolean | void | Promise<void>
 ): void {
   _eachIterator<V, K>(collection, callback, true)
 }

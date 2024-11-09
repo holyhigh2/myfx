@@ -7,10 +7,10 @@
  */
 
 import _eq from '../_eq'
-import { Collection, NonFuncItee, UnknownMapKey } from '../types'
+import type { Collection, NonFuncItee, UnknownMapKey } from '../types'
 import _identity from '../utils/identity'
 import { range, reverse, slice } from './array'
-import { size, toArray, map, filter, eachRight, each, tail, take, first, head, last } from './collection'
+import { each, eachRight, filter, first, head, last, map, size, tail, take, toArray } from './collection'
 import { tap } from './function'
 import { isArrayLike, isDefined, isFunction, isUndefined } from './is'
 import { get } from './object'
@@ -246,7 +246,7 @@ uuid():FuncChain<any>{return get<Function>(FuncChain.prototype,'_uuid').call(thi
  * 用于定义FuncChain对象并构造函数链
  * 注意，该类仅用于内部构造函数链
  */
-export class FuncChain<T> extends ChainFx{
+export class FuncChain<T> extends ChainFx {
   /**
    * @internal 
    */
@@ -290,7 +290,7 @@ export class FuncChain<T> extends ChainFx{
         if (sig > 0 || (!sig && maxChainIndex === i)) {
           rs = execComprehension(comprehension, acc)
           if (comprehension.tap) {
-            ;(comprehension.tap as Function)(rs)
+            ; (comprehension.tap as Function)(rs)
           }
           comprehension = null
         }

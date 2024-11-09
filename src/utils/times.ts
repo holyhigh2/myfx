@@ -1,4 +1,3 @@
-import _identity from "../_identity"
 import range from '../array/range'
 /**
  * 调用iteratee函数n次，并将历次调用的返回值数组作为结果返回

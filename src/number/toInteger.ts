@@ -16,7 +16,7 @@
  * @since 1.0.0
  */
 function toInteger(v: any): number {
-  if(v === null || v === undefined)return 0
+  if (v === null || v === undefined) return 0
   return parseInt(v)
 }
 

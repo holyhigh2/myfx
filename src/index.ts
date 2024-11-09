@@ -2,34 +2,34 @@
 /* eslint-disable no-invalid-this */
 /* eslint-disable max-len */
 
-import * as str from "./_modules/string";
-import * as num from "./_modules/number";
-import * as datetime from "./_modules/datetime";
-import * as is from "./_modules/is";
-import * as object from "./_modules/object";
-import * as collection from "./_modules/collection";
 import * as array from "./_modules/array";
-import * as math from "./_modules/math";
-import * as utils from "./_modules/utils";
+import * as collection from "./_modules/collection";
+import * as datetime from "./_modules/datetime";
 import * as functions from "./_modules/function";
+import * as is from "./_modules/is";
+import * as math from "./_modules/math";
+import * as num from "./_modules/number";
+import * as object from "./_modules/object";
+import * as str from "./_modules/string";
 import * as template from "./_modules/template";
 import * as tree from "./_modules/tree";
+import * as utils from "./_modules/utils";
 
 import { FuncChain } from "./_modules/func";
 import mixin from "./utils/mixin";
 
-export * from "./_modules/string";
-export * from "./_modules/number";
-export * from "./_modules/datetime";
-export * from "./_modules/is";
-export * from "./_modules/object";
 export * from "./_modules/array";
 export * from "./_modules/collection";
-export * from "./_modules/math";
-export * from "./_modules/utils";
+export * from "./_modules/datetime";
 export * from "./_modules/function";
-export * from "./_modules/tree";
+export * from "./_modules/is";
+export * from "./_modules/math";
+export * from "./_modules/number";
+export * from "./_modules/object";
+export * from "./_modules/string";
 export * from "./_modules/template";
+export * from "./_modules/tree";
+export * from "./_modules/utils";
 
 export const VERSION = "#ver#"; //#ver
 
@@ -133,4 +133,4 @@ if (ctx.myff) {
 }
 ctx.myfx = myfx
 
-export default myfx;
+export default myfx

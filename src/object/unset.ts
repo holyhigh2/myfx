@@ -1,6 +1,6 @@
-import isObject from "../is/isObject"
-import { UnknownMapKey } from "../types"
 import _toPath from "../_toPath"
+import isObject from "../is/isObject"
+import type { UnknownMapKey } from "../types"
 /**
  * 删除obj上path路径对应属性
  * @param obj 需要设置属性值的对象，如果obj不是对象(isObject返回false)，直接返回obj

@@ -1,4 +1,3 @@
-import _identity from "../_identity"
 /**
  * 返回一个全局的整数id，序号从0开始。可以用于前端列表编号等用途
  *

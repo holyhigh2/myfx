@@ -14,8 +14,8 @@ function repeat(str: any, count: number): string {
   str = toString(str)
   count = Number.isFinite(count) ? count : 0
   if (count < 1) return ''
-  if(str.repeat)return str.repeat(count)
-  
+  if (str.repeat) return str.repeat(count)
+
   let i = count
   let rs = ''
   while (i--) {

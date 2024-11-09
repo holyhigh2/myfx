@@ -1,13 +1,13 @@
-import { NonFuncItee } from "./types"
-import isUndefined from "./is/isUndefined"
-import isFunction from "./is/isFunction"
-import isString from "./is/isString"
-import isArray from "./is/isArray"
-import isObject from "./is/isObject"
 import _identity from "./_identity"
+import isArray from "./is/isArray"
+import isFunction from "./is/isFunction"
+import isObject from "./is/isObject"
+import isString from "./is/isString"
+import isUndefined from "./is/isUndefined"
 import prop from "./object/prop"
-import toPath from "./utils/toPath"
+import type { NonFuncItee } from "./types"
 import matcher from "./utils/matcher"
+import toPath from "./utils/toPath"
 
 function iteratee(value: Function | NonFuncItee): Function {
   if (isUndefined(value)) {
@@ -16,7 +16,7 @@ function iteratee(value: Function | NonFuncItee): Function {
     return value
   } else if (isString(value)) {
     return prop(value)
-  } else if (isArray<string|number>(value)) {
+  } else if (isArray<string | number>(value)) {
     return prop(toPath(value))
   } else if (isObject(value)) {
     return matcher(value)

@@ -1,7 +1,7 @@
+import _identity from '../_identity';
+import _iteratee from '../_iteratee';
 import each from "../collection/each";
-import _identity from '../_identity'
-import _iteratee from '../_iteratee'
-import { NonFuncItee, UnknownMapKey } from "../types";
+import type { NonFuncItee, UnknownMapKey } from "../types";
 /**
  * 同<code>uniq</code>，但支持自定义筛选函数
  * @example

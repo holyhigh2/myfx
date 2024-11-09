@@ -1,6 +1,4 @@
-import { Collection, NonFuncItee } from "../types"
-import _eachIterator from "../_eachIterator";
-import _iteratee from "../_iteratee";
+import type { Collection, NonFuncItee } from "../types";
 import flatMap from "./flatMap";
 
 /**
@@ -31,11 +29,11 @@ function flatMapDeep<V>(
     | ((
       value: V,
       index: string,
-      collection: Collection<V,string>
+      collection: Collection<V, string>
     ) => V | Promise<V>)
     | NonFuncItee
 ): V[]
-function flatMapDeep<V,U>(
+function flatMapDeep<V, U>(
   collection: Set<V> | ArrayLike<V>,
   itee:
     | ((
@@ -45,26 +43,26 @@ function flatMapDeep<V,U>(
     ) => U | Promise<U>)
     | NonFuncItee
 ): U[]
-function flatMapDeep<V,U>(
+function flatMapDeep<V, U>(
   collection: Record<string, V> | Map<string, V>,
   itee:
     | ((
       value: V,
       index: string,
-      collection: Collection<V,string>
+      collection: Collection<V, string>
     ) => U | Promise<U>)
     | NonFuncItee
 ): U[]
 function flatMapDeep<V, K extends string | number | symbol>(
-  collection: Collection<V,K>,
+  collection: Collection<V, K>,
   itee: ((value: V, index: K, collection: Collection<V>) => V) | NonFuncItee
 ): V[]
 function flatMapDeep<V, K extends string | number | symbol, U>(
-  collection: Collection<V,K>,
+  collection: Collection<V, K>,
   itee: ((value: V, index: K, collection: Collection<V>) => U) | NonFuncItee
 ): U[]
 function flatMapDeep<V, K extends string | number | symbol, U>(
-  collection: Collection<V,K>,
+  collection: Collection<V, K>,
   itee: ((value: V, index: K, collection: Collection<V>) => U) | NonFuncItee
 ): U[] {
   return flatMap<V, K, U>(collection, itee, Infinity)

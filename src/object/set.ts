@@ -1,6 +1,6 @@
-import isObject from "../is/isObject"
-import { UnknownMapKey } from "../types"
 import _toPath from "../_toPath"
+import isObject from "../is/isObject"
+import type { UnknownMapKey } from "../types"
 /**
  * 通过path设置对象属性值。如果路径不存在则创建，索引会创建数组，属性会创建对象
  * <div class="alert alert-secondary">

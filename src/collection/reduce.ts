@@ -1,6 +1,4 @@
-import { Collection, UnknownMapKey } from "../types"
-import _eachIterator from "../_eachIterator";
-import _iteratee from "../_iteratee";
+import type { Collection } from "../types";
 import each from "./each";
 
 /**
@@ -25,7 +23,7 @@ import each from "./each";
  * @param [initialValue] 第一次调用 callback函数时的第一个参数的值
  * @returns 汇总值
  */
-function reduce<V,U>(
+function reduce<V, U>(
   collection: Set<V> | ArrayLike<V>,
   callback: (
     accumulator: U,
@@ -34,17 +32,17 @@ function reduce<V,U>(
     collection: Collection<V>
   ) => U,
   initialValue: U
-): U 
-function reduce<V,U>(
+): U
+function reduce<V, U>(
   collection: Record<string, V> | Map<string, V>,
   callback: (
     accumulator: U,
     value: V,
     key: number,
-    collection: Collection<V,string>
+    collection: Collection<V, string>
   ) => U,
   initialValue: U
-): U 
+): U
 function reduce<V>(
   collection: Set<V> | ArrayLike<V>,
   callback: (
@@ -54,34 +52,34 @@ function reduce<V>(
     collection: Collection<V>
   ) => V,
   initialValue: V
-): V 
+): V
 function reduce<V>(
   collection: Record<string, V> | Map<string, V>,
   callback: (
     accumulator: V,
     value: V,
     key: string,
-    collection: Collection<V,string>
+    collection: Collection<V, string>
   ) => V,
   initialValue: V
-): V 
-function reduce<V,K extends string | number | symbol,U>(
-  collection: Collection<V,K>,
+): V
+function reduce<V, K extends string | number | symbol, U>(
+  collection: Collection<V, K>,
   callback: (
     accumulator: U,
     value: V,
     key: K,
-    collection: Collection<V,K>
+    collection: Collection<V, K>
   ) => U,
   initialValue: U
 ): U
-function reduce<V,K extends string | number | symbol,U>(
-  collection: Collection<V,K>,
+function reduce<V, K extends string | number | symbol, U>(
+  collection: Collection<V, K>,
   callback: (
     accumulator: U,
     value: V,
     key: K,
-    collection: Collection<V,K>
+    collection: Collection<V, K>
   ) => U,
   initialValue: U
 ): U {

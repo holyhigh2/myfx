@@ -1,5 +1,5 @@
-import isInteger from "../is/isInteger";
 import isArray from "../is/isArray";
+import isInteger from "../is/isInteger";
 import toNumber from "../number/toNumber";
 import padEnd from "../string/padEnd";
 /**

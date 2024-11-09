@@ -1,6 +1,6 @@
 import each from "../collection/each";
-import { UnknownMapKey } from "../types";
 import get from "../object/get";
+import type { UnknownMapKey } from "../types";
 /**
  * 创建一个对象，属性名称与属性值分别来自两个数组
  * @example

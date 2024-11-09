@@ -1,5 +1,5 @@
 import toArray from "../collection/toArray";
-import { Collection } from "../types";
+import type { Collection } from "../types";
 /**
  * 从起始位置获取指定数量的元素并放入新数组后返回
  *

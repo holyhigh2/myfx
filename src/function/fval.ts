@@ -19,10 +19,10 @@ import values from "../object/values"
  * @param context 可选上下文
  * @returns 表达式计算结果
  */
-function fval<T>(expression: string,args?:Record<string,any>,context?:any): T {
+function fval<T>(expression: string, args?: Record<string, any>, context?: any): T {
   const ks = keys(args)
   const val = values(args)
-  return Function(...ks,'"use strict";return ' + expression).call(context,...val)
+  return Function(...ks, '"use strict";return ' + expression).call(context, ...val)
 }
 
 export default fval

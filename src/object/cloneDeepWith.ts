@@ -1,9 +1,8 @@
-import { UnknownMapKey } from "../types"
-import _identity from "../_identity"
-import _cloneBuiltInObject from "../_cloneBuiltInObject"
-import isObject from "../is/isObject";
-import isFunction from "../is/isFunction";
+import _cloneBuiltInObject from "../_cloneBuiltInObject";
 import isElement from "../is/isElement";
+import isFunction from "../is/isFunction";
+import isObject from "../is/isObject";
+import type { UnknownMapKey } from "../types";
 import clone from "./clone";
 /**
  * 完整复制对象,可以保持被复制属性的原有类型。支持赋值处理器
@@ -25,7 +24,7 @@ import clone from "./clone";
 function cloneDeepWith<T>(
   obj: Record<UnknownMapKey, any>,
   handler?: (v: any, k: UnknownMapKey, obj: Record<UnknownMapKey, any>) => any,
-  skip: (v: any, k: string | number | symbol) => boolean = ()=>false
+  skip: (v: any, k: string | number | symbol) => boolean = () => false
 ): T {
   if (!isObject(obj)) return obj
   if (isFunction(obj)) return <T>obj
@@ -38,7 +37,7 @@ function cloneDeepWith<T>(
   const propNames = Object.keys(obj)
   propNames.forEach((p) => {
     let skipTag = skip(obj[p], p)
-    if(skipTag)return;
+    if (skipTag) return;
 
     let newProp = (handler || clone)(obj[p], p, obj)
     if (isObject(newProp) && newProp !== obj[p]) {

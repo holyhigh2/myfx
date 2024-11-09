@@ -1,8 +1,8 @@
+import _iteratee from "../_iteratee";
 import eachRight from "../collection/eachRight";
-import { NonFuncItee } from "../types";
-import _iteratee from "../_iteratee"
-import slice from './slice'
-import size from '../collection/size'
+import size from '../collection/size';
+import type { NonFuncItee } from "../types";
+import slice from './slice';
 /**
  * 对集合内的所有元素进行断言并返回最后一个匹配的元素索引
  *

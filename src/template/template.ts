@@ -15,16 +15,16 @@ import each from "../collection/each";
 import includes from "../collection/includes";
 import map from "../collection/map";
 import size from "../collection/size";
+import takeRight from "../collection/takeRight";
 import keys from "../object/keys";
 import toObject from "../object/toObject";
+import toPairs from "../object/toPairs";
 import lastIndexOf from "../string/lastIndexOf";
 import padStart from "../string/padStart";
 import replace from "../string/replace";
 import substring from "../string/substring";
 import trim from "../string/trim";
-import { INode, IOptions, UnknownMapKey } from "../types";
-import toPairs from "../object/toPairs";
-import takeRight from "../collection/takeRight";
+import type { INode, IOptions, UnknownMapKey } from "../types";
 
 /**
  * 使用MTL(Myfx Template Language)编译字符串模板，并返回编译后的render函数
@@ -89,7 +89,7 @@ function template(string: string, options?: IOptions) {
 
   // ///////////////////////////////----拆分表达式与文本
   // 1. 对指令及插值进行分段
-  const tokens = parse(string, splitExp, mixins, stripWhite,delimiters);
+  const tokens = parse(string, splitExp, mixins, stripWhite, delimiters);
   // 2. 编译render函数
   const render = compile(tokens, options);
   return render;
@@ -115,7 +115,7 @@ function parse(
   splitExp: RegExp,
   mixins: Record<UnknownMapKey, any> | undefined,
   stripWhite: boolean,
-  delimiters:Array<string>
+  delimiters: Array<string>
 ): INode[] {
   let indicator = 0;
   let lastSegLength = 0;
@@ -148,7 +148,7 @@ function parse(
       }
 
       try {
-        const node2 = parseNode(rs, mixins,delimiters);
+        const node2 = parseNode(rs, mixins, delimiters);
         fullStack.push(node2);
       } catch (error) {
         // 获取最近信息
@@ -190,7 +190,7 @@ function getText(str: string) {
 function parseNode(
   rs: RegExpExecArray,
   mixins: Record<UnknownMapKey, any> | undefined,
-  delimiters:Array<string>
+  delimiters: Array<string>
 ): INode {
   const parts = compact(rs);
   const src = parts[0];
@@ -256,9 +256,8 @@ function compile(tokens: INode[], options: IOptions): Function {
     } else if (token.evaluate) {
       funcStr += "\n" + token.expression;
     } else if (token.mixin) {
-      funcStr += `\nprint(_.template(${JSON.stringify(token.tmpl)},$options)(${
-        token.paramters
-      }));`;
+      funcStr += `\nprint(_.template(${JSON.stringify(token.tmpl)},$options)(${token.paramters
+        }));`;
     }
   });
 
@@ -287,8 +286,8 @@ function compile(tokens: INode[], options: IOptions): Function {
       const print=(str)=>{
         textQ.push(str)
       };` +
-        funcStr +
-        ';return textQ.join("")}'
+      funcStr +
+      ';return textQ.join("")}'
     )(...globalValues, options);
 
     return getRender(obj);

@@ -1,5 +1,5 @@
-import { UnknownMapKey } from "../types"
-import _identity from "../_identity"
+import _identity from "../_identity";
+import type { UnknownMapKey } from "../types";
 import cloneWith from "./cloneWith";
 /**
  * 浅层复制对象
@@ -14,7 +14,7 @@ import cloneWith from "./cloneWith";
  * @param obj
  * @returns 被复制的新对象
  */
-function clone<T>(obj: Record<UnknownMapKey, any>):T {
+function clone<T>(obj: Record<UnknownMapKey, any>): T {
   return cloneWith<T>(obj, _identity)
 }
 

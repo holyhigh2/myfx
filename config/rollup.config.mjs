@@ -1,12 +1,12 @@
 /* eslint-disable max-len */
 import commonjs from '@rollup/plugin-commonjs'
-import banner2 from 'rollup-plugin-banner2'
 import json from '@rollup/plugin-json'
-import copy from 'rollup-plugin-copy'
-import typescript from 'rollup-plugin-typescript2'
-import clear from 'rollup-plugin-clear'
 import fs from 'fs'
 import path from 'path'
+import banner2 from 'rollup-plugin-banner2'
+import clear from 'rollup-plugin-clear'
+import copy from 'rollup-plugin-copy'
+import typescript from 'rollup-plugin-typescript2'
 const text = fs.readFileSync('./package.json', 'utf8')
 const pkg = JSON.parse(text)
 
@@ -37,7 +37,7 @@ const targets = [
         useTsconfigDeclarationDir: true,
         tsconfigOverride: {
           compilerOptions: {
-            declaration:true,
+            declaration: true,
             declarationDir: './dist/types',
           },
         },
@@ -71,7 +71,7 @@ const targets = [
     ],
     output: [
       {
-        file: 'dist/index.esm.js',
+        file: 'dist/index.esm.mjs',
         format: 'esm'
       },
       {
@@ -95,7 +95,7 @@ readfilelist('./src/_modules').forEach((path) => {
         tsconfigOverride: {
           // useTsconfigDeclarationDir: true,
           compilerOptions: {
-            declaration:false,
+            declaration: false,
             // declarationDir: './dist/'+fileName+'/types',
           },
         },

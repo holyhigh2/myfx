@@ -1,7 +1,6 @@
-import { Collection, NonFuncItee, UnknownMapKey } from "../types"
-import _eachIterator from "../_eachIterator";
-import _iteratee from "../_iteratee";
 import _identity from "../_identity";
+import _iteratee from "../_iteratee";
+import type { Collection, NonFuncItee, UnknownMapKey } from "../types";
 import each from "./each";
 
 /**
@@ -30,11 +29,11 @@ function countBy<V>(
   itee?: ((value: V) => string) | NonFuncItee
 ): Record<string, number>
 function countBy<V, K extends string | number | symbol>(
-  collection: Collection<V,K>,
+  collection: Collection<V, K>,
   itee?: ((value: V) => K) | NonFuncItee
 ): Record<K, number>
 function countBy<V, K extends string | number | symbol>(
-  collection: Collection<V,K>,
+  collection: Collection<V, K>,
   itee?: ((value: V) => K) | NonFuncItee
 ): Record<K, number> {
   const stat: Record<UnknownMapKey, any> = {}

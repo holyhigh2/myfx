@@ -1,5 +1,5 @@
 import toArray from "../collection/toArray";
-import { Collection } from "../types";
+import type { Collection } from "../types";
 /**
  * 返回除第一个元素外的所有元素组成的新数组
  *

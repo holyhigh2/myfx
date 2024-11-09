@@ -1,13 +1,10 @@
-import _eachIterator from "../_eachIterator";
-import _iteratee from "../_iteratee";
-import _identity from "../_identity";
 import isArray from "../is/isArray";
-import isFunction from "../is/isFunction";
-import isSet from "../is/isSet";
-import isString from "../is/isString";
 import isArrayLike from "../is/isArrayLike";
+import isFunction from "../is/isFunction";
 import isMap from "../is/isMap";
 import isObject from "../is/isObject";
+import isSet from "../is/isSet";
+import isString from "../is/isString";
 import values from "../object/values";
 
 /**
@@ -41,7 +38,7 @@ function toArray<T>(collection: any): T[] {
     return collection.split('') as T[]
   } else if (isArrayLike(collection)) {
     return Array.from(collection as any)
-  } else if (isMap<any,any>(collection)) {
+  } else if (isMap<any, any>(collection)) {
     return Array.from(collection.values())
   } else if (isObject(collection)) {
     return values(collection)

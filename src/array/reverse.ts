@@ -1,5 +1,5 @@
 import toArray from "../collection/toArray";
-import { ArrayLike } from "../types";
+import type { ArrayLike } from "../types";
 /**
  * 对数组元素位置进行颠倒，返回改变后的数组。
  *

@@ -1,5 +1,4 @@
 import _getGrouped from "../_getGrouped"
-import lowerCase from "./lowerCase"
 import toString from "./toString"
 import upperFirst from './upperFirst'
 /**

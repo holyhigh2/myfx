@@ -1,8 +1,8 @@
-import toString from "./toString"
-import escapeRegExp from './escapeRegExp'
+import isObject from '../is/isObject'
 import isRegExp from '../is/isRegExp'
 import isString from '../is/isString'
-import isObject from '../is/isObject'
+import escapeRegExp from './escapeRegExp'
+import toString from "./toString"
 /**
  * 使用<code>replaceValue</code>替换<code>str</code>中的所有<code>searchValue</code>部分
  *
@@ -46,7 +46,7 @@ function replaceAll(
     return strRs.replace(searchExp, replaceValue as any)
   } else if (isObject(searchValue)) {
     const ks = Object.keys(searchValue)
-    for (let i = ks.length; i--; ) {
+    for (let i = ks.length; i--;) {
       const k = ks[i]
       const v = searchValue[k]
       searchExp = new RegExp(escapeRegExp(k), 'g')

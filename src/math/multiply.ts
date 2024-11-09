@@ -14,7 +14,7 @@ import isNil from '../is/isNil'
  * @returns a*b
  * @since 1.0.0
  */
-function multiply(a:number,b:number):number{
+function multiply(a: number, b: number): number {
   a = isNil(a) ? 0 : a
   b = isNil(b) ? 0 : b
   return a * b

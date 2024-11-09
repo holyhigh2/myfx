@@ -1,7 +1,7 @@
-import _eachSources from "../_eachSources";
-import { UnknownMapKey } from "../types";
 import _checkTarget from "../_checkTarget";
+import _eachSources from "../_eachSources";
 import _identity from "../_identity";
+import type { UnknownMapKey } from "../types";
 /**
  * 与<code>assign</code>相同，但支持自定义处理器
  * 
@@ -24,11 +24,11 @@ function assignWith(
 
   let src = sources
   const sl = sources.length
-  let handler = src[sl-1]
+  let handler = src[sl - 1]
   if (!handler || !handler.call) {
     handler = _identity
   } else {
-    src = src.slice(0,sl-1)
+    src = src.slice(0, sl - 1)
   }
 
   _eachSources(

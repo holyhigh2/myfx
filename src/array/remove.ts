@@ -1,6 +1,6 @@
 import _iteratee from "../_iteratee";
 import isArray from "../is/isArray";
-import { NonFuncItee } from "../types";
+import type { NonFuncItee } from "../types";
 /**
  * 删除数组中断言结果为true的元素并返回被删除的元素
  * <div class="alert alert-secondary">
@@ -25,29 +25,29 @@ import { NonFuncItee } from "../types";
  * @returns 被删除的元素数组或空数组
  * @since 0.19.0
  */
-    function remove<T>(
-      array: T[],
-      predicate:
-        | ((value: T, index: string | number, array: T[]) => boolean)
-        | NonFuncItee
-    ): T[] {
-      const rs: T[] = []
-      if (!isArray(array)) return rs
-      const itee = _iteratee(predicate)
-    
-      let i = 0
-      for (let l = 0; l < array.length; l++) {
-        const item = array[l]
-        const r = itee(item, l, array)
-        if (r) {
-          rs.push(item)
-        } else {
-          array[i++] = item
-        }
-      }
-      array.length = i
-    
-      return rs
+function remove<T>(
+  array: T[],
+  predicate:
+    | ((value: T, index: string | number, array: T[]) => boolean)
+    | NonFuncItee
+): T[] {
+  const rs: T[] = []
+  if (!isArray(array)) return rs
+  const itee = _iteratee(predicate)
+
+  let i = 0
+  for (let l = 0; l < array.length; l++) {
+    const item = array[l]
+    const r = itee(item, l, array)
+    if (r) {
+      rs.push(item)
+    } else {
+      array[i++] = item
     }
+  }
+  array.length = i
+
+  return rs
+}
 
 export default remove

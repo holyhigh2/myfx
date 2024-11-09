@@ -1,8 +1,6 @@
-import { Collection, NonFuncItee } from "../types"
-import _eachIterator from "../_eachIterator";
-import _iteratee from "../_iteratee";
-import map from "./map";
 import flat from "../array/flat";
+import type { Collection, NonFuncItee } from "../types";
+import map from "./map";
 
 /**
  * 类似<code>map</code>，但会对返回值进行<code>flat</code>处理。
@@ -37,12 +35,12 @@ function flatMap<V>(
     | ((
       value: V,
       index: string,
-      collection: Collection<V,string>
+      collection: Collection<V, string>
     ) => V | Promise<V>)
     | NonFuncItee,
   depth?: number
 ): V[]
-function flatMap<V,U>(
+function flatMap<V, U>(
   collection: Set<V> | ArrayLike<V>,
   itee:
     | ((
@@ -53,29 +51,29 @@ function flatMap<V,U>(
     | NonFuncItee,
   depth?: number
 ): U[]
-function flatMap<V,U>(
+function flatMap<V, U>(
   collection: Record<string, V> | Map<string, V>,
   itee:
     | ((
       value: V,
       index: string,
-      collection: Collection<V,string>
+      collection: Collection<V, string>
     ) => U | Promise<U>)
     | NonFuncItee,
   depth?: number
 ): U[]
 function flatMap<V, K extends string | number | symbol>(
-  collection: Collection<V,K>,
+  collection: Collection<V, K>,
   itee: ((value: V, index: K, collection: Collection<V>) => V | Promise<any>) | NonFuncItee,
   depth?: number
 ): V[]
 function flatMap<V, K extends string | number | symbol, U>(
-  collection: Collection<V,K>,
+  collection: Collection<V, K>,
   itee: ((value: V, index: K, collection: Collection<V>) => U | Promise<any>) | NonFuncItee,
   depth?: number
 ): U[]
 function flatMap<V, K extends string | number | symbol, U>(
-  collection: Collection<V,K>,
+  collection: Collection<V, K>,
   itee: ((value: V, index: K, collection: Collection<V>) => U | Promise<any>) | NonFuncItee,
   depth?: number
 ): U[] {

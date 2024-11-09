@@ -1,5 +1,5 @@
-import { UnknownMapKey } from "./types"
 import isObject from "./is/isObject";
+import type { UnknownMapKey } from "./types";
 
 function eachSources(
   target: Record<UnknownMapKey, any>,

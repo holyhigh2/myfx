@@ -1,6 +1,6 @@
-import { UnknownMapKey } from "../types";
 import _checkTarget from "../_checkTarget";
 import _eachSources from "../_eachSources";
+import type { UnknownMapKey } from "../types";
 /**
  * 将一个或多个源对象的可枚举属性值分配到目标对象中属性值为undefined的属性上。
  * 如果源对象有多个，则按照从左到右的顺序依次对target赋值，相同属性会被忽略

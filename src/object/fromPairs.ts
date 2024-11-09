@@ -1,7 +1,4 @@
-import { UnknownMapKey } from "../types";
-import _checkTarget from "../_checkTarget";
-import _eachSources from "../_eachSources";
-import _noop from "../_noop";
+import type { UnknownMapKey } from "../types";
 /**
  * <code>toPairs</code>反函数，创建一个由键值对数组组成的对象
  *
@@ -14,7 +11,7 @@ import _noop from "../_noop";
  */
 function fromPairs(pairs: any[][]): Record<UnknownMapKey, any> {
   const rs: Record<UnknownMapKey, any> = {}
-  for(let k in pairs){
+  for (let k in pairs) {
     let pair = pairs[k]
     rs[pair[0]] = pair[1]
   }

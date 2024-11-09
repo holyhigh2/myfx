@@ -15,7 +15,7 @@ import _eq from "../_eq";
  * @since 1.0.0
  */
 function eq(a: unknown, b: unknown): boolean {
-  return _eq(a,b)
+  return _eq(a, b)
 }
 
 export default eq

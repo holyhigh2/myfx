@@ -1,6 +1,5 @@
-import { Collection, NonFuncItee } from "../types"
-import _eachIterator from "../_eachIterator";
 import _iteratee from "../_iteratee";
+import type { Collection, NonFuncItee } from "../types";
 import eachRight from "./eachRight";
 
 /**
@@ -46,18 +45,18 @@ function findLast<V>(
     | ((
       value: V,
       index: string,
-      collection: Collection<V,string>
+      collection: Collection<V, string>
     ) => boolean)
     | NonFuncItee
 ): V | undefined
 function findLast<V, K extends string | number | symbol>(
-  collection: Collection<V,K>,
+  collection: Collection<V, K>,
   predicate:
     | ((value: V, index: K, collection: Collection<V>) => boolean)
     | NonFuncItee
 ): V | undefined
 function findLast<V, K extends string | number | symbol>(
-  collection: Collection<V,K>,
+  collection: Collection<V, K>,
   predicate:
     | ((value: V, index: K, collection: Collection<V>) => boolean)
     | NonFuncItee

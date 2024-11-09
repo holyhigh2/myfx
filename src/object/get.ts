@@ -1,5 +1,5 @@
-import isObject from "../is/isObject"
 import _toPath from "../_toPath"
+import isObject from "../is/isObject"
 /**
  * 通过path获取对象属性值
  *

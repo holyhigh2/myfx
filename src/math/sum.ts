@@ -1,5 +1,5 @@
-import isNil from '../is/isNil'
 import isArrayLike from '../is/isArrayLike'
+import isNil from '../is/isNil'
 
 /**
  * 对字符/数字数组/Set进行求和并返回结果
@@ -26,14 +26,14 @@ import isArrayLike from '../is/isArrayLike'
 function sum(
   values: Set<string | number> | Array<string | number>
 ): number
-function sum(...values:any[]):number
-function sum(...values:any[]):number {
-  let ary:any = values
-  if(ary.length === 1 && isArrayLike(ary[0])){
+function sum(...values: any[]): number
+function sum(...values: any[]): number {
+  let ary: any = values
+  if (ary.length === 1 && isArrayLike(ary[0])) {
     ary = ary[0]
   }
 
-  const vals = ary.map((v:any)=>isNil(v)?0:v)
+  const vals = ary.map((v: any) => isNil(v) ? 0 : v)
   let rs = 0
   const f64a = new Float64Array(vals)
   f64a.forEach((v: number) => {

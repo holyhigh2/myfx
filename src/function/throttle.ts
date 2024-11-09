@@ -16,25 +16,25 @@
  * @returns 包装后的函数
  * @since 1.4.0
  */
-function throttle<T extends (...args:any[])=>any>(fn: T, wait: number, options?:{leading?:boolean,trailing?:boolean}): T {
+function throttle<T extends (...args: any[]) => any>(fn: T, wait: number, options?: { leading?: boolean, trailing?: boolean }): T {
   let proxy = fn
   let lastExec = 0
   let timer: any = null
-  let timeoutArgs:any
-  let timeoutContext:any
+  let timeoutArgs: any
+  let timeoutContext: any
   options = options || { leading: true, trailing: true }
   options.leading = options.leading === undefined ? true : options.leading;
   options.trailing = options.trailing === undefined ? true : options.trailing;
 
   function timeout() {
     if (options?.trailing)
-    proxy.apply(timeoutContext,timeoutArgs);
+      proxy.apply(timeoutContext, timeoutArgs);
 
     lastExec = Date.now();
     timeoutArgs = timer = null;
   }
 
-  return (function(...args: any[]){
+  return (function (this: any, ...args: any[]) {
     timeoutArgs = args
     timeoutContext = this
     let now = Date.now()
@@ -44,10 +44,10 @@ function throttle<T extends (...args:any[])=>any>(fn: T, wait: number, options?:
         clearTimeout(timer)
         timeoutArgs = timer = null
       }
-      if (options?.leading){
-        proxy.apply(this,args);
+      if (options?.leading) {
+        proxy.apply(this, args);
       }
-        
+
       lastExec = now;
     } else if (!timer) {
       timer = setTimeout(timeout, remaining);

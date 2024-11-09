@@ -1,7 +1,5 @@
-import { NonFuncItee, UnknownMapKey } from "../types";
-import _checkTarget from "../_checkTarget";
-import _eachSources from "../_eachSources";
 import _iteratee from "../_iteratee";
+import type { NonFuncItee, UnknownMapKey } from "../types";
 /**
  * 对`object`内的所有属性进行断言并返回第一个匹配的属性key
  *
@@ -35,7 +33,7 @@ function findKey<V>(
 ): string | number | symbol | undefined {
   const callback = _iteratee(predicate)
   let rs
-  for(let k in object){
+  for (let k in object) {
     let v = object[k]
     const r = callback(v, k, object)
     if (r) {

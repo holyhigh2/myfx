@@ -32,7 +32,7 @@ export type ArrayLike<V = unknown> =
 /**
  * 集合类型
  */
-export type Collection<V = unknown,K extends string | number | symbol = string> =
+export type Collection<V = unknown, K extends string | number | symbol = string> =
   | Record<K, V>
   | Set<V>
   | Map<K, V>

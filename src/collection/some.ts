@@ -1,6 +1,5 @@
-import { Collection, NonFuncItee, UnknownMapKey } from "../types"
-import _eachIterator from "../_eachIterator";
 import _iteratee from "../_iteratee";
+import type { Collection, NonFuncItee } from "../types";
 import each from "./each";
 
 /**
@@ -41,19 +40,19 @@ function some<V>(
 function some<V>(
   collection: Record<string, V> | Map<string, V>,
   predicate:
-    | ((value: V, index: string, collection: Collection<V,string>) => boolean)
+    | ((value: V, index: string, collection: Collection<V, string>) => boolean)
     | NonFuncItee
 ): boolean
 function some<V, K extends string | number | symbol>(
-  collection: Collection<V,K>,
+  collection: Collection<V, K>,
   predicate:
-    | ((value: V, index: K, collection: Collection<V,K>) => boolean)
+    | ((value: V, index: K, collection: Collection<V, K>) => boolean)
     | NonFuncItee
 ): boolean
 function some<V, K extends string | number | symbol>(
-  collection: Collection<V,K>,
+  collection: Collection<V, K>,
   predicate:
-    | ((value: V, index: K, collection: Collection<V,K>) => boolean)
+    | ((value: V, index: K, collection: Collection<V, K>) => boolean)
     | NonFuncItee
 ): boolean {
   let rs = false

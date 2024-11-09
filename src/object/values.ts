@@ -1,4 +1,3 @@
-import _identity from "../_identity"
 import keys from "./keys";
 /**
  * 返回对象的所有value数组

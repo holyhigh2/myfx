@@ -1,7 +1,7 @@
-import isString from "./is/isString"
-import isDate from "./is/isDate"
 import isBoolean from "./is/isBoolean"
+import isDate from "./is/isDate"
 import isRegExp from "./is/isRegExp"
+import isString from "./is/isString"
 
 function cloneBuiltInObject(
   obj: unknown

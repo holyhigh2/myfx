@@ -1,8 +1,8 @@
-import { UnknownMapKey } from "../types";
+import flatDeep from "../array/flatDeep";
 import each from "../collection/each";
 import get from "../object/get";
 import set from "../object/set";
-import flatDeep from "../array/flatDeep";
+import type { UnknownMapKey } from "../types";
 /**
  * 批量绑定对象内的函数属性，将这些函数的this上下文指向绑定对象。经常用于模型中的函数用于外部场景，比如setTimeout/事件绑定等
  *

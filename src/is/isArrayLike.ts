@@ -1,7 +1,7 @@
-import isString from "./isString";
-import isObject from "./isObject";
+import type { ArrayLike, IList } from "../types";
 import isFunction from "./isFunction";
-import { ArrayLike ,IList} from "../types";
+import isObject from "./isObject";
+import isString from "./isString";
 /**
  * 判断参数是否为类数组对象
  *

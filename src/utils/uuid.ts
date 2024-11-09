@@ -1,5 +1,5 @@
-import substring from "../string/substring";
 import randi from "../math/randi";
+import substring from "../string/substring";
 
 const VARIANTS = ['8', '9', 'a', 'b']
 /**

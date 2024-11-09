@@ -1,9 +1,9 @@
-import { UnknownMapKey } from "../types"
-import _identity from "../_identity"
-import isObject from "../is/isObject"
-import isFunction from "../is/isFunction"
 import _cloneBuiltInObject from "../_cloneBuiltInObject";
-import isElement from "../is/isElement"
+import _identity from "../_identity";
+import isElement from "../is/isElement";
+import isFunction from "../is/isFunction";
+import isObject from "../is/isObject";
+import type { UnknownMapKey } from "../types";
 
 /**
  * 浅层复制对象，支持赋值处理器
@@ -27,8 +27,8 @@ import isElement from "../is/isElement"
 function cloneWith<T>(
   obj: Record<UnknownMapKey, any>,
   handler: (v: any, k: string | number | symbol) => any = _identity,
-  skip: (v: any, k: string | number | symbol) => boolean = ()=>false
-):T {
+  skip: (v: any, k: string | number | symbol) => boolean = () => false
+): T {
   if (!isObject(obj)) return obj
   if (isFunction(obj)) return <T>obj
   if (isElement(obj)) return <T>obj
@@ -39,7 +39,7 @@ function cloneWith<T>(
   const propNames = Object.keys(obj)
   propNames.forEach((p) => {
     let skipTag = skip(obj[p], p)
-    if(skipTag)return;
+    if (skipTag) return;
     let newProp = (handler || _identity)(obj[p], p)
     try {
       // maybe unwritable

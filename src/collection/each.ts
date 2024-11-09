@@ -1,5 +1,5 @@
-import { Collection, UnknownMapKey } from "../types"
 import _eachIterator from "../_eachIterator";
+import type { Collection } from "../types";
 
 /**
  * 对集合元素进行顺序遍历。
@@ -33,15 +33,15 @@ function each<V>(
   callback: (
     value: V,
     index: string,
-    collection: Collection<V,string>
+    collection: Collection<V, string>
   ) => boolean | void | Promise<void>
 ): void
 function each<V, K extends string | number | symbol>(
-  collection: Collection<V,K>,
+  collection: Collection<V, K>,
   callback: (value: V, index: K, collection: Collection<V>) => boolean | void | Promise<void>
 ): void
 function each<V, K extends string | number | symbol>(
-  collection: Collection<V,K>,
+  collection: Collection<V, K>,
   callback: (value: V, index: K, collection: Collection<V>) => boolean | void | Promise<void>
 ): void {
   _eachIterator<V, K>(collection, callback, false)

@@ -1,5 +1,5 @@
 import toArray from "../collection/toArray";
-import { Collection } from "../types";
+import type { Collection } from "../types";
 /**
  * 从数组末尾位置获取指定数量的元素放入新数组并返回
  *

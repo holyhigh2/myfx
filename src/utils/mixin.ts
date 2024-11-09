@@ -1,4 +1,3 @@
-import isFunction from "../is/isFunction"
 import functions from "../object/functions"
 /**
  * 为func.js扩展额外函数，扩展后的函数同样具有函数链访问能力
@@ -22,19 +21,19 @@ import functions from "../object/functions"
  *
  * @param obj 扩展的函数声明
  */
-function mixin(target: Record<any, any>,obj: Record<string, Function>): void {
+function mixin(target: Record<any, any>, obj: Record<string, Function>): void {
     functions(obj).forEach((fnName) => {
         const fn: Function = obj[fnName]
-        if (target.prototype && target.prototype.constructor.name === 'FuncChain'){
-            target.prototype['_'+fnName] = function (...rest: any[]) {
+        if (target.prototype && target.prototype.constructor.name === 'FuncChain') {
+            target.prototype['_' + fnName] = function (...rest: any[]) {
                 this._chain.push({
                     fn: fn,
                     params: rest,
                 })
                 return this
             }
-        }else{
-            (target as any)['_'+fnName] = fn
+        } else {
+            (target as any)['_' + fnName] = fn
         }
     })
 }

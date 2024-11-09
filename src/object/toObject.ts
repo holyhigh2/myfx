@@ -1,8 +1,7 @@
-import _eq from "../_eq";
-import { UnknownMapKey } from "../types"
 import isArray from "../is/isArray";
-import assign from "./assign";
 import isObject from "../is/isObject";
+import type { UnknownMapKey } from "../types";
+import assign from "./assign";
 /**
  * 解析传递参数并返回一个根据参数值创建的Object实例。
  * 支持数组对、k/v对、对象、混合方式等创建
@@ -29,7 +28,7 @@ function toObject(...vals: any[]): Record<UnknownMapKey, any> {
   const rs: Record<UnknownMapKey, any> = {}
   const pairs: any[] = [] // 存放k/v
   let key: unknown = null
-  
+
   vals.forEach((v) => {
     if (isArray(v)) {
       const tmp = toObject(...v)

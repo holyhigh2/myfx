@@ -1,7 +1,7 @@
-import size from "../collection/size"
-import { NonFuncItee } from "../types"
-import _iteratee from '../_iteratee'
 import _identity from '../_identity'
+import _iteratee from '../_iteratee'
+import size from "../collection/size"
+import type { NonFuncItee } from "../types"
 /**
  * 同<code>sortedIndex</code>，但支持自定义回调用来获取对比值
  * @example

@@ -1,7 +1,6 @@
-import { Collection, NonFuncItee, UnknownMapKey } from "../types"
-import _eachIterator from "../_eachIterator";
-import _iteratee from "../_iteratee";
 import _identity from "../_identity";
+import _iteratee from "../_iteratee";
+import type { Collection, NonFuncItee, UnknownMapKey } from "../types";
 import each from "./each";
 
 /**
@@ -29,12 +28,12 @@ function keyBy<K extends string | number | symbol>(
   collection: Collection<any>,
   itee?: ((value: unknown) => K) | NonFuncItee
 ): Record<K, unknown>
-function keyBy<V,K extends string | number | symbol>(
-  collection: Collection<V,K>,
+function keyBy<V, K extends string | number | symbol>(
+  collection: Collection<V, K>,
   itee?: ((value: V) => K) | NonFuncItee
 ): Record<K, V>
-function keyBy<V,K extends string | number | symbol>(
-  collection: Collection<V,K>,
+function keyBy<V, K extends string | number | symbol>(
+  collection: Collection<V, K>,
   itee?: ((value: V) => K) | NonFuncItee
 ): Record<K, V> {
   const stat: Record<UnknownMapKey, unknown> = {}

@@ -1,6 +1,6 @@
-import each from "../collection/each"
-import { NonFuncItee } from "../types"
 import _iteratee from "../_iteratee"
+import each from "../collection/each"
+import type { NonFuncItee } from "../types"
 import slice from './slice'
 /**
  * 对集合内的所有元素进行断言并返回第一个匹配的元素索引

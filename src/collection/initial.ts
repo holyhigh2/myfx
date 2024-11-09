@@ -1,5 +1,5 @@
 import toArray from "../collection/toArray"
-import { Collection } from "../types"
+import type { Collection } from "../types"
 
 /**
  * 返回除最后一个元素外的所有元素组成的新数组
@@ -14,7 +14,7 @@ import { Collection } from "../types"
  */
 function initial<T>(array: Collection<T>): T[] {
   let ary = toArray(array)
-  return ary.slice(0, ary.length-1) as T[]
+  return ary.slice(0, ary.length - 1) as T[]
 }
 
 export default initial

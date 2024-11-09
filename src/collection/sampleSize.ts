@@ -1,12 +1,9 @@
-import { Collection, UnknownMapKey } from "../types"
-import _eachIterator from "../_eachIterator";
-import _iteratee from "../_iteratee";
-import _identity from "../_identity";
-import toArray from "../collection/toArray";
-import range from "../array/range";
-import randi from "../math/randi";
 import pop from "../array/pop";
+import range from "../array/range";
 import map from "../collection/map";
+import toArray from "../collection/toArray";
+import randi from "../math/randi";
+import type { Collection, UnknownMapKey } from "../types";
 
 /**
  * 返回对指定列表的指定数量随机采样结果

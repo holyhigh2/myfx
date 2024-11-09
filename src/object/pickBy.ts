@@ -1,5 +1,5 @@
-import { UnknownMapKey } from "../types"
 import _identity from "../_identity";
+import type { UnknownMapKey } from "../types";
 /**
  * 同<code>pick</code>，但支持断言函数进行选取
  * @example
@@ -16,8 +16,8 @@ function pickBy<V, K extends UnknownMapKey>(
   predicate?: (v: V, k: K) => boolean
 ): Record<UnknownMapKey, any> {
   const rs: Record<UnknownMapKey, any> = {}
-  if(obj === null || obj === undefined)return rs
-  Object.keys(obj).forEach(k=>{
+  if (obj === null || obj === undefined) return rs
+  Object.keys(obj).forEach(k => {
     let v = obj[k]
     if ((predicate || _identity)(v, k as K)) {
       rs[k] = v

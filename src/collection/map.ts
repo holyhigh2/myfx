@@ -1,6 +1,5 @@
-import { Collection, NonFuncItee, UnknownMapKey } from "../types"
-import _eachIterator from "../_eachIterator";
 import _iteratee from "../_iteratee";
+import type { Collection, NonFuncItee } from "../types";
 import each from "./each";
 
 /**
@@ -42,32 +41,32 @@ function map<U>(
 function map<U>(
   collection: Record<string, any> | Map<string, any>,
   itee:
-    | ((value: any, index: string, collection: Collection<any,string>) => U | Promise<U>)
+    | ((value: any, index: string, collection: Collection<any, string>) => U | Promise<U>)
     | NonFuncItee
 ): U[]
-function map<V,U>(
+function map<V, U>(
   collection: Set<V> | ArrayLike<V>,
   itee:
     | ((value: V, index: number, collection: Collection<V>) => U | Promise<U>)
     | NonFuncItee
 ): U[]
-function map<V,U>(
+function map<V, U>(
   collection: Record<string, V> | Map<string, V>,
   itee:
-    | ((value: V, index: string, collection: Collection<V,string>) => U | Promise<U>)
+    | ((value: V, index: string, collection: Collection<V, string>) => U | Promise<U>)
     | NonFuncItee
 ): U[]
 function map<V, K extends string | number | symbol>(
-  collection: Collection<V,K>,
-  itee: ((value: V, index: K, collection: Collection<V,K>) => V | Promise<any>) | NonFuncItee
+  collection: Collection<V, K>,
+  itee: ((value: V, index: K, collection: Collection<V, K>) => V | Promise<any>) | NonFuncItee
 ): V[]
 function map<V, K extends string | number | symbol, U>(
-  collection: Collection<V,K>,
-  itee: ((value: V, index: K, collection: Collection<V,K>) => U | Promise<any>) | NonFuncItee
+  collection: Collection<V, K>,
+  itee: ((value: V, index: K, collection: Collection<V, K>) => U | Promise<any>) | NonFuncItee
 ): U[]
 function map<V, K extends string | number | symbol, U>(
-  collection: Collection<V,K>,
-  itee: ((value: V, index: K, collection: Collection<V,K>) => U | Promise<any>) | NonFuncItee
+  collection: Collection<V, K>,
+  itee: ((value: V, index: K, collection: Collection<V, K>) => U | Promise<any>) | NonFuncItee
 ): U[] {
   const rs: U[] = []
   const cb = _iteratee(itee)
@@ -80,8 +79,8 @@ function map<V, K extends string | number | symbol, U>(
 
 export default map
 
-function xx(){
-  let x = map({a:1,b:'3'},(v,k)=>{
-    return v+''
+function xx() {
+  let x = map({ a: 1, b: '3' }, (v, k) => {
+    return v + ''
   })
 }

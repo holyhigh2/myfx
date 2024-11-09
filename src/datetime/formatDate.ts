@@ -6,8 +6,8 @@ import toDate from "./toDate"
 const INVALID_DATE = ''
 const SearchExp =
   /y{2,4}|M{1,3}|d{1,4}|h{1,2}|m{1,2}|s{1,2}|Q{1,2}|E{1,2}|W{1,2}|w{1,2}|H{1,2}|S|a/gm
-  const pad0 = (str:string)=>str.length>1?str:'0'+str
-  const pad00 = (str: string)=>str.length>2?str:(str.length>1?'0'+str:'00'+str)
+const pad0 = (str: string) => str.length > 1 ? str : '0' + str
+const pad00 = (str: string) => str.length > 2 ? str : (str.length > 1 ? '0' + str : '00' + str)
 
 /**
  * 通过表达式格式化日期时间
@@ -124,14 +124,14 @@ function formatDate(val: string | Date | number, pattern?: string): string {
               return pad00(getDayOfYear(valDate) + '')
           }
         } else if (cap === 'a') {
-          let val = valDate.getHours() 
-          return val<12?locale?.meridiems[0]:locale?.meridiems[1]
-        }else if (cap === 'h') {//12
-          let val = valDate.getHours() 
+          let val = valDate.getHours()
+          return val < 12 ? locale?.meridiems[0] : locale?.meridiems[1]
+        } else if (cap === 'h') {//12
+          let val = valDate.getHours()
           val = val % 12;
-          if(val === 0)val = 12
-          return tag.length > 1 ? pad0(val+'') : val+''
-        }else if (cap === 'H') {//24
+          if (val === 0) val = 12
+          return tag.length > 1 ? pad0(val + '') : val + ''
+        } else if (cap === 'H') {//24
           const val = valDate.getHours() + ''
           return tag.length > 1 ? pad0(val) : val
         } else if (cap === 'm') {
@@ -157,8 +157,8 @@ function formatDate(val: string | Date | number, pattern?: string): string {
           return tag === 'E'
             ? dayOfWeek + ''
             : locale?.days[dayOfWeek - 1] || tag
-        }else if (cap === 'S') {
-          return valDate.getMilliseconds()+''
+        } else if (cap === 'S') {
+          return valDate.getMilliseconds() + ''
         }
         return tag
       })
@@ -169,7 +169,7 @@ function formatDate(val: string | Date | number, pattern?: string): string {
 const cache: Record<string, Function> = {}
 const Locale: Record<
   string,
-  { quarters: string[]; months: string[]; weeks: string[]; days: string[];meridiems:string[] }
+  { quarters: string[]; months: string[]; weeks: string[]; days: string[]; meridiems: string[] }
 > = {
   'zh-CN': {
     quarters: ['一季度', '二季度', '三季度', '四季度'],
@@ -189,7 +189,7 @@ const Locale: Record<
     ].map((v) => v + '月'),
     weeks: ['一', '二', '三', '四', '五', '六'].map((v) => '第' + v + '周'),
     days: ['一', '二', '三', '四', '五', '六', '日'].map((v) => '星期' + v),
-    meridiems: ['AM','PM']
+    meridiems: ['AM', 'PM']
   },
 }
 let Lang = globalThis.navigator?.language || 'zh-CN'
@@ -215,7 +215,7 @@ formatDate.locale = function (
 ): void {
   let locale = Locale[lang]
   if (!locale) {
-    locale = Locale[lang] = { quarters: [], months: [], weeks: [], days: [],meridiems:[] }
+    locale = Locale[lang] = { quarters: [], months: [], weeks: [], days: [], meridiems: [] }
   }
 
   if (options?.quarters) {

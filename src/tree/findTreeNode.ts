@@ -1,5 +1,5 @@
-import {NonFuncItee, UnknownMapKey} from '../types'
 import _iteratee from '../_iteratee'
+import type { NonFuncItee, UnknownMapKey } from '../types'
 import walkTree from './walkTree'
 
 /**
@@ -51,8 +51,8 @@ function findTreeNode(
     node: Record<UnknownMapKey, any>,
     parentNode: Record<UnknownMapKey, any>,
     chain: Record<UnknownMapKey, any>[],
-    level:number,
-    index:number
+    level: number,
+    index: number
   ) => boolean | NonFuncItee,
   options?: { childrenKey?: string }
 ): Record<UnknownMapKey, any> | undefined {
@@ -60,8 +60,8 @@ function findTreeNode(
   let node
   walkTree(
     treeNodes,
-    (n,p, c,l,i) => {
-      const rs = callback(n,p, c,l,i)
+    (n, p, c, l, i) => {
+      const rs = callback(n, p, c, l, i)
       if (rs) {
         node = n
         return false

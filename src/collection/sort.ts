@@ -1,10 +1,7 @@
-import _eachIterator from "../_eachIterator";
-import _iteratee from "../_iteratee";
-import _identity from "../_identity";
-import toArray from "./toArray";
 import isFunction from "../is/isFunction";
+import type { Collection } from "../types";
 import sortBy from "./sortBy";
-import { Collection } from "../types";
+import toArray from "./toArray";
 
 /**
  * 对集合进行排序，并返回排序后的数组副本。

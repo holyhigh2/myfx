@@ -1,6 +1,5 @@
-import { ArrayLike, Collection, NonFuncItee } from "../types"
-import _eachIterator from "../_eachIterator";
 import _iteratee from "../_iteratee";
+import type { ArrayLike, Collection, NonFuncItee } from "../types";
 import each from "./each";
 
 /**
@@ -35,7 +34,7 @@ import each from "./each";
  * @returns 由通过断言的元素组成的新数组
  */
 function filter<V>(
-  collection: Set<V>|ArrayLike<V>,
+  collection: Set<V> | ArrayLike<V>,
   predicate:
     | ((value: V, index: number, collection: Collection<V>) => boolean)
     | NonFuncItee
@@ -43,17 +42,17 @@ function filter<V>(
 function filter<V>(
   collection: Record<string, V> | Map<string, V>,
   predicate:
-    | ((value: V, index: string, collection: Collection<V,string>) => boolean)
+    | ((value: V, index: string, collection: Collection<V, string>) => boolean)
     | NonFuncItee
 ): V[]
 function filter<V, K extends string | number | symbol>(
-  collection: Collection<V,K>,
+  collection: Collection<V, K>,
   predicate:
     | ((value: V, index: K, collection: Collection<V>) => boolean)
     | NonFuncItee
 ): V[]
 function filter<V, K extends string | number | symbol>(
-  collection: Collection<V,K>,
+  collection: Collection<V, K>,
   predicate:
     | ((value: V, index: K, collection: Collection<V>) => boolean)
     | NonFuncItee

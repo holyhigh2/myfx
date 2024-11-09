@@ -117,7 +117,7 @@ function formatNumber(v: string | number, pattern = '#,##0.00'): string {
       if (fractionPtn) {
         if (fraction.length >= fixedLen) {
           dStr = parseFloat('0.' + fraction).toFixed(fixedLen)
-          if(dStr[0] === '1'){
+          if (dStr[0] === '1') {
             integer += 1
           }
           dStr = dStr.substring(1)

@@ -1,8 +1,5 @@
-import { UnknownMapKey } from "../types";
-import _checkTarget from "../_checkTarget";
-import _eachSources from "../_eachSources";
-import _identity from "../_identity";
 import isFunction from "../is/isFunction";
+import type { UnknownMapKey } from "../types";
 /**
  * 返回对象中的函数属性key数组
  * @example

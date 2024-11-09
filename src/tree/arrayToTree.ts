@@ -1,10 +1,10 @@
-import {UnknownMapKey} from '../types'
+import sortedIndexBy from '../array/sortedIndexBy'
+import each from '../collection/each'
+import sortBy from '../collection/sortBy'
 import isArray from '../is/isArray'
 import isObject from '../is/isObject'
 import get from '../object/get'
-import each from '../collection/each'
-import sortBy from '../collection/sortBy'
-import sortedIndexBy from '../array/sortedIndexBy'
+import type { UnknownMapKey } from '../types'
 
 /**
  * 使用高性能算法，将array结构数据变为tree结构数据。*注意，会修改原始数据*
@@ -74,7 +74,7 @@ function arrayToTree(
   const roots: Record<any, any>[] = []
   const nodeMap: { [key: string | number]: any } = {}
   const sortMap: { [key: string | number]: any } = {}
-  const initParentMap:{ [key: string | number]: boolean } = {}
+  const initParentMap: { [key: string | number]: boolean } = {}
 
   array.forEach((record) => {
     const nodeId = record[idKey || 'id']
@@ -97,7 +97,7 @@ function arrayToTree(
     const parentNode = nodeMap[parentId]
     if (parentNode) {
       let children = parentNode[childrenKey]
-      if(!initParentMap[parentId]){
+      if (!initParentMap[parentId]) {
         children = parentNode[childrenKey] = []
         initParentMap[parentId] = true
       }

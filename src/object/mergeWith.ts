@@ -1,10 +1,10 @@
-import { UnknownMapKey } from "../types";
 import _checkTarget from "../_checkTarget";
 import _eachSources from "../_eachSources";
 import _noop from "../_noop";
-import isObject from "../is/isObject";
-import isFunction from "../is/isFunction";
 import concat from "../array/concat";
+import isFunction from "../is/isFunction";
+import isObject from "../is/isObject";
+import type { UnknownMapKey } from "../types";
 /**
  * 与<code>merge</code>相同，但支持自定义处理器
  * 
@@ -29,7 +29,7 @@ function mergeWith<T extends Record<UnknownMapKey, any>>(
 
   let src = sources
   const sl = src.length
-  let handler = src[sl-1]
+  let handler = src[sl - 1]
   if (!isFunction(handler)) {
     handler = _noop
   } else {

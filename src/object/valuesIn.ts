@@ -1,5 +1,4 @@
-import { UnknownMapKey } from "../types"
-import _identity from "../_identity"
+import type { UnknownMapKey } from "../types";
 import keysIn from "./keysIn";
 /**
  * 返回对象的所有value数组

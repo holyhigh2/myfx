@@ -1,9 +1,9 @@
-import {NonFuncItee, UnknownMapKey} from '../types'
 import _iteratee from '../_iteratee'
-import walkTree from './walkTree'
 import includes from '../collection/includes'
 import map from '../collection/map'
 import cloneWith from '../object/cloneWith'
+import type { NonFuncItee, UnknownMapKey } from '../types'
+import walkTree from './walkTree'
 
 /**
  * 类似<code>findTreeNodes</code>，但会返回包含所有父节点的节点副本数组，已做去重处理。
@@ -54,7 +54,7 @@ function filterTree(
   predicate: (node: Record<UnknownMapKey, any>,
     parentNode: Record<UnknownMapKey, any>,
     chain: Record<UnknownMapKey, any>[],
-    level:number) => boolean | NonFuncItee,
+    level: number) => boolean | NonFuncItee,
   options?: { childrenKey?: string }
 ): Record<UnknownMapKey, any>[] {
   options = options || {}
@@ -63,8 +63,8 @@ function filterTree(
   let nodes: Record<UnknownMapKey, any>[] = []
   walkTree(
     treeNodes,
-    (n,p, c,l) => {
-      const rs = callback(n,p, c,l)
+    (n, p, c, l) => {
+      const rs = callback(n, p, c, l)
       if (rs) {
         c.forEach((node: Record<UnknownMapKey, any>) => {
           if (!includes(nodes, node)) {

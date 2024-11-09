@@ -1,8 +1,8 @@
-import { IList } from "../types";
-import isNil from "../is/isNil";
 import isMap from "../is/isMap";
-import isSet from "../is/isSet";
+import isNil from "../is/isNil";
 import isObject from "../is/isObject";
+import isSet from "../is/isSet";
+import type { IList } from "../types";
 /**
  * 获取集合对象的内容数量，对于map/object对象获取的是键/值对的数量
  *

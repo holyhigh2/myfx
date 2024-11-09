@@ -1,11 +1,9 @@
-import _eachIterator from "../_eachIterator";
-import _iteratee from "../_iteratee";
 import _eq from "../_eq";
-import each from "./each";
-import isString from "../is/isString";
-import isArrayLike from "../is/isArrayLike";
 import slice from "../array/slice";
-import { Collection } from "../types";
+import isArrayLike from "../is/isArrayLike";
+import isString from "../is/isString";
+import type { Collection } from "../types";
+import each from "./each";
 
 /**
  * 判断集合中是否包含给定的值。使用<code>eq</code>函数进行等值判断。
@@ -33,7 +31,7 @@ import { Collection } from "../types";
  * @param [fromIndex=0] 从集合的fromIndex 索引处开始查找。如果集合是map/object对象，无效
  * @returns 如果包含返回true否则返回false
  */
-function includes(collection: Collection<any>, value: any, fromIndex?: number):boolean {
+function includes(collection: Collection<any>, value: any, fromIndex?: number): boolean {
   let rs = false
   fromIndex = fromIndex || 0
   if (isString(collection)) {

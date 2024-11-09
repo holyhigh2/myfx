@@ -1,6 +1,6 @@
+import json from '@rollup/plugin-json'
 import typescript from 'rollup-plugin-typescript2'
 const nodeResolve = require('@rollup/plugin-node-resolve')
-import json from '@rollup/plugin-json'
 
 const targets = [
   {
@@ -8,9 +8,9 @@ const targets = [
     plugins: [
       typescript({
         tsconfigOverride: {
-          include:["src/index.ts"],
+          include: ["src/index.ts"],
           compilerOptions: {
-            declaration:false
+            declaration: false
           },
         },
       }),
@@ -20,8 +20,7 @@ const targets = [
     output: [
       {
         file: 'test/index.js',
-        format: 'umd',
-        name: 'myfx'
+        format: 'esm'
       }
     ],
   }

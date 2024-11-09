@@ -1,7 +1,6 @@
-import { UnknownMapKey } from "../types"
-import _identity from "../_identity"
-import omitBy from "./omitBy"
 import flatDeep from "../array/flatDeep"
+import type { UnknownMapKey } from "../types"
+import omitBy from "./omitBy"
 /**
  * 创建一个剔除指定属性的对象子集并返回。与pick()刚好相反
  * @example
@@ -21,8 +20,8 @@ function omit(
   obj: Record<UnknownMapKey, any>,
   ...props: (string | string[])[]
 ) {
-  const keys:string[] = flatDeep(props)
-  return omitBy<any,string>(obj, (v, k) => {
+  const keys: string[] = flatDeep(props)
+  return omitBy<any, string>(obj, (v, k) => {
     return keys.includes(k)
   })
 }

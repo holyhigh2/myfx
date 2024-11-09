@@ -1,8 +1,8 @@
-import { UnknownMapKey } from "../types";
 import _checkTarget from "../_checkTarget";
 import _eachSources from "../_eachSources";
-import isObject from "../is/isObject";
 import isFunction from "../is/isFunction";
+import isObject from "../is/isObject";
+import type { UnknownMapKey } from "../types";
 /**
  * 与<code>defaults</code>相同，但会递归对象属性
  * 

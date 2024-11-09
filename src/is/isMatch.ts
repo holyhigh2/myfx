@@ -1,5 +1,5 @@
-import isMatchWith from "./isMatchWith";
 import _eq from "../_eq";
+import isMatchWith from "./isMatchWith";
 /**
  * 检测props对象中的所有属性是否在object中存在，可用于对象的深度对比。
  * 使用<code>eq</code>作为值对比逻辑

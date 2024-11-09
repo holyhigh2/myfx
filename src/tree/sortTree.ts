@@ -1,6 +1,6 @@
-import {UnknownMapKey} from '../types'
 import isArray from '../is/isArray'
 import isEmpty from '../is/isEmpty'
+import type { UnknownMapKey } from '../types'
 
 /**
  * 对给定节点及所有子孙节点(同级)排序

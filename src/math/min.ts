@@ -1,5 +1,5 @@
-import isNil from '../is/isNil'
 import flatMap from '../collection/flatMap'
+import isNil from '../is/isNil'
 /**
  * 返回给定数字序列中最小的一个。忽略NaN，null，undefined
  * @example

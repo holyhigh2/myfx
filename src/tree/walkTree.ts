@@ -1,7 +1,7 @@
-import {UnknownMapKey} from '../types'
-import isEmpty from '../is/isEmpty'
 import isArrayLike from '../is/isArrayLike'
+import isEmpty from '../is/isEmpty'
 import isObject from '../is/isObject'
+import type { UnknownMapKey } from '../types'
 
 /**
  * 以给定节点为根遍历所有子孙节点。深度优先
@@ -48,8 +48,8 @@ function walkTree<V extends Record<UnknownMapKey, any>>(
     node: Record<UnknownMapKey, any>,
     parentNode: Record<UnknownMapKey, any>,
     chain: Record<UnknownMapKey, any>[],
-    level:number,
-    index:number
+    level: number,
+    index: number
   ) => boolean | number | void,
   options?: Record<string, any>
 ): void {
@@ -61,13 +61,13 @@ function _walkTree(
     node: Record<UnknownMapKey, any>,
     parentNode: Record<UnknownMapKey, any>,
     chain: Record<UnknownMapKey, any>[],
-    level:number,
-    index:number
+    level: number,
+    index: number
   ) => boolean | number | void,
   options?: Record<UnknownMapKey, any>,
   ...rest: any[]
 ): boolean | void {
-  if(!isObject(treeNodes))return;
+  if (!isObject(treeNodes)) return;
   options = options || {}
   const parentNode = rest[0]
   const chain = rest[1] || []
@@ -75,7 +75,7 @@ function _walkTree(
   const data = isArrayLike(treeNodes) ? treeNodes : [treeNodes]
   for (let i = 0; i < data.length; i++) {
     const node = data[i]
-    const rs = callback(node,parentNode, chain,chain.length,i)
+    const rs = callback(node, parentNode, chain, chain.length, i)
     if (rs === false) return
     if (rs === -1) continue
 

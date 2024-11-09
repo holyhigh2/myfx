@@ -4,13 +4,13 @@ import path from 'path'
 //创建模块
 function buildModules(dir) {
   const files = fs.readdirSync(dir)
-  
+
   files.forEach((item, index) => {
     var fullpath = path.join(dir, item)
     const stat = fs.statSync(fullpath)
     if (stat.isDirectory()) {
-      if(item === '_modules')return
-      
+      if (item === '_modules') return
+
       const funcs = fs.readdirSync(fullpath)
 
       let txt = ''

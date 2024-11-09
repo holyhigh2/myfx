@@ -1,7 +1,7 @@
-import isObject from "./isObject";
-import isDate from "./isDate";
-import isRegExp from "./isRegExp";
 import _eq from "../_eq";
+import isDate from "./isDate";
+import isObject from "./isObject";
+import isRegExp from "./isRegExp";
 /**
  * 同<code>isEqual</code>，但支持自定义比较器
  *
@@ -20,7 +20,7 @@ function isEqualWith(a: any, b: any, comparator?: Function): boolean {
   if (!isObject(a) || !isObject(b)) {
     return (cptor || _eq)(a, b)
   }
-  let keys:any = []
+  let keys: any = []
 
   if ((keys = Object.keys(a)).length !== Object.keys(b).length) return false
   if (isDate(a) && isDate(b))

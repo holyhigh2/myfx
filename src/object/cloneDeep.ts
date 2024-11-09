@@ -1,7 +1,6 @@
-import { UnknownMapKey } from "../types"
-import _identity from "../_identity"
-import cloneDeepWith from "./cloneDeepWith";
+import type { UnknownMapKey } from "../types";
 import clone from "./clone";
+import cloneDeepWith from "./cloneDeepWith";
 /**
  * 完整复制对象,可以保持被复制属性的原有类型
  *

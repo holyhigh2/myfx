@@ -1,8 +1,7 @@
-import { UnknownMapKey } from "../types"
-import _identity from "../_identity"
-import pickBy from "./pickBy"
 import flatDeep from "../array/flatDeep"
 import includes from "../collection/includes"
+import type { UnknownMapKey } from "../types"
+import pickBy from "./pickBy"
 /**
  * 创建一个指定属性的对象子集并返回
  * @example

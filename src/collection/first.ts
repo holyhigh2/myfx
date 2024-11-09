@@ -1,5 +1,5 @@
 import toArray from "../collection/toArray";
-import { Collection } from "../types";
+import type { Collection } from "../types";
 /**
  * 获取数组中的第一个元素
  *
@@ -13,7 +13,7 @@ import { Collection } from "../types";
  * @returns 数组中第一个元素
  */
 function first<T>(array: Collection<T>): T
-function first<T,U>(array: Collection<T>): U
+function first<T, U>(array: Collection<T>): U
 function first<T>(array: Collection<T>): T {
   return toArray<T>(array)[0]
 }

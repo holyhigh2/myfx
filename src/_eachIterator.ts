@@ -1,8 +1,8 @@
-import isString from "./is/isString";
 import isArrayLike from "./is/isArrayLike";
-import isSet from "./is/isSet";
 import isMap from "./is/isMap";
 import isObject from "./is/isObject";
+import isSet from "./is/isSet";
+import isString from "./is/isString";
 
 function _eachIterator<V, K extends string | number | symbol>(
   collection: any,

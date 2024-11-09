@@ -1,7 +1,6 @@
-import toString from "./toString"
-import escapeRegExp from './escapeRegExp'
-import isObject from '../is/isObject'
-import isRegExp from '../is/isObject'
+import { default as isObject, default as isRegExp } from '../is/isObject';
+import escapeRegExp from './escapeRegExp';
+import toString from "./toString";
 /**
  * 对超过指定长度的字符串进行截取并在末尾追加代替字符
  *

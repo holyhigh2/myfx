@@ -1,15 +1,14 @@
-import { Collection, NonFuncItee, UnknownMapKey } from "../types"
-import _eachIterator from "../_eachIterator";
-import _iteratee from "../_iteratee";
-import _identity from "../_identity";
 import _eq from "../_eq";
-import map from "./map";
-import size from "./size";
+import _identity from "../_identity";
+import _iteratee from "../_iteratee";
+import compareDate from "../datetime/compareDate";
+import isDate from "../is/isDate";
 import isNil from "../is/isNil";
 import isNumber from "../is/isNumber";
-import isDate from "../is/isDate";
-import compareDate from "../datetime/compareDate";
 import toString from "../string/toString";
+import type { Collection, NonFuncItee, UnknownMapKey } from "../types";
+import map from "./map";
+import size from "./size";
 
 /**
  * 使用指定回调对集合结果进行升序排序。根据集合结果的第一个元素确定排序逻辑，内置排序逻辑包括
@@ -43,11 +42,11 @@ function sortBy<V>(
   itee?: ((value: V, index: string) => any) | NonFuncItee
 ): V[]
 function sortBy<V, K extends string | number | symbol>(
-  collection: Collection<V,K>,
+  collection: Collection<V, K>,
   itee?: ((value: V, index: K) => any) | NonFuncItee
 ): V[]
 function sortBy<V, K extends string | number | symbol>(
-  collection: Collection<V,K>,
+  collection: Collection<V, K>,
   itee?: ((value: V, index: K) => any) | NonFuncItee
 ): V[] {
   if (size(collection) < 1) return []

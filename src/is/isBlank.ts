@@ -15,7 +15,7 @@
  * @since 0.16.0
  */
 function isBlank(v: unknown): boolean {
-  return v === null || v === undefined || (v + '').trim().replace(/\t|\n|\f|\r/mg,'').length === 0
+  return v === null || v === undefined || (v + '').trim().replace(/\t|\n|\f|\r/mg, '').length === 0
 }
 
 export default isBlank

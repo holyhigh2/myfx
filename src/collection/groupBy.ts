@@ -1,7 +1,6 @@
-import { Collection, NonFuncItee, UnknownMapKey } from "../types"
-import _eachIterator from "../_eachIterator";
-import _iteratee from "../_iteratee";
 import _identity from "../_identity";
+import _iteratee from "../_iteratee";
+import type { Collection, NonFuncItee, UnknownMapKey } from "../types";
 import each from "./each";
 
 /**
@@ -28,12 +27,12 @@ import each from "./each";
 function groupBy<V>(
   collection: Collection<V>,
   itee?: ((value: V) => UnknownMapKey) | NonFuncItee
-): Record<UnknownMapKey, unknown[]> 
-function groupBy<V,U>(
+): Record<UnknownMapKey, unknown[]>
+function groupBy<V, U>(
   collection: Collection<V>,
   itee?: ((value: V) => UnknownMapKey) | NonFuncItee
-): U 
-function groupBy<V,U>(
+): U
+function groupBy<V, U>(
   collection: Collection<V>,
   itee?: ((value: V) => UnknownMapKey) | NonFuncItee
 ): U {

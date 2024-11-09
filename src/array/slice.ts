@@ -1,5 +1,5 @@
 import toArray from "../collection/toArray";
-import { ArrayLike } from "../types";
+import type { ArrayLike } from "../types";
 /**
  * 对数组进行切片，并返回切片后的新数组，原数组不变。新数组内容是对原数组内容的浅拷贝
  *

@@ -1,9 +1,6 @@
-import _eachIterator from "../_eachIterator";
-import _iteratee from "../_iteratee";
-import _identity from "../_identity";
-import size from "./size";
+import type { Collection } from "../types";
 import sampleSize from "./sampleSize";
-import { Collection } from "../types";
+import size from "./size";
 
 /**
  * 返回指定数组的一个随机乱序副本

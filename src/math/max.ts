@@ -1,5 +1,5 @@
-import isNil from '../is/isNil'
 import flatMap from '../collection/flatMap'
+import isNil from '../is/isNil'
 /**
  * 返回给定数字序列中最大的一个。忽略NaN，null，undefined
  * @example
@@ -17,7 +17,7 @@ import flatMap from '../collection/flatMap'
 function max(
   values: Set<string | number> | Array<string | number>
 ): number {
-  const vals = flatMap<any>(values, v => isNil(v)||isNaN(v) ? [] : v)
+  const vals = flatMap<any>(values, v => isNil(v) || isNaN(v) ? [] : v)
   let f64a = new Float64Array(vals)
   f64a.sort()
   return f64a[f64a.length - 1]
