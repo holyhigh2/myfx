@@ -1,7 +1,6 @@
 /**
  * 创建一个包含指定函数逻辑的节流函数并返回。每当节流函数执行后都会等待`wait`间隔归零才可再次调用，等待期间调用函数无效。
  * 对于一些需要降低执行频率的场景非常有用，如onmousemove、onscroll等事件中
- * *注意*，如果节流函数作为事件回调时，尾部执行会导致event参数target属性丢失
  *
  * @example
  * //每隔1秒输出当前时间
@@ -16,6 +15,7 @@
  * @returns 包装后的函数
  * @since 1.4.0
  */
+const EventTargetMap = new WeakMap
 function throttle<T extends (...args: any[]) => any>(fn: T, wait: number, options?: { leading?: boolean, trailing?: boolean }): T {
   let proxy = fn
   let lastExec = 0
@@ -27,15 +27,42 @@ function throttle<T extends (...args: any[]) => any>(fn: T, wait: number, option
   options.trailing = options.trailing === undefined ? true : options.trailing;
 
   function timeout() {
-    if (options?.trailing)
+    if (options?.trailing) {
+      for (const arg of timeoutArgs) {
+        if (EventTargetMap.has(arg)) {
+          let targets = EventTargetMap.get(arg)
+          let ks = Object.keys(targets)
+          for (const k of ks) {
+            Object.defineProperty(arg, k, {
+              value: targets[k],
+              writable: false,
+              enumerable: true,
+              configurable: false
+            });
+          }
+          EventTargetMap.delete(arg)
+        }
+      }
       proxy.apply(timeoutContext, timeoutArgs);
+    }
 
     lastExec = Date.now();
     timeoutArgs = timer = null;
   }
 
   return (function (this: any, ...args: any[]) {
-    timeoutArgs = args
+    timeoutArgs = args.map(arg => {
+      if (arg instanceof Event) {
+        EventTargetMap.set(arg, {
+          currentTarget: arg.currentTarget,
+          fromElement: Reflect.get(arg, 'fromElement'),
+          relatedTarget: Reflect.get(arg, 'relatedTarget'),
+          target: arg.target,
+          toElement: Reflect.get(arg, 'toElement'),
+        })
+      }
+      return arg
+    })
     timeoutContext = this
     let now = Date.now()
     let remaining = wait - (now - lastExec)
