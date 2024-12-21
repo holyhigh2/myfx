@@ -1,5 +1,7 @@
 import _eq from "../_eq";
+import isFunction from "./isFunction";
 import isNil from "./isNil";
+import isNode from "./isNode";
 import isObject from "./isObject";
 /**
  * 检测props对象中的所有属性是否在object中存在并使用自定义比较器对属性值进行对比。可以用于对象的深度对比。
@@ -35,7 +37,7 @@ function isMatchWith<T extends Record<string | number | symbol, any>>(
     const k = ks[i]
     const v1 = target[k]
     const v2 = props[k]
-    if (isObject(v1) && isObject(v2)) {
+    if (isObject(v1) && isObject(v2) && !isNode(v1) && !isNode(v2) && !isFunction(v1) && !isFunction(v2)) {
       if (!isMatchWith(v1, v2, comparator)) {
         rs = false
         break

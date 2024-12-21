@@ -17,6 +17,7 @@ import isMatch from '../is/isMatch'
 import isMatchWith from '../is/isMatchWith'
 import isNaN from '../is/isNaN'
 import isNil from '../is/isNil'
+import isNode from '../is/isNode'
 import isNull from '../is/isNull'
 import isNumber from '../is/isNumber'
 import isObject from '../is/isObject'
@@ -30,4 +31,4 @@ import isUndefined from '../is/isUndefined'
 import isWeakMap from '../is/isWeakMap'
 import isWeakSet from '../is/isWeakSet'
 
-export {isArray,isArrayLike,isBlank,isBoolean,isDate,isDefined,isElement,isEmpty,isEqual,isEqualWith,isError,isFinite,isFunction,isInteger,isMap,isMatch,isMatchWith,isNaN,isNil,isNull,isNumber,isObject,isPlainObject,isRegExp,isSafeInteger,isSet,isString,isSymbol,isUndefined,isWeakMap,isWeakSet}
+export {isArray,isArrayLike,isBlank,isBoolean,isDate,isDefined,isElement,isEmpty,isEqual,isEqualWith,isError,isFinite,isFunction,isInteger,isMap,isMatch,isMatchWith,isNaN,isNil,isNode,isNull,isNumber,isObject,isPlainObject,isRegExp,isSafeInteger,isSet,isString,isSymbol,isUndefined,isWeakMap,isWeakSet}

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0] - 2024/12/21
+### Add
+- is -> isNode 判断是否Node
+### Change
+- isMatchWith 增加Node、Function类型判断
+- isEqualWith 增加isElement、isFunction内置类型判断
+
 ## [1.4.0] - 2024/4/26
 ### Add
 - function -> debounce, throttle
