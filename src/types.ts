@@ -67,3 +67,12 @@ export interface IOptions {
   globals?: Record<string, any>
   stripWhite?: boolean
 }
+
+export const PRIMITIVE_TYPES = [
+  'string',
+  'number',
+  'bigint',
+  'boolean',
+  'undefined',
+  'symbol',
+]

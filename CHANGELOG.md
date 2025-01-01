@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.6.0] - 2024/1/2
+### Add
+- is -> isPrimitive, isNative
+
 ## [1.5.0] - 2024/12/21
 ### Add
 - is -> isNode 判断是否Node

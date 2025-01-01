@@ -122,12 +122,14 @@ isMap<K,V>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isMap').c
 isMatch<T extends Record<string | number | symbol, any>>(props: T):FuncChain<any>{return get<Function>(FuncChain.prototype,'_isMatch').call(this,...arguments)}
 isMatchWith<T extends Record<string | number | symbol, any>>(props: T,comparator: Function = _eq):FuncChain<any>{return get<Function>(FuncChain.prototype,'_isMatchWith').call(this,...arguments)}
 isNaN():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isNaN').call(this,...arguments)}
+isNative():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isNative').call(this,...arguments)}
 isNil():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isNil').call(this,...arguments)}
 isNode():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isNode').call(this,...arguments)}
 isNull():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isNull').call(this,...arguments)}
 isNumber():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isNumber').call(this,...arguments)}
 isObject<T extends object>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isObject').call(this,...arguments)}
 isPlainObject():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isPlainObject').call(this,...arguments)}
+isPrimitive():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isPrimitive').call(this,...arguments)}
 isRegExp():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isRegExp').call(this,...arguments)}
 isSafeInteger():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isSafeInteger').call(this,...arguments)}
 isSet<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isSet').call(this,...arguments)}
