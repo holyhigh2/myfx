@@ -11,7 +11,7 @@
  * @returns
  */
 function isDate(v: unknown): v is Date {
-  return v instanceof Date
+  return v instanceof Date || Object.prototype.toString.call(v) === '[object Date]'
 }
 
 export default isDate

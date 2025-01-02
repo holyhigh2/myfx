@@ -11,7 +11,7 @@
  * @returns
  */
 function isMap<K, V>(v: unknown): v is Map<K, V> {
-  return v instanceof Map
+  return v instanceof Map || Object.prototype.toString.call(v) === '[object Map]'
 }
 
 export default isMap

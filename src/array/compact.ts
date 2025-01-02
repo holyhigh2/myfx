@@ -1,5 +1,5 @@
+import _identity from '../_identity';
 import toArray from "../collection/toArray";
-import _identity from '../_identity'
 /**
  * 对集合内的假值进行剔除，并返回剔除后的新数组。假值包括 null/undefined/NaN/0/''/false
  * @example
@@ -9,7 +9,7 @@ import _identity from '../_identity'
  * @param array 数组
  * @returns 转换后的新数组对象
  */
-function compact<T>(array: T[]|Set<T>): T[] {
+function compact<T>(array: T[] | Set<T>): T[] {
   return toArray(array).filter<T>(_identity as any)
 }
 

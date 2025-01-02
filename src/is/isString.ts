@@ -11,7 +11,7 @@
  * @returns
  */
 function isString(v: unknown): v is string {
-  return typeof v === 'string' || v instanceof String
+  return v instanceof String || Object.prototype.toString.call(v) === '[object String]'
 }
 
 export default isString

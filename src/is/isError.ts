@@ -14,7 +14,7 @@
  * @since 1.0.0
  */
 function isError(v: unknown): v is Error {
-  return typeof v === 'object' && v instanceof Error
+  return v instanceof Error || Object.prototype.toString.call(v) === '[object Error]'
 }
 
 export default isError

@@ -13,7 +13,7 @@
  * @returns
  */
 function isBoolean(v: unknown): v is boolean {
-  return typeof v === 'boolean' || v instanceof Boolean
+  return v instanceof Boolean || Object.prototype.toString.call(v) === '[object Boolean]'
 }
 
 export default isBoolean

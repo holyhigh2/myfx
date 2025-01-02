@@ -11,7 +11,7 @@
  * @returns
  */
 function isWeakMap<K extends object, V>(v: unknown): v is WeakMap<K, V> {
-  return v instanceof WeakMap
+  return v instanceof WeakMap || Object.prototype.toString.call(v) === '[object WeakMap]'
 }
 
 export default isWeakMap

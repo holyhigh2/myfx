@@ -24,7 +24,7 @@ function except<T>(...params: any): T[] {
   let comparator
   let list = params
   const sl = params.length
-  if (sl > 2) {    
+  if (sl > 2) {
     const lp = params[sl - 1]
     if (isFunction(lp)) {
       comparator = lp

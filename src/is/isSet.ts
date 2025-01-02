@@ -11,7 +11,7 @@
  * @returns
  */
 function isSet<T>(v: unknown): v is Set<T> {
-  return v instanceof Set
+  return v instanceof Set || Object.prototype.toString.call(v) === '[object Set]'
 }
 
 export default isSet

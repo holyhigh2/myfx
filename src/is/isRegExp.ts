@@ -12,7 +12,7 @@
  * @since 0.19.0
  */
 function isRegExp(v: unknown): v is RegExp {
-  return typeof v === 'object' && v instanceof RegExp
+  return v instanceof RegExp || Object.prototype.toString.call(v) === '[object RegExp]'
 }
 
 export default isRegExp

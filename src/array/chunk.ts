@@ -12,7 +12,7 @@ import toArray from "../collection/toArray"
  * @returns 拆分后的新数组
  * @since 0.23.0
  */
-function chunk<T>(array: T[]|Set<T>, size: number = 1): T[][] {
+function chunk<T>(array: T[] | Set<T>, size: number = 1): T[][] {
   const ary = toArray<T>(array)
   const sizeNum = (size || 1) >> 0
   const rs: T[][] = []

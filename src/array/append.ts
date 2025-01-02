@@ -23,10 +23,10 @@ import isArray from "../is/isArray";
  * @param values 1-n个需要插入列表的值
  * @returns 插入值后的数组对象
  */
-    function append<T>(array: T[]|Set<T>, ...values: any[]): T[] {
-      const rs = isArray(array) ? array : toArray<T>(array)
-      rs.push(...values)
-      return rs
-    }
+function append<T>(array: T[] | Set<T>, ...values: any[]): T[] {
+  const rs = isArray(array) ? array : toArray<T>(array)
+  rs.push(...values)
+  return rs
+}
 
 export default append

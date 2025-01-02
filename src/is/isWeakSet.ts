@@ -11,7 +11,7 @@
  * @returns
  */
 function isWeakSet<T extends object>(v: unknown): v is WeakSet<T> {
-  return v instanceof WeakSet
+  return v instanceof WeakSet || Object.prototype.toString.call(v) === '[object WeakSet]'
 }
 
 export default isWeakSet

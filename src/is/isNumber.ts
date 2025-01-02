@@ -13,7 +13,7 @@
  * @returns
  */
 function isNumber(v: unknown): v is number {
-  return typeof v === 'number' || v instanceof Number
+  return v instanceof Number || Object.prototype.toString.call(v) === '[object Number]'
 }
 
 export default isNumber
