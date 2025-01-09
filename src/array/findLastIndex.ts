@@ -1,8 +1,6 @@
 import _iteratee from "../_iteratee";
-import eachRight from "../collection/eachRight";
 import size from '../collection/size';
 import type { NonFuncItee } from "../types";
-import slice from './slice';
 /**
  * 对集合内的所有元素进行断言并返回最后一个匹配的元素索引
  *
@@ -12,7 +10,7 @@ import slice from './slice';
  * //2
  * console.log(_.findLastIndex([{a:1},{a:2},{a:3}],'a'))
  *
- * @param array arrayLike对象及set对象
+ * @param array 数组，非数组返回-1
  * @param predicate (value[,index[,array]]);断言
  * <br>当断言是函数时回调参数见定义
  * <br>其他类型请参考 {@link utils!iteratee}
@@ -27,19 +25,18 @@ function findLastIndex<T>(
     | NonFuncItee,
   fromIndex?: number
 ): number {
+  if (!Array.isArray(array)) return -1
   let rs = -1
-  let fromIndexNum = fromIndex || 0
+  let fromIndexNum = fromIndex ?? size(array) - 1
   const itee = _iteratee(predicate)
-  if (fromIndex === undefined) {
-    fromIndexNum = size(array) - 1
-  }
-  eachRight<any, number>(slice(array, 0, fromIndexNum + 1), (v, k, c) => {
-    const r = itee(v, k, c)
+  for (let i = fromIndexNum; i >= 0; i--) {
+    const v = array[i];
+    const r = itee(v, i, array)
     if (r) {
-      rs = k
-      return false
+      rs = i
+      break
     }
-  })
+  }
   return rs
 }
 

@@ -1,7 +1,5 @@
 import _iteratee from "../_iteratee"
-import each from "../collection/each"
 import type { NonFuncItee } from "../types"
-import slice from './slice'
 /**
  * 对集合内的所有元素进行断言并返回第一个匹配的元素索引
  *
@@ -13,7 +11,7 @@ import slice from './slice'
  * //2
  * console.log(_.findIndex([{a:1},{a:2},{a:3}],{a:3}))
  *
- * @param array 数组
+ * @param array 数组，非数组返回-1
  * @param predicate (value[,index[,array]]);断言
  * <br>当断言是函数时回调参数见定义
  * <br>其他类型请参考 {@link utils!iteratee}
@@ -27,16 +25,18 @@ function findIndex<T>(
     | NonFuncItee,
   fromIndex?: number
 ): number {
+  if (!Array.isArray(array)) return -1
   let rs = -1
   let fromIndexNum = fromIndex || 0
   const itee = _iteratee(predicate)
-  each<any, number>(slice(array, fromIndexNum), (v, k, c) => {
-    const r = itee(v, k, c)
+  for (let i = fromIndexNum; i < array.length; i++) {
+    const v = array[i];
+    const r = itee(v, i, array)
     if (r) {
-      rs = k + fromIndexNum
-      return false
+      rs = i + fromIndexNum
+      break
     }
-  })
+  }
   return rs
 }
 

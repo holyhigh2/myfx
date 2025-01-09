@@ -1,6 +1,12 @@
 # Changelog
 
-## [1.6.0] - 2024/1/2
+## [1.7.0] - 2025/1/9
+### Optimize
+- each
+### Change
+- array -> 取消部分函数自动转换参数为数组
+
+## [1.6.0] - 2025/1/2
 ### Add
 - is -> isPrimitive, isNative
 

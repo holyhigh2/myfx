@@ -7,7 +7,7 @@ import type { ArrayLike } from "../types";
  * //[3, 2, 1]
  * console.log(_.reverse([1, 2, 3]))
  *
- * @param array 数组
+ * @param array 数组，类数组或Set
  * @returns 颠倒后的新数组
  */
 function reverse<T>(array: Set<T> | ArrayLike): T[] {

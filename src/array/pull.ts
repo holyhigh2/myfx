@@ -1,5 +1,5 @@
-import remove from "./remove";
 import includes from "../collection/includes";
+import remove from "./remove";
 /**
  * 与without相同，但会修改原数组
  * <div class="alert alert-secondary">
@@ -17,9 +17,9 @@ import includes from "../collection/includes";
  * @returns 新数组
  * @since 0.19.0
  */
-    function pull<T>(array: T[], ...values: T[]): T[] {
-      remove(array, (item) => includes(values, item))
-      return array
-    }
+function pull<T>(array: T[], ...values: T[]): T[] {
+  remove(array, (item) => includes(values, item))
+  return array
+}
 
 export default pull

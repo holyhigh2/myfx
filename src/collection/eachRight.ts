@@ -1,4 +1,4 @@
-import _eachIterator from "../_eachIterator";
+import _eachIteratorRight from "../_eachIteratorRight";
 import type { ArrayLike, Collection } from "../types";
 
 /**
@@ -42,7 +42,7 @@ function eachRight<V, K extends string | number | symbol>(
   collection: Collection<V, K>,
   callback: (value: V, index: K, collection: Collection<V>) => boolean | void | Promise<void>
 ): void {
-  _eachIterator<V, K>(collection, callback, true)
+  _eachIteratorRight<V, K>(collection, callback)
 }
 
 export default eachRight

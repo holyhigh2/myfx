@@ -4,7 +4,7 @@ import isObject from "./is/isObject";
 import isSet from "./is/isSet";
 import isString from "./is/isString";
 
-function _eachIterator<V, K extends string | number | symbol>(
+function _eachIteratorRight<V, K extends string | number | symbol>(
   collection: any,
   callback: (
     value: V,
@@ -17,46 +17,41 @@ function _eachIterator<V, K extends string | number | symbol>(
   if (isString(collection) || isArrayLike(collection)) {
     let size = collection.length
 
-    for (let i = 0; i < size; i++) {
-      const r = callback(collection[i] as V, i as K, collection)
+    while (size--) {
+      const r = callback(collection[size] as V, size as K, collection)
       if (r === false) return
     }
 
   } else if (isSet(collection)) {
     let size = collection.size
 
-    values = collection.values()
-    for (let i = 0; i < size; i++) {
-      const r = callback(values.next().value as V, i as K, collection)
+    values = Array.from(collection)
+    while (size--) {
+      const r = callback(values[size] as V, size as K, collection)
       if (r === false) return
     }
-
   } else if (isMap(collection)) {
     let size = collection.size
 
     keys = collection.keys()
     values = collection.values()
 
-    for (let i = 0; i < size; i++) {
-      const r = callback(
-        values.next().value as V,
-        keys.next().value as K,
-        collection
-      )
+    keys = Array.from(keys)
+    values = Array.from(values)
+    while (size--) {
+      const r = callback(values[size] as V, keys[size] as K, collection)
       if (r === false) return
     }
-
   } else if (isObject(collection)) {
     keys = Object.keys(collection)
     let size = keys.length
 
-    for (let i = 0; i < size; i++) {
-      const k = keys[i]
+    while (size--) {
+      const k = keys[size]
       const r = callback((collection as any)[k] as V, k as K, collection)
       if (r === false) return
     }
-
   }
 }
 
-export default _eachIterator
+export default _eachIteratorRight

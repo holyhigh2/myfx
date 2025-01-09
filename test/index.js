@@ -11,11 +11,6 @@
  * @returns
  */
 function isArray(v) {
-    // 使用 instanceof Array 无法鉴别某些场景，比如
-    // Array.prototype instanceof Array => false
-    // Array.isArray(Array.prototype) => true
-    // typeof new Proxy([],{}) => object
-    // Array.isArray(new Proxy([],{})) => true
     return Array.isArray(v);
 }
 
@@ -32,9 +27,14 @@ function isArray(v) {
  * @returns
  */
 function isFunction(v) {
-    return typeof v == 'function' || v instanceof Function;
+    return v instanceof Function || typeof v == 'function';
 }
 
+/**
+ * 内部使用类型
+ *
+ * @packageDocumentation
+ */
 const PRIMITIVE_TYPES = [
     'string',
     'number',
@@ -43,6 +43,7 @@ const PRIMITIVE_TYPES = [
     'undefined',
     'symbol',
 ];
+
 /**
  * 判断值是不是一个非基本类型外的值，如果true则认为值是一个对象
  * 同样，该方法还可以用来判断一个值是不是基本类型
@@ -77,7 +78,7 @@ function isObject(v) {
  * @returns
  */
 function isString(v) {
-    return typeof v === 'string' || v instanceof String;
+    return v instanceof String || Object.prototype.toString.call(v) === '[object String]';
 }
 
 /**
@@ -126,7 +127,7 @@ function isArrayLike(v) {
  * @returns
  */
 function isMap(v) {
-    return v instanceof Map;
+    return v instanceof Map || Object.prototype.toString.call(v) === '[object Map]';
 }
 
 /**
@@ -142,7 +143,7 @@ function isMap(v) {
  * @returns
  */
 function isSet(v) {
-    return v instanceof Set;
+    return v instanceof Set || Object.prototype.toString.call(v) === '[object Set]';
 }
 
 /**
@@ -266,18 +267,19 @@ function append(array, ...values) {
  * //[[1,2,3],[4]]
  * console.log(_.chunk([1,2,3,4],3))
  *
- * @param array 数组对象。如果非数组类型会转成数组
+ * @param array 数组，非数组返回空数组
  * @param [size=1] 子数组长度
  * @returns 拆分后的新数组
  * @since 0.23.0
  */
 function chunk(array, size = 1) {
-    const ary = toArray(array);
-    const sizeNum = (size || 1) >> 0;
     const rs = [];
-    ary.forEach((v, i) => {
+    if (!Array.isArray(array))
+        return rs;
+    const sizeNum = (size || 1) >> 0;
+    array.forEach((v, i) => {
         if (i % sizeNum == 0) {
-            rs.push(ary.slice(i, i + sizeNum));
+            rs.push(array.slice(i, i + sizeNum));
         }
     });
     return rs;
@@ -323,90 +325,50 @@ function concat(...arrays) {
     return toArray(arrays[0]).concat(...arrays.slice(1));
 }
 
-function _eachIterator(collection, callback, forRight) {
+function _eachIterator(collection, callback) {
     let values;
     let keys;
     if (isString(collection) || isArrayLike(collection)) {
         let size = collection.length;
-        if (forRight) {
-            while (size--) {
-                const r = callback(collection[size], size, collection);
-                if (r === false)
-                    return;
-            }
-        }
-        else {
-            for (let i = 0; i < size; i++) {
-                const r = callback(collection[i], i, collection);
-                if (r === false)
-                    return;
-            }
+        for (let i = 0; i < size; i++) {
+            const r = callback(collection[i], i, collection);
+            if (r === false)
+                return;
         }
     }
     else if (isSet(collection)) {
         let size = collection.size;
-        if (forRight) {
-            values = Array.from(collection);
-            while (size--) {
-                const r = callback(values[size], size, collection);
-                if (r === false)
-                    return;
-            }
-        }
-        else {
-            values = collection.values();
-            for (let i = 0; i < size; i++) {
-                const r = callback(values.next().value, i, collection);
-                if (r === false)
-                    return;
-            }
+        values = collection.values();
+        for (let i = 0; i < size; i++) {
+            const r = callback(values.next().value, i, collection);
+            if (r === false)
+                return;
         }
     }
     else if (isMap(collection)) {
         let size = collection.size;
         keys = collection.keys();
         values = collection.values();
-        if (forRight) {
-            keys = Array.from(keys);
-            values = Array.from(values);
-            while (size--) {
-                const r = callback(values[size], keys[size], collection);
-                if (r === false)
-                    return;
-            }
-        }
-        else {
-            for (let i = 0; i < size; i++) {
-                const r = callback(values.next().value, keys.next().value, collection);
-                if (r === false)
-                    return;
-            }
+        for (let i = 0; i < size; i++) {
+            const r = callback(values.next().value, keys.next().value, collection);
+            if (r === false)
+                return;
         }
     }
     else if (isObject(collection)) {
         keys = Object.keys(collection);
         let size = keys.length;
-        if (forRight) {
-            while (size--) {
-                const k = keys[size];
-                const r = callback(collection[k], k, collection);
-                if (r === false)
-                    return;
-            }
-        }
-        else {
-            for (let i = 0; i < size; i++) {
-                const k = keys[i];
-                const r = callback(collection[k], k, collection);
-                if (r === false)
-                    return;
-            }
+        for (let i = 0; i < size; i++) {
+            const k = keys[i];
+            const r = callback(collection[k], k, collection);
+            if (r === false)
+                return;
         }
     }
 }
 
 function each(collection, callback) {
-    _eachIterator(collection, callback, false);
+    _eachIterator(collection, callback);
 }
 
 /**
@@ -610,6 +572,23 @@ function isNil(v) {
 }
 
 /**
+ * 判断值是不是Node的实例
+ *
+ * @example
+ * //true
+ * console.log(_.isNode(document.body.attributes[0]))
+ * //true
+ * console.log(_.isNode(document))
+ *
+ * @param v
+ * @returns
+ * @since 1.5.0
+ */
+function isNode(v) {
+    return typeof v === 'object' && v instanceof Node;
+}
+
+/**
  * 检测props对象中的所有属性是否在object中存在并使用自定义比较器对属性值进行对比。可以用于对象的深度对比。
  * 当comparator参数是默认值时，与<code>isMath</code>函数相同
  *
@@ -641,7 +620,7 @@ function isMatchWith(target, props, comparator = eq$1) {
         const k = ks[i];
         const v1 = target[k];
         const v2 = props[k];
-        if (isObject(v1) && isObject(v2)) {
+        if (isObject(v1) && isObject(v2) && !isNode(v1) && !isNode(v2) && !isFunction(v1) && !isFunction(v2)) {
             if (!isMatchWith(v1, v2, comparator)) {
                 rs = false;
                 break;
@@ -745,25 +724,6 @@ function iteratee(value) {
 }
 
 /**
- * 对数组进行切片，并返回切片后的新数组，原数组不变。新数组内容是对原数组内容的浅拷贝
- *
- * @example
- * //[2,3,4]
- * console.log(_.slice([1,2,3,4,5],1,4))
- * //[2,3,4,5]
- * console.log(_.slice([1,2,3,4,5],1))
- *
- *
- * @param array 数组
- * @param [begin=0] 切片起始下标，包含下标位置元素
- * @param [end] 切片结束下标，<b>不包含</b>下标位置元素
- * @returns 切片元素组成的新数组
- */
-function slice(array, begin, end) {
-    return toArray(array).slice(begin || 0, end);
-}
-
-/**
  * 对集合内的所有元素进行断言并返回第一个匹配的元素索引
  *
  * @example
@@ -774,7 +734,7 @@ function slice(array, begin, end) {
  * //2
  * console.log(_.findIndex([{a:1},{a:2},{a:3}],{a:3}))
  *
- * @param array 数组
+ * @param array 数组，非数组返回-1
  * @param predicate (value[,index[,array]]);断言
  * <br>当断言是函数时回调参数见定义
  * <br>其他类型请参考 {@link utils!iteratee}
@@ -782,21 +742,20 @@ function slice(array, begin, end) {
  * @returns 第一个匹配断言的元素索引或-1
  */
 function findIndex(array, predicate, fromIndex) {
+    if (!Array.isArray(array))
+        return -1;
     let rs = -1;
     let fromIndexNum = fromIndex || 0;
     const itee = iteratee(predicate);
-    each(slice(array, fromIndexNum), (v, k, c) => {
-        const r = itee(v, k, c);
+    for (let i = fromIndexNum; i < array.length; i++) {
+        const v = array[i];
+        const r = itee(v, i, array);
         if (r) {
-            rs = k + fromIndexNum;
-            return false;
+            rs = i + fromIndexNum;
+            break;
         }
-    });
+    }
     return rs;
-}
-
-function eachRight(collection, callback) {
-    _eachIterator(collection, callback, true);
 }
 
 /**
@@ -844,7 +803,7 @@ function size(collection) {
  * //2
  * console.log(_.findLastIndex([{a:1},{a:2},{a:3}],'a'))
  *
- * @param array arrayLike对象及set对象
+ * @param array 数组，非数组返回-1
  * @param predicate (value[,index[,array]]);断言
  * <br>当断言是函数时回调参数见定义
  * <br>其他类型请参考 {@link utils!iteratee}
@@ -853,19 +812,19 @@ function size(collection) {
  * @since 0.19.0
  */
 function findLastIndex(array, predicate, fromIndex) {
+    if (!Array.isArray(array))
+        return -1;
     let rs = -1;
-    let fromIndexNum = fromIndex || 0;
+    let fromIndexNum = fromIndex ?? size(array) - 1;
     const itee = iteratee(predicate);
-    if (fromIndex === undefined) {
-        fromIndexNum = size(array) - 1;
-    }
-    eachRight(slice(array, 0, fromIndexNum + 1), (v, k, c) => {
-        const r = itee(v, k, c);
+    for (let i = fromIndexNum; i >= 0; i--) {
+        const v = array[i];
+        const r = itee(v, i, array);
         if (r) {
-            rs = k;
-            return false;
+            rs = i;
+            break;
         }
-    });
+    }
     return rs;
 }
 
@@ -926,7 +885,7 @@ function flatDeep(array) {
  * @returns
  */
 function isNumber(v) {
-    return typeof v === 'number' || v instanceof Number;
+    return v instanceof Number || Object.prototype.toString.call(v) === '[object Number]';
 }
 
 /**
@@ -1050,12 +1009,14 @@ function intersect(...params) {
  * //'1,2,3,4'
  * console.log(_.join([1, 2, 3, 4]))
  *
- * @param array 数组
+ * @param array 数组，非数组返回空字符串
  * @param [separator=','] 分隔符
  * @returns 拼接字符串
  */
 function join(array, separator) {
-    return toArray(array).join(separator || ',');
+    if (!Array.isArray(array))
+        return '';
+    return array.join(separator || ',');
 }
 
 /**
@@ -1104,7 +1065,7 @@ function toNumber(v) {
 function pop(array, index) {
     index = index || -1;
     let rs = null;
-    if (isArray(array)) {
+    if (Array.isArray(array)) {
         const i = toNumber(index);
         if (i > -1) {
             rs = array.splice(i, 1);
@@ -1118,6 +1079,71 @@ function pop(array, index) {
             rs = array.pop();
         }
     }
+    return rs;
+}
+
+/**
+ * 对数组进行切片，并返回切片后的新数组，原数组不变。新数组内容是对原数组内容的浅拷贝
+ *
+ * @example
+ * //[2,3,4]
+ * console.log(_.slice([1,2,3,4,5],1,4))
+ * //[2,3,4,5]
+ * console.log(_.slice([1,2,3,4,5],1))
+ *
+ *
+ * @param array 数组，非数组返回空数组
+ * @param [begin=0] 切片起始下标，包含下标位置元素
+ * @param [end] 切片结束下标，<b>不包含</b>下标位置元素
+ * @returns 切片元素组成的新数组
+ */
+function slice(array, begin, end) {
+    if (!Array.isArray(array))
+        return [];
+    return array.slice(begin || 0, end);
+}
+
+/**
+ * 判断集合中是否包含给定的值。使用<code>eq</code>函数进行等值判断。
+ *
+ * @example
+ * //true
+ * console.log(_.includes({a:1,b:2},2))
+ * //false
+ * console.log(_.includes([1,3,5,7,[2]],2))
+ * //true
+ * console.log(_.includes([1,3,5,7,[2]],3))
+ * //false
+ * console.log(_.includes([1,3,5,7,[2]],3,2))
+ * //true
+ * console.log(_.includes([0,null,undefined,NaN],NaN))
+ * //true
+ * console.log(_.includes('abcdefg','abc'))
+ * //false
+ * console.log(_.includes('abcdefg','abc',2))
+ * //false
+ * console.log(_.includes('aBcDeFg','abc'))
+ *
+ * @param collection 如果集合是map/object对象，则只对value进行比对
+ * @param value
+ * @param [fromIndex=0] 从集合的fromIndex 索引处开始查找。如果集合是map/object对象，无效
+ * @returns 如果包含返回true否则返回false
+ */
+function includes(collection, value, fromIndex) {
+    let rs = false;
+    fromIndex = fromIndex || 0;
+    if (isString(collection)) {
+        return collection.includes(value, fromIndex);
+    }
+    collection = isArrayLike(collection)
+        ? slice(collection, fromIndex)
+        : collection;
+    each(collection, (v) => {
+        if (eq$1(v, value)) {
+            rs = true;
+            return false;
+        }
+    });
     return rs;
 }
 
@@ -1162,50 +1188,6 @@ function remove(array, predicate) {
         }
     }
     array.length = i;
-    return rs;
-}
-
-/**
- * 判断集合中是否包含给定的值。使用<code>eq</code>函数进行等值判断。
- *
- * @example
- * //true
- * console.log(_.includes({a:1,b:2},2))
- * //false
- * console.log(_.includes([1,3,5,7,[2]],2))
- * //true
- * console.log(_.includes([1,3,5,7,[2]],3))
- * //false
- * console.log(_.includes([1,3,5,7,[2]],3,2))
- * //true
- * console.log(_.includes([0,null,undefined,NaN],NaN))
- * //true
- * console.log(_.includes('abcdefg','abc'))
- * //false
- * console.log(_.includes('abcdefg','abc',2))
- * //false
- * console.log(_.includes('aBcDeFg','abc'))
- *
- * @param collection 如果集合是map/object对象，则只对value进行比对
- * @param value
- * @param [fromIndex=0] 从集合的fromIndex 索引处开始查找。如果集合是map/object对象，无效
- * @returns 如果包含返回true否则返回false
- */
-function includes(collection, value, fromIndex) {
-    let rs = false;
-    fromIndex = fromIndex || 0;
-    if (isString(collection)) {
-        return collection.includes(value, fromIndex);
-    }
-    collection = isArrayLike(collection)
-        ? slice(collection, fromIndex)
-        : collection;
-    each(collection, (v) => {
-        if (eq$1(v, value)) {
-            rs = true;
-            return false;
-        }
-    });
     return rs;
 }
 
@@ -1269,7 +1251,7 @@ function range(start = 0, end, step) {
  * //[3, 2, 1]
  * console.log(_.reverse([1, 2, 3]))
  *
- * @param array 数组
+ * @param array 数组，类数组或Set
  * @returns 颠倒后的新数组
  */
 function reverse(array) {
@@ -1391,12 +1373,13 @@ function union(...params) {
  * // [1,2,4,"a","1",null]
  * console.log(_.unique([1,2,2,4,4,'a','1','a',null,null]))
  *
- * @param array 数组
+ * @param array 数组，非数组返回空数组
  * @returns 转换后的新数组对象
  */
 function uniq(array) {
-    const ary = toArray(array);
-    return toArray(new Set(ary));
+    if (!Array.isArray(array))
+        return [];
+    return toArray(new Set(array));
 }
 
 /**
@@ -1603,6 +1586,54 @@ function countBy(collection, itee) {
         stat[key]++;
     });
     return stat;
+}
+
+function _eachIteratorRight(collection, callback) {
+    let values;
+    let keys;
+    if (isString(collection) || isArrayLike(collection)) {
+        let size = collection.length;
+        while (size--) {
+            const r = callback(collection[size], size, collection);
+            if (r === false)
+                return;
+        }
+    }
+    else if (isSet(collection)) {
+        let size = collection.size;
+        values = Array.from(collection);
+        while (size--) {
+            const r = callback(values[size], size, collection);
+            if (r === false)
+                return;
+        }
+    }
+    else if (isMap(collection)) {
+        let size = collection.size;
+        keys = collection.keys();
+        values = collection.values();
+        keys = Array.from(keys);
+        values = Array.from(values);
+        while (size--) {
+            const r = callback(values[size], keys[size], collection);
+            if (r === false)
+                return;
+        }
+    }
+    else if (isObject(collection)) {
+        keys = Object.keys(collection);
+        let size = keys.length;
+        while (size--) {
+            const k = keys[size];
+            const r = callback(collection[k], k, collection);
+            if (r === false)
+                return;
+        }
+    }
+}
+
+function eachRight(collection, callback) {
+    _eachIteratorRight(collection, callback);
 }
 
 function every(collection, predicate) {
@@ -1920,7 +1951,7 @@ function compareDate(date1, date2, type) {
  * @returns
  */
 function isDate(v) {
-    return v instanceof Date;
+    return v instanceof Date || Object.prototype.toString.call(v) === '[object Date]';
 }
 
 /**
@@ -3004,7 +3035,6 @@ function tap(v, interceptor) {
 /**
  * 创建一个包含指定函数逻辑的节流函数并返回。每当节流函数执行后都会等待`wait`间隔归零才可再次调用，等待期间调用函数无效。
  * 对于一些需要降低执行频率的场景非常有用，如onmousemove、onscroll等事件中
- * *注意*，如果节流函数作为事件回调时，尾部执行会导致event参数target属性丢失
  *
  * @example
  * //每隔1秒输出当前时间
@@ -3019,6 +3049,7 @@ function tap(v, interceptor) {
  * @returns 包装后的函数
  * @since 1.4.0
  */
+const EventTargetMap = new WeakMap;
 function throttle(fn, wait, options) {
     let proxy = fn;
     let lastExec = 0;
@@ -3029,13 +3060,40 @@ function throttle(fn, wait, options) {
     options.leading = options.leading === undefined ? true : options.leading;
     options.trailing = options.trailing === undefined ? true : options.trailing;
     function timeout() {
-        if (options?.trailing)
+        if (options?.trailing) {
+            for (const arg of timeoutArgs) {
+                if (EventTargetMap.has(arg)) {
+                    let targets = EventTargetMap.get(arg);
+                    let ks = Object.keys(targets);
+                    for (const k of ks) {
+                        Object.defineProperty(arg, k, {
+                            value: targets[k],
+                            writable: false,
+                            enumerable: true,
+                            configurable: false
+                        });
+                    }
+                    EventTargetMap.delete(arg);
+                }
+            }
             proxy.apply(timeoutContext, timeoutArgs);
+        }
         lastExec = Date.now();
         timeoutArgs = timer = null;
     }
     return (function (...args) {
-        timeoutArgs = args;
+        timeoutArgs = args.map(arg => {
+            if (arg instanceof Event) {
+                EventTargetMap.set(arg, {
+                    currentTarget: arg.currentTarget,
+                    fromElement: Reflect.get(arg, 'fromElement'),
+                    relatedTarget: Reflect.get(arg, 'relatedTarget'),
+                    target: arg.target,
+                    toElement: Reflect.get(arg, 'toElement'),
+                });
+            }
+            return arg;
+        });
         timeoutContext = this;
         let now = Date.now();
         let remaining = wait - (now - lastExec);
@@ -3107,7 +3165,7 @@ function isBlank(v) {
  * @returns
  */
 function isBoolean(v) {
-    return typeof v === 'boolean' || v instanceof Boolean;
+    return v instanceof Boolean || Object.prototype.toString.call(v) === '[object Boolean]';
 }
 
 /**
@@ -3188,12 +3246,16 @@ function isEmpty(v) {
  * @since 0.19.0
  */
 function isRegExp(v) {
-    return typeof v === 'object' && v instanceof RegExp;
+    return v instanceof RegExp || Object.prototype.toString.call(v) === '[object RegExp]';
 }
 
 /**
- * 同<code>isEqual</code>，但支持自定义比较器
- *
+ * 同<code>isEqual</code>，但支持自定义比较器。如果未指定比较器则使用内置逻辑处理
+ * 内置逻辑:
+ *  - 如果是日期使用getTime对比
+ *  - 如果是正则使用toString对比
+ *  - 如果是元素节点使用tagName+id+class对比
+ *  - 如果是函数使用name对比
  * @example
  * //true
  * console.log(_.isEqualWith([new Date('2010-2-1'),'abcd'],['2010/2/1','Abcd'],(av,bv)=>_.isDate(av)?av.toLocaleDateString() == bv:_.test(av,bv,'i')))
@@ -3216,6 +3278,13 @@ function isEqualWith(a, b, comparator) {
         return cptor ? cptor(a, b) : a.getTime() === b.getTime();
     if (isRegExp(a) && isRegExp(b))
         return cptor ? cptor(a, b) : a.toString() === b.toString();
+    if (isElement(a) && isElement(b)) {
+        let ea = `${a.tagName.toLowerCase()}${a.id ? '#' + a.id : ''}` + Array.from(a.classList.values()).reduce((acc, v) => acc + '.' + v, '');
+        let eb = `${b.tagName.toLowerCase()}${b.id ? '#' + b.id : ''}` + Array.from(b.classList.values()).reduce((acc, v) => acc + '.' + v, '');
+        return cptor ? cptor(a, b) : ea === eb;
+    }
+    if (isFunction(a) && isFunction(b))
+        return cptor ? cptor(a, b) : a.name === b.name;
     for (let i = keys.length; i--;) {
         const k = keys[i];
         const v1 = a[k], v2 = b[k];
@@ -3266,7 +3335,7 @@ function isEqual(a, b) {
  * @since 1.0.0
  */
 function isError(v) {
-    return typeof v === 'object' && v instanceof Error;
+    return v instanceof Error || Object.prototype.toString.call(v) === '[object Error]';
 }
 
 /**
@@ -3315,6 +3384,22 @@ function isNaN$1(v) {
 }
 
 /**
+ * 判断参数是否为本地函数
+ *
+ * @example
+ * //true
+ * console.log(_.isNative(Array))
+ * //false
+ * console.log(_.isNative(()=>{}))
+ *
+ * @param v
+ * @returns
+ */
+function isNative(v) {
+    return typeof v === 'function' && /native code/.test(v.toString());
+}
+
+/**
  * 判断参数是否为null
  *
  * @example
@@ -3354,6 +3439,26 @@ function isNull(v) {
  */
 function isPlainObject(v) {
     return isObject(v) && v.constructor === Object.prototype.constructor;
+}
+
+/**
+ * 判断参数是否为原始类型
+ *
+ * @example
+ * //true
+ * console.log(_.isPrimitive(1))
+ * //true
+ * console.log(_.isPrimitive(null)
+ * //false
+ * console.log(_.isPrimitive(new String()))
+ * //true
+ * console.log(_.isPrimitive(123n)
+ *
+ * @param v
+ * @returns
+ */
+function isPrimitive(v) {
+    return null === v || PRIMITIVE_TYPES.indexOf(typeof v) > -1;
 }
 
 /**
@@ -3410,7 +3515,7 @@ function isSymbol(v) {
  * @returns
  */
 function isWeakMap(v) {
-    return v instanceof WeakMap;
+    return v instanceof WeakMap || Object.prototype.toString.call(v) === '[object WeakMap]';
 }
 
 /**
@@ -3426,7 +3531,7 @@ function isWeakMap(v) {
  * @returns
  */
 function isWeakSet(v) {
-    return v instanceof WeakSet;
+    return v instanceof WeakSet || Object.prototype.toString.call(v) === '[object WeakSet]';
 }
 
 var is = /*#__PURE__*/Object.freeze({
@@ -3449,11 +3554,14 @@ var is = /*#__PURE__*/Object.freeze({
   isMatch: isMatch,
   isMatchWith: isMatchWith,
   isNaN: isNaN$1,
+  isNative: isNative,
   isNil: isNil,
+  isNode: isNode,
   isNull: isNull,
   isNumber: isNumber,
   isObject: isObject,
   isPlainObject: isPlainObject,
+  isPrimitive: isPrimitive,
   isRegExp: isRegExp,
   isSafeInteger: isSafeInteger,
   isSet: isSet,
@@ -6394,11 +6502,14 @@ class ChainFx {
     isMatch(props) { return get(FuncChain.prototype, '_isMatch').call(this, ...arguments); }
     isMatchWith(props, comparator = eq$1) { return get(FuncChain.prototype, '_isMatchWith').call(this, ...arguments); }
     isNaN() { return get(FuncChain.prototype, '_isNaN').call(this, ...arguments); }
+    isNative() { return get(FuncChain.prototype, '_isNative').call(this, ...arguments); }
     isNil() { return get(FuncChain.prototype, '_isNil').call(this, ...arguments); }
+    isNode() { return get(FuncChain.prototype, '_isNode').call(this, ...arguments); }
     isNull() { return get(FuncChain.prototype, '_isNull').call(this, ...arguments); }
     isNumber() { return get(FuncChain.prototype, '_isNumber').call(this, ...arguments); }
     isObject() { return get(FuncChain.prototype, '_isObject').call(this, ...arguments); }
     isPlainObject() { return get(FuncChain.prototype, '_isPlainObject').call(this, ...arguments); }
+    isPrimitive() { return get(FuncChain.prototype, '_isPrimitive').call(this, ...arguments); }
     isRegExp() { return get(FuncChain.prototype, '_isRegExp').call(this, ...arguments); }
     isSafeInteger() { return get(FuncChain.prototype, '_isSafeInteger').call(this, ...arguments); }
     isSet() { return get(FuncChain.prototype, '_isSet').call(this, ...arguments); }
@@ -6778,4 +6889,4 @@ if (ctx.myff) {
 }
 ctx.myfx = myfx;
 
-export { VERSION, add, addTime, after, alphaId, alt, append, arrayToTree, assign, assignWith, bind, bindAll, call, camelCase, capitalize, chain, chunk, clone, cloneDeep, cloneDeepWith, cloneWith, closest, compact, compareDate, compose, concat, countBy, debounce, myfx as default, defaultTo, defaults, defaultsDeep, delay, divide, each, eachRight, endsWith, eq, escapeRegExp, every, except, fill, filter, filterTree, find, findIndex, findKey, findLast, findLastIndex, findTreeNode, findTreeNodes, first, flat, flatDeep, flatMap, flatMapDeep, formatDate, formatNumber, fromPairs, functions, fval, get, getDayOfYear, getWeekOfMonth, getWeekOfYear, groupBy, gt, gte, has, first as head, identity, inRange, includes, indexOf, initial, insert, intersect, isArray, isArrayLike, isBlank, isBoolean, isDate, isDefined, isElement, isEmpty, isEqual, isEqualWith, isError, isFinite, isFunction, isInteger, isLeapYear, isMap, isMatch, isMatchWith, isNaN$1 as isNaN, isNil, isNull, isNumber, isObject, isPlainObject, isRegExp, isSafeInteger, isSameDay, isSet, isString, isSymbol, isUndefined, isWeakMap, isWeakSet, iteratee, join, kebabCase, keyBy, keys, keysIn, last, lastIndexOf, lowerCase, lowerFirst, lt, lte, map, matcher, max, mean, merge, mergeWith, min, minmax, mixin, multiply, noConflict, noop, now, omit, omitBy, once, padEnd, padStart, padZ, partial, partition, pascalCase, pick, pickBy, pop, prop, pull, randf, randi, range, reduce, reject, remove, repeat, replace, replaceAll, reverse, sample, sampleSize, set, shuffle, size, slice, snakeCase, snowflakeId, some, sort, sortBy, sortTree, sortedIndex, sortedIndexBy, split, startsWith, substring, subtract, sum, tail, take, takeRight, tap, template$1 as template, test, throttle, times, toArray, toDate, toFixed, toInteger as toInt, toInteger, toNumber, toObject, toPairs, toPath, toString, trim, trimEnd, trimStart, truncate, union, uniq, uniqBy, uniqueId, unset, unzip, upperCase, upperFirst, uuid, values, valuesIn, walkTree, without, zip, zipObject, zipWith };
+export { VERSION, add, addTime, after, alphaId, alt, append, arrayToTree, assign, assignWith, bind, bindAll, call, camelCase, capitalize, chain, chunk, clone, cloneDeep, cloneDeepWith, cloneWith, closest, compact, compareDate, compose, concat, countBy, debounce, myfx as default, defaultTo, defaults, defaultsDeep, delay, divide, each, eachRight, endsWith, eq, escapeRegExp, every, except, fill, filter, filterTree, find, findIndex, findKey, findLast, findLastIndex, findTreeNode, findTreeNodes, first, flat, flatDeep, flatMap, flatMapDeep, formatDate, formatNumber, fromPairs, functions, fval, get, getDayOfYear, getWeekOfMonth, getWeekOfYear, groupBy, gt, gte, has, first as head, identity, inRange, includes, indexOf, initial, insert, intersect, isArray, isArrayLike, isBlank, isBoolean, isDate, isDefined, isElement, isEmpty, isEqual, isEqualWith, isError, isFinite, isFunction, isInteger, isLeapYear, isMap, isMatch, isMatchWith, isNaN$1 as isNaN, isNative, isNil, isNode, isNull, isNumber, isObject, isPlainObject, isPrimitive, isRegExp, isSafeInteger, isSameDay, isSet, isString, isSymbol, isUndefined, isWeakMap, isWeakSet, iteratee, join, kebabCase, keyBy, keys, keysIn, last, lastIndexOf, lowerCase, lowerFirst, lt, lte, map, matcher, max, mean, merge, mergeWith, min, minmax, mixin, multiply, noConflict, noop, now, omit, omitBy, once, padEnd, padStart, padZ, partial, partition, pascalCase, pick, pickBy, pop, prop, pull, randf, randi, range, reduce, reject, remove, repeat, replace, replaceAll, reverse, sample, sampleSize, set, shuffle, size, slice, snakeCase, snowflakeId, some, sort, sortBy, sortTree, sortedIndex, sortedIndexBy, split, startsWith, substring, subtract, sum, tail, take, takeRight, tap, template$1 as template, test, throttle, times, toArray, toDate, toFixed, toInteger as toInt, toInteger, toNumber, toObject, toPairs, toPath, toString, trim, trimEnd, trimStart, truncate, union, uniq, uniqBy, uniqueId, unset, unzip, upperCase, upperFirst, uuid, values, valuesIn, walkTree, without, zip, zipObject, zipWith };

@@ -44,7 +44,7 @@ function each<V, K extends string | number | symbol>(
   collection: Collection<V, K>,
   callback: (value: V, index: K, collection: Collection<V>) => boolean | void | Promise<void>
 ): void {
-  _eachIterator<V, K>(collection, callback, false)
+  _eachIterator<V, K>(collection, callback)
 }
 
 export default each
