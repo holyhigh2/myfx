@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.8.0] - 2025/2/9
+### Add
+- is -> isNumeric
+
 ## [1.7.0] - 2025/1/9
 ### Optimize
 - each

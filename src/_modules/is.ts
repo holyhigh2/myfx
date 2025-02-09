@@ -21,6 +21,7 @@ import isNil from '../is/isNil'
 import isNode from '../is/isNode'
 import isNull from '../is/isNull'
 import isNumber from '../is/isNumber'
+import isNumeric from '../is/isNumeric'
 import isObject from '../is/isObject'
 import isPlainObject from '../is/isPlainObject'
 import isPrimitive from '../is/isPrimitive'
@@ -33,4 +34,4 @@ import isUndefined from '../is/isUndefined'
 import isWeakMap from '../is/isWeakMap'
 import isWeakSet from '../is/isWeakSet'
 
-export {isArray,isArrayLike,isBlank,isBoolean,isDate,isDefined,isElement,isEmpty,isEqual,isEqualWith,isError,isFinite,isFunction,isInteger,isMap,isMatch,isMatchWith,isNaN,isNative,isNil,isNode,isNull,isNumber,isObject,isPlainObject,isPrimitive,isRegExp,isSafeInteger,isSet,isString,isSymbol,isUndefined,isWeakMap,isWeakSet}
+export {isArray,isArrayLike,isBlank,isBoolean,isDate,isDefined,isElement,isEmpty,isEqual,isEqualWith,isError,isFinite,isFunction,isInteger,isMap,isMatch,isMatchWith,isNaN,isNative,isNil,isNode,isNull,isNumber,isNumeric,isObject,isPlainObject,isPrimitive,isRegExp,isSafeInteger,isSet,isString,isSymbol,isUndefined,isWeakMap,isWeakSet}

@@ -127,6 +127,7 @@ isNil():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isNil').call(t
 isNode():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isNode').call(this,...arguments)}
 isNull():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isNull').call(this,...arguments)}
 isNumber():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isNumber').call(this,...arguments)}
+isNumeric():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isNumeric').call(this,...arguments)}
 isObject<T extends object>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isObject').call(this,...arguments)}
 isPlainObject():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isPlainObject').call(this,...arguments)}
 isPrimitive():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isPrimitive').call(this,...arguments)}
