@@ -18,6 +18,7 @@ import merge from '../object/merge'
 import mergeWith from '../object/mergeWith'
 import omit from '../object/omit'
 import omitBy from '../object/omitBy'
+import parseJSON from '../object/parseJSON'
 import pick from '../object/pick'
 import pickBy from '../object/pickBy'
 import prop from '../object/prop'
@@ -28,4 +29,4 @@ import unset from '../object/unset'
 import values from '../object/values'
 import valuesIn from '../object/valuesIn'
 
-export {assign,assignWith,clone,cloneDeep,cloneDeepWith,cloneWith,defaults,defaultsDeep,eq,findKey,fromPairs,functions,get,has,keys,keysIn,merge,mergeWith,omit,omitBy,pick,pickBy,prop,set,toObject,toPairs,unset,values,valuesIn}
+export {assign,assignWith,clone,cloneDeep,cloneDeepWith,cloneWith,defaults,defaultsDeep,eq,findKey,fromPairs,functions,get,has,keys,keysIn,merge,mergeWith,omit,omitBy,parseJSON,pick,pickBy,prop,set,toObject,toPairs,unset,values,valuesIn}

@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.9.0] - 2025/4/19
+### Add
+- object -> parseJSON
+
 ## [1.8.0] - 2025/2/9
 ### Add
 - is -> isNumeric

@@ -178,6 +178,7 @@ merge<T extends Record<UnknownMapKey, any>>(...sources: any[]):FuncChain<any>{re
 mergeWith<T extends Record<UnknownMapKey, any>>(...sources: any[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_mergeWith').call(this,...arguments)}
 omit(...props: (string | string[])[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_omit').call(this,...arguments)}
 omitBy<V,K extends UnknownMapKey>(predicate?: (v: V, k: K) => boolean):FuncChain<any>{return get<Function>(FuncChain.prototype,'_omitBy').call(this,...arguments)}
+parseJSON():FuncChain<any>{return get<Function>(FuncChain.prototype,'_parseJSON').call(this,...arguments)}
 pick(...props: (string | string[])[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_pick').call(this,...arguments)}
 pickBy<V,K extends UnknownMapKey>(predicate?: (v: V, k: K) => boolean):FuncChain<any>{return get<Function>(FuncChain.prototype,'_pickBy').call(this,...arguments)}
 prop():FuncChain<any>{return get<Function>(FuncChain.prototype,'_prop').call(this,...arguments)}
