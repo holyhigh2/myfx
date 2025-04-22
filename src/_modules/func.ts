@@ -118,6 +118,7 @@ isError():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isError').ca
 isFinite():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isFinite').call(this,...arguments)}
 isFunction():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isFunction').call(this,...arguments)}
 isInteger():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isInteger').call(this,...arguments)}
+isIterator():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isIterator').call(this,...arguments)}
 isMap<K,V>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isMap').call(this,...arguments)}
 isMatch<T extends Record<string | number | symbol, any>>(props: T):FuncChain<any>{return get<Function>(FuncChain.prototype,'_isMatch').call(this,...arguments)}
 isMatchWith<T extends Record<string | number | symbol, any>>(props: T,comparator: Function = _eq):FuncChain<any>{return get<Function>(FuncChain.prototype,'_isMatchWith').call(this,...arguments)}

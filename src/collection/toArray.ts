@@ -1,6 +1,7 @@
 import isArray from "../is/isArray";
 import isArrayLike from "../is/isArrayLike";
 import isFunction from "../is/isFunction";
+import isIterator from "../is/isIterator";
 import isMap from "../is/isMap";
 import isObject from "../is/isObject";
 import isSet from "../is/isSet";
@@ -23,6 +24,8 @@ import values from "../object/values";
  * console.log(_.toArray({x:1,y:2,z:'b'}))
  * //[[1, 'a'], [3, 'b'], ['a', 5]]
  * console.log(_.toArray(new Map([[1,'a'],[3,'b'],['a',5]])))
+ * //[1, 3, 'a']
+ * console.log(_.toArray(new Map([[1,'a'],[3,'b'],['a',5]])).keys())
  *
  * @param collection 如果是Map/Object对象会转换为值列表
  *
@@ -40,6 +43,8 @@ function toArray<T>(collection: any): T[] {
     return Array.from(collection as any)
   } else if (isMap<any, any>(collection)) {
     return Array.from(collection.values())
+  } else if (isIterator(collection)) {
+    return Array.from(collection)
   } else if (isObject(collection)) {
     return values(collection)
   }

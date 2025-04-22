@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.10.0] - 2025/4/21
+### Add
+- is -> isIterator
+### Optimize
+- toArray 新增迭代器转换
+
 ## [1.9.0] - 2025/4/19
 ### Add
 - object -> parseJSON
