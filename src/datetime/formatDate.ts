@@ -75,11 +75,11 @@ const pad00 = (str: string) => str.length > 2 ? str : (str.length > 1 ? '0' + st
  * console.log(_.formatDate('2020-12-11 10:09:08','现在时间:(yy-MM-dd hh:mm:ss)'))
  *
  * @param val 需要格式化的值，可以是日期对象或时间字符串或日期毫秒数
- * @param [pattern='yyyy-MM-dd hh:mm:ss'] 格式化模式
+ * @param [pattern='yyyy-MM-dd HH:mm:ss'] 格式化模式
  * @returns 格式化后的日期字符串，无效日期返回空字符串
  */
 function formatDate(val: string | Date | number, pattern?: string): string {
-  pattern = pattern || 'yyyy-MM-dd hh:mm:ss'
+  pattern = pattern || 'yyyy-MM-dd HH:mm:ss'
   let formatter = cache[pattern]
   if (!formatter) {
     formatter = (date: string | Date | number) => {
