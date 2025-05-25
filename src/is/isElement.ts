@@ -11,8 +11,8 @@
  * @returns
  * @since 1.0.0
  */
-function isElement(v: unknown): v is Element {
-  return typeof v === 'object' && v instanceof Element
+function isElement(v: unknown): v is globalThis.Element {
+  return typeof v === 'object' && v instanceof (globalThis.Element || Object)
 }
 
 export default isElement

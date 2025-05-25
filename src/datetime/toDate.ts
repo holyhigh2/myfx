@@ -31,7 +31,7 @@ import padEnd from "../string/padEnd";
  *
  * @returns 转换后的日期。无效日期统一返回1970/1/1
  */
-function toDate(value: number | Array<number> | string | Date): Date {
+function toDate(value: number | [year: number, monthIndex: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number] | string | Date): Date {
   let rs
   if (isInteger(value)) {
     if (value < TIMESTAMP_MIN) {
@@ -41,7 +41,7 @@ function toDate(value: number | Array<number> | string | Date): Date {
     }
     rs = new Date(value)
   } else if (isArray(value)) {
-    rs = new Date(...(value as []))
+    rs = new Date(value[0], value[1] - 1, value[2] || 1, value[3] || 0, value[4] || 0, value[5] || 0, value[6] || 0)
   } else {
     rs = new Date(value)
   }

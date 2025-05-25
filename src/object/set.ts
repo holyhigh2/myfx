@@ -30,7 +30,7 @@ function set(
     const nextSeg = chain[i + 1]
     let tmp = target[seg]
     if (nextSeg) {
-      let next = !tmp ? (isNaN(nextSeg as any) ? {} : []) : tmp
+      let next = !tmp ? (isNaN(parseInt(nextSeg)) ? {} : []) : tmp
       if (!tmp) {
         tmp = target[seg] = next
       }

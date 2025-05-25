@@ -1,4 +1,3 @@
-import _eq from "../_eq";
 import isFunction from "./isFunction";
 import isNil from "./isNil";
 import isNode from "./isNode";
@@ -10,9 +9,9 @@ import isObject from "./isObject";
  * @example
  * let target = {a:{x:1,y:2},b:1}
  * //true
- * console.log(_.isMatchWith(target,{b:1}))
+ * console.log(_.isMatchWith(target,{b:1},_.eq))
  * //false
- * console.log(_.isMatchWith(target,{b:'1'}))
+ * console.log(_.isMatchWith(target,{b:'1'},_.eq))
  *
  * target = {a:null,b:0}
  * //true
@@ -20,14 +19,14 @@ import isObject from "./isObject";
  *
  * @param target 如果不是对象类型，返回false
  * @param props 对比属性对象，如果是nil，返回true
- * @param [comparator=eq] 比较器，参数(object[k],props[k],k,object,props)，返回true表示匹配
+ * @param comparator 比较器。参数(object[k],props[k],k,object,props)，返回true表示匹配
  * @returns 匹配所有props返回true
  * @since 0.18.1
  */
 function isMatchWith<T extends Record<string | number | symbol, any>>(
   target: T,
   props: T,
-  comparator: Function = _eq
+  comparator: (v1: any, v2: any, k?: string, target?: T, props?: T) => boolean
 ): boolean {
   if (isNil(props)) return true
   const ks = Object.keys(props)
@@ -38,7 +37,7 @@ function isMatchWith<T extends Record<string | number | symbol, any>>(
     const v1 = target[k]
     const v2 = props[k]
     if (isObject(v1) && isObject(v2) && !isNode(v1) && !isNode(v2) && !isFunction(v1) && !isFunction(v2)) {
-      if (!isMatchWith(v1, v2, comparator)) {
+      if (!isMatchWith<Record<string | number | symbol, any>>(v1, v2, comparator)) {
         rs = false
         break
       }

@@ -20,7 +20,7 @@ function unset(
     const nextSeg = chain[i + 1]
     let tmp = target[seg]
     if (nextSeg) {
-      tmp = target[seg] = !tmp ? (isNaN(nextSeg as any) ? {} : []) : tmp
+      tmp = target[seg] = !tmp ? (isNaN(parseInt(nextSeg)) ? {} : []) : tmp
     } else {
       return delete target[seg]
     }

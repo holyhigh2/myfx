@@ -43,7 +43,7 @@ import type { UnknownMapKey } from '../types'
  * @param array 原始数据集。如果非Array类型，返回空数组
  * @param idKey id标识
  * @param pidKey='pid' 父id标识
- * @param options 自定义选项
+ * @param {object} options 自定义选项
  * @param options.rootParentValue 根节点的parentValue，用于识别根节点。默认null
  * @param options.childrenKey 包含子节点容器的key。默认'children'
  * @param options.attrMap 转换tree节点时的属性映射，如\{text:'name'\}表示把array中一条记录的name属性映射为tree节点的text属性
@@ -60,7 +60,7 @@ function arrayToTree(
     attrMap?: Record<string, any>
     childrenKey?: string
     sortKey?: string
-  } = {}
+  } = { childrenKey: 'children', rootParentValue: null, attrMap: undefined, sortKey: '' }
 ): Record<UnknownMapKey, any>[] {
   if (!isArray(array)) return []
 

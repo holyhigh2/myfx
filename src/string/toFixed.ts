@@ -52,17 +52,18 @@ function toFixed(v: string | number, scale?: number): string {
       keep = 1 + keep.substring(1)
       startZ = true
     }
-    let n: any = Math.round(parseFloat(keep + '.' + round))
+    let n = Math.round(parseFloat(keep + '.' + round))
+    let nStr = n + ''
     const strN = n + ''
     if (n > 0 && strN.length > keep.length) {
       integ += 1 * isNeg
-      n = strN.substring(1)
+      nStr = strN.substring(1)
     }
     if (startZ) {
-      n = parseInt(strN[0]) - 1 + strN.substring(1)
+      nStr = parseInt(strN[0]) - 1 + strN.substring(1)
     }
-    n = n !== '' && keep.length > 0 ? '.' + n : n
-    rs = integ + n + ''
+    nStr = nStr !== '' && keep.length > 0 ? '.' + nStr : nStr
+    rs = integ + nStr + ''
     if (isNeg < 0 && rs[0] !== '-') rs = '-' + rs
   }
   return rs

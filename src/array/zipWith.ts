@@ -1,6 +1,6 @@
+import _identity from "../_identity";
 import map from "../collection/map";
 import isFunction from "../is/isFunction";
-import _identity from "../_identity";
 import pop from "./pop";
 import zip from "./zip";
 /**
@@ -13,8 +13,10 @@ import zip from "./zip";
  * //[3, 4]
  * console.log(_.zipWith([1,2],[3,4],[5,6],group=>_.avg(group)))
  *
- * @param arrays 1-n个数组
- * @param [iteratee=identity] (group)回调函数，返回组合后的分组值
+ * @param params (...arrays[,iteratee(group)]) 
+ * arrays - 1-n个数组或arraylike对象，非arraylike参数会被忽略; 
+ * iteratee - 回调函数，返回组合后的分组值。默认使用<code>identity</code>函数
+ * 
  * @returns 重新分组后的新数组
  * @since 1.0.0
  */

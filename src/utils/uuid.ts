@@ -16,9 +16,9 @@ const VARIANTS = ['8', '9', 'a', 'b']
  */
 function uuid(delimiter?: boolean): string {
   let uuid = ''
-  if (self.crypto.randomUUID) {
+  if (globalThis.crypto && globalThis.crypto.randomUUID) {
     // only in https
-    uuid = self.crypto.randomUUID()
+    uuid = globalThis.crypto.randomUUID()
   } else {
     const r32 = Math.random()
     const r16 = Math.random()

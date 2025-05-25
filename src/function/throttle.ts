@@ -52,7 +52,7 @@ function throttle<T extends (...args: any[]) => any>(fn: T, wait: number, option
 
   return (function (this: any, ...args: any[]) {
     timeoutArgs = args.map(arg => {
-      if (arg instanceof Event) {
+      if (arg instanceof globalThis.Event) {
         EventTargetMap.set(arg, {
           currentTarget: arg.currentTarget,
           fromElement: Reflect.get(arg, 'fromElement'),

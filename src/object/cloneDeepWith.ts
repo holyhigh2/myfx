@@ -24,7 +24,7 @@ import clone from "./clone";
 function cloneDeepWith<T>(
   obj: Record<UnknownMapKey, any>,
   handler?: (v: any, k: UnknownMapKey, obj: Record<UnknownMapKey, any>) => any,
-  skip: (v: any, k: string | number | symbol) => boolean = () => false
+  skip: (v: any, k: string | number | symbol) => boolean = (value?, key?) => false
 ): T {
   if (!isObject(obj)) return obj
   if (isFunction(obj)) return <T>obj

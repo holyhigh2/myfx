@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.0] - 2025/5/24 ⚠️BreakChange
+### Remove
+- collection -> head
+- number -> toInt
+### Optimize
+- 适配鸿蒙
+
 ## [1.10.0] - 2025/4/21
 ### Add
 - is -> isIterator

@@ -26,8 +26,8 @@ import type { UnknownMapKey } from "../types";
  */
 function cloneWith<T>(
   obj: Record<UnknownMapKey, any>,
-  handler: (v: any, k: string | number | symbol) => any = _identity,
-  skip: (v: any, k: string | number | symbol) => boolean = () => false
+  handler: (v: any, k?: string | number | symbol) => any,
+  skip: (v: any, k: string | number | symbol) => boolean = (value?, key?) => false
 ): T {
   if (!isObject(obj)) return obj
   if (isFunction(obj)) return <T>obj

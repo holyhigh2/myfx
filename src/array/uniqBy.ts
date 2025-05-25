@@ -11,7 +11,7 @@ import type { NonFuncItee, UnknownMapKey } from "../types";
  * console.log(_.uniqBy([{a:1},{a:1},{a:'1'},{a:2},{a:'2'},{a:2}],v=>v.a>>0))
  *
  * @param array 数组
- * @param iteratee (value,index) 筛选函数，返回需要对比的值。默认identity
+ * @param itee (value,index) 筛选函数，返回需要对比的值。默认identity
  * <br>当iteratee是函数时回调参数见定义
  * <br>其他类型请参考 {@link utils.iteratee}
  * @returns 去重后的新数组对象

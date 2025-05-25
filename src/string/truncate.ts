@@ -18,16 +18,16 @@ import toString from "./toString";
  *
  * @param str
  * @param len 最大长度。如果长度大于<code>str</code>长度，直接返回str
- * @param options 可选项
+ * @param {object} options 可选项
  * @param options.omission 替代字符，默认 '...'
- * @param options.separator 截断符。如果截取后的字符串中包含截断符，则最终只会返回截断符之前的内容
+ * @param [options.separator] 截断符。如果截取后的字符串中包含截断符，则最终只会返回截断符之前的内容
  * @returns 返回新字符串
  * @since 1.0.0
  */
 function truncate(
   str: any,
   len: number,
-  options?: { omission?: '...'; separator?: string | RegExp }
+  options?: { omission?: '...', separator?: string | RegExp }
 ) {
   str = toString(str)
   if (str.length <= len) return str

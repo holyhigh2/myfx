@@ -8,7 +8,7 @@ import functions from "../object/functions"
  *  select:_.get,
  *  from:_.chain,
  *  where:_.filter,
- *  top:_.head
+ *  top:_.first
  * });
  *
  * const libs = [

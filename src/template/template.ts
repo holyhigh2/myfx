@@ -17,7 +17,6 @@ import map from "../collection/map";
 import size from "../collection/size";
 import takeRight from "../collection/takeRight";
 import keys from "../object/keys";
-import toObject from "../object/toObject";
 import toPairs from "../object/toPairs";
 import lastIndexOf from "../string/lastIndexOf";
 import padStart from "../string/padStart";
@@ -54,7 +53,7 @@ import type { INode, IOptions, UnknownMapKey } from "../types";
  * console.log(render())
  *
  * @param string 模板字符串
- * @param options MTL参数
+ * @param {object} options MTL参数
  * @param options.delimiters 分隔符，默认 ['[%' , '%]']
  * @param options.mixins 混入对象。\{名称:模板字符串\}
  * @param options.globals 全局变量对象，可以在任意位置引用。模板内置的全局对象有两个：`print(content)`函数、`_` 对象，Myfx的命名空间
@@ -72,7 +71,15 @@ function template(string: string, options?: IOptions) {
       }).join("");
     }
   );
-  options = toObject(options);
+  if (!options) {
+    options = {
+      delimiters: delimiters,
+      globals: {},
+      mixins: undefined,
+      stripWhite: false
+    };
+  }
+
   const mixins = options.mixins;
   const stripWhite = options.stripWhite || false;
 
@@ -273,9 +280,9 @@ function compile(tokens: INode[], options: IOptions): Function {
       globalKeys = paramAry[0];
       globalValues = paramAry[1];
     }
-    if (!globalKeys.includes("_") && (self as any).myfx) {
+    if (!globalKeys.includes("_") && (globalThis as any).myfx) {
       globalKeys.push("_");
-      globalValues.push((self as any).myfx);
+      globalValues.push((globalThis as any).myfx);
     }
 
     const getRender = new Function(

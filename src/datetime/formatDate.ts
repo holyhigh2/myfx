@@ -196,7 +196,7 @@ let Lang = globalThis.navigator?.language || 'zh-CN'
 /**
  * 设置不同locale的配置
  * @param lang 语言标记，默认跟随系统
- * @param options 格式化选项
+ * @param {object} options 格式化选项
  * @param options.quarters 季度描述，默认"一 - 四季度"
  * @param options.months 月度描述，默认"一 - 十二月"
  * @param options.weeks 一月中的周描述，默认"第一 - 六周"

@@ -15,8 +15,9 @@ import type { UnknownMapKey } from "../types";
  * console.log(_.mergeWith({x:1,y:{a:1,b:2,c:3}},{x:2,y:{a:2,d:3}},{y:{b:4}},(sv,tv,k)=>k=='d'?sv*9:undefined))
  *
  * @param target 目标对象
- * @param sources 1-n个源对象
- * @param [handler=noop] (src[k],target[k],k,src,target,chain) 自定义赋值处理器，返回赋予target[k]的值
+ * @param sources (...src[,handler(src[k],target[k],k,src,target,chain)]) 
+ * src - 1-n个源对象; 
+ * handler - 自定义赋值处理器，返回赋予target[k]的值。默认使用<code>noop</code>
  * @returns 返回target
  * @since 0.22.0
  */

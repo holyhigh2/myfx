@@ -9,7 +9,6 @@ import first from '../collection/first'
 import flatMap from '../collection/flatMap'
 import flatMapDeep from '../collection/flatMapDeep'
 import groupBy from '../collection/groupBy'
-import head from '../collection/head'
 import includes from '../collection/includes'
 import initial from '../collection/initial'
 import keyBy from '../collection/keyBy'
@@ -30,4 +29,4 @@ import take from '../collection/take'
 import takeRight from '../collection/takeRight'
 import toArray from '../collection/toArray'
 
-export {countBy,each,eachRight,every,filter,find,findLast,first,flatMap,flatMapDeep,groupBy,head,includes,initial,keyBy,last,map,partition,reduce,reject,sample,sampleSize,shuffle,size,some,sort,sortBy,tail,take,takeRight,toArray}
+export {countBy,each,eachRight,every,filter,find,findLast,first,flatMap,flatMapDeep,groupBy,includes,initial,keyBy,last,map,partition,reduce,reject,sample,sampleSize,shuffle,size,some,sort,sortBy,tail,take,takeRight,toArray}

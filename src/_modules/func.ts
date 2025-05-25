@@ -6,11 +6,9 @@
  * @author holyhigh
  */
 
-import _eq from '../_eq'
 import type { Collection, NonFuncItee, UnknownMapKey } from '../types'
-import _identity from '../utils/identity'
 import { range, reverse, slice } from './array'
-import { each, eachRight, filter, first, head, last, map, size, tail, take, toArray } from './collection'
+import { each, eachRight, filter, first, last, map, size, tail, take, toArray } from './collection'
 import { tap } from './function'
 import { isArrayLike, isDefined, isFunction, isUndefined } from './is'
 import { get } from './object'
@@ -121,7 +119,7 @@ isInteger():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isInteger'
 isIterator():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isIterator').call(this,...arguments)}
 isMap<K,V>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isMap').call(this,...arguments)}
 isMatch<T extends Record<string | number | symbol, any>>(props: T):FuncChain<any>{return get<Function>(FuncChain.prototype,'_isMatch').call(this,...arguments)}
-isMatchWith<T extends Record<string | number | symbol, any>>(props: T,comparator: Function = _eq):FuncChain<any>{return get<Function>(FuncChain.prototype,'_isMatchWith').call(this,...arguments)}
+isMatchWith<T extends Record<string | number | symbol, any>>(props: T,comparator: (v1: any, v2: any, k?: string, target?: T, props?: T) => boolean):FuncChain<any>{return get<Function>(FuncChain.prototype,'_isMatchWith').call(this,...arguments)}
 isNaN():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isNaN').call(this,...arguments)}
 isNative():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isNative').call(this,...arguments)}
 isNil():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isNil').call(this,...arguments)}
@@ -163,8 +161,8 @@ assign(...sources: any[]):FuncChain<any>{return get<Function>(FuncChain.prototyp
 assignWith(...sources: any[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_assignWith').call(this,...arguments)}
 clone<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_clone').call(this,...arguments)}
 cloneDeep<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_cloneDeep').call(this,...arguments)}
-cloneDeepWith<T>(handler?: (v: any, k: UnknownMapKey, obj: Record<UnknownMapKey, any>) => any,skip: (v: any, k: string | number | symbol) => boolean = () => false):FuncChain<any>{return get<Function>(FuncChain.prototype,'_cloneDeepWith').call(this,...arguments)}
-cloneWith<T>(handler: (v: any, k: string | number | symbol) => any = _identity,skip: (v: any, k: string | number | symbol) => boolean = () => false):FuncChain<any>{return get<Function>(FuncChain.prototype,'_cloneWith').call(this,...arguments)}
+cloneDeepWith<T>(handler?: (v: any, k: UnknownMapKey, obj: Record<UnknownMapKey, any>) => any,skip: (v: any, k: string | number | symbol) => boolean = (value?, key?) => false):FuncChain<any>{return get<Function>(FuncChain.prototype,'_cloneDeepWith').call(this,...arguments)}
+cloneWith<T>(handler: (v: any, k?: string | number | symbol) => any,skip: (v: any, k: string | number | symbol) => boolean = (value?, key?) => false):FuncChain<any>{return get<Function>(FuncChain.prototype,'_cloneWith').call(this,...arguments)}
 defaults<T extends Record<UnknownMapKey, any>>(...sources: any[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_defaults').call(this,...arguments)}
 defaultsDeep<T extends Record<UnknownMapKey, any>>(...sources: any[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_defaultsDeep').call(this,...arguments)}
 eq(b: unknown):FuncChain<any>{return get<Function>(FuncChain.prototype,'_eq').call(this,...arguments)}
@@ -226,11 +224,11 @@ arrayToTree(idKey: string = 'id',pidKey?: string,options: {
     attrMap?: Record<string, any>;
     childrenKey?: string;
     sortKey?: string;
-} = {}):FuncChain<any>{return get<Function>(FuncChain.prototype,'_arrayToTree').call(this,...arguments)}
+} = { childrenKey: 'children', rootParentValue: null, attrMap: undefined, sortKey: '' }):FuncChain<any>{return get<Function>(FuncChain.prototype,'_arrayToTree').call(this,...arguments)}
 closest<T = Record<UnknownMapKey, any>>(predicate: (node: Record<UnknownMapKey, any>, times: number, cancel: () => void) => boolean,parentKey: string):FuncChain<any>{return get<Function>(FuncChain.prototype,'_closest').call(this,...arguments)}
-filterTree(predicate: (node: Record<UnknownMapKey, any>, parentNode: Record<UnknownMapKey, any>, chain: Record<UnknownMapKey, any>[], level: number) => boolean | NonFuncItee,options?: {
+filterTree(predicate: (node: Record<UnknownMapKey, any>, parentNode: Record<UnknownMapKey, any>, chain: Record<UnknownMapKey, any>[], level: number) => boolean | NonFuncItee,options: {
     childrenKey?: string;
-}):FuncChain<any>{return get<Function>(FuncChain.prototype,'_filterTree').call(this,...arguments)}
+} = { childrenKey: 'children' }):FuncChain<any>{return get<Function>(FuncChain.prototype,'_filterTree').call(this,...arguments)}
 findTreeNode(predicate: (node: Record<UnknownMapKey, any>, parentNode: Record<UnknownMapKey, any>, chain: Record<UnknownMapKey, any>[], level: number, index: number) => boolean | NonFuncItee,options?: {
     childrenKey?: string;
 }):FuncChain<any>{return get<Function>(FuncChain.prototype,'_findTreeNode').call(this,...arguments)}
@@ -375,7 +373,6 @@ function buildComprehension(
       }
       break
     case first.name:
-    case head.name:
       if (isUndefined(comprehension.count) || 1 < comprehension.count) {
         comprehension.count = 1
         comprehension.returnEl = true

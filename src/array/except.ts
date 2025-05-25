@@ -15,9 +15,9 @@ import isFunction from "../is/isFunction"
  * //[2, 3, "2", "3"] '2'和2不相等
  * console.log(_.except([1,2,3],[1,'2',3],[2,'3',1]))
  *
- * @param [arrays] 1-n个数组或arraylike对象，非arraylike参数会被忽略
- * @param [identifier] (v);标识函数，用来对每个元素返回唯一标识，标识相同的值会认为相等。使用<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness#Same-value-zero_equality">SameValueZero</a>
- * 算法进行值比较。如果为空，直接使用值自身比较
+ * @param params (...arrays[,identifier(v)]) 
+ * arrays - 1-n个数组或arraylike对象，非arraylike参数会被忽略; 
+ * identifier - 标识函数，用来对每个元素返回唯一标识，标识相同的值会认为相等。使用<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness#Same-value-zero_equality">SameValueZero</a> 算法进行值比较。如果为空，直接使用值自身比较
  * @returns 差集元素组成的新数组
  */
 function except<T>(...params: any): T[] {

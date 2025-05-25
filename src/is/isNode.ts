@@ -11,8 +11,8 @@
  * @returns
  * @since 1.5.0
  */
-function isNode(v: unknown): v is Node {
-  return typeof v === 'object' && v instanceof Node
+function isNode(v: unknown): v is globalThis.Node {
+  return typeof v === 'object' && v instanceof (globalThis.Node || Object)
 }
 
 export default isNode

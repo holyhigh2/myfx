@@ -41,7 +41,7 @@ import type { UnknownMapKey } from '../types'
  *
  * @param treeNodes 一组节点或一个节点
  * @param comparator (a,b) 排序函数
- * @param options 自定义选项
+ * @param {object} options 自定义选项
  * @param options.childrenKey 包含子节点容器的key。默认'children'
  *
  * @since 1.0.0
@@ -52,9 +52,8 @@ function sortTree(
     a: Record<UnknownMapKey, any>,
     b: Record<UnknownMapKey, any>
   ) => number,
-  options?: { childrenKey?: string }
+  options: { childrenKey?: string } = { childrenKey: 'children' }
 ): void {
-  options = options || {}
   const childrenKey = options.childrenKey || 'children'
   const data: Record<UnknownMapKey, any>[] = isArray<any>(treeNodes)
     ? treeNodes
