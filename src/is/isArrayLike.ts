@@ -22,9 +22,9 @@ function isArrayLike<T>(v: unknown): v is ArrayLike<T> {
   // 具有length属性
   const list = v as IList
   if (list.length !== undefined) {
-    const proto = list.constructor.prototype
+    const proto = Reflect.getPrototypeOf(list) as Record<string, unknown> | null
     // NodeList/HTMLCollection/CSSRuleList/...
-    if (isFunction(proto.item)) return true
+    if (isFunction(proto?.item)) return true
     // arguments
     if (isFunction(list[Symbol.iterator])) return true
   }
