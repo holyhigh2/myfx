@@ -1,3 +1,4 @@
+import isMap from "../is/isMap"
 import type { UnknownMapKey } from "../types"
 /**
  * 返回对象的所有key数组
@@ -13,6 +14,9 @@ import type { UnknownMapKey } from "../types"
  * @returns 对象的key
  */
 function keysIn(obj: Record<UnknownMapKey, any>): string[] {
+  if (isMap(obj)) {
+    return Array.from((obj as Map<any, any>).keys())
+  }
   const rs: string[] = []
   // eslint-disable-next-line guard-for-in
   for (const k in obj) {

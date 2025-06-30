@@ -1,3 +1,5 @@
+import isMap from "../is/isMap"
+
 /**
  * 返回对象的所有key数组
  * 
@@ -14,6 +16,9 @@
  */
 function keys(obj: unknown): string[] {
   if (obj === null || obj === undefined) return []
+  if (isMap(obj)) {
+    return Array.from((obj as Map<any, any>).keys())
+  }
   return Object.keys(obj)
 }
 

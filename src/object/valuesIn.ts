@@ -1,3 +1,4 @@
+import isMap from "../is/isMap";
 import type { UnknownMapKey } from "../types";
 import keysIn from "./keysIn";
 /**
@@ -14,6 +15,9 @@ import keysIn from "./keysIn";
  * @returns 对象根属性对应的值列表
  */
 function valuesIn(obj: Record<UnknownMapKey, any>): any[] {
+  if (isMap(obj)) {
+    return Array.from((obj as Map<any, any>).values())
+  }
   return keysIn(obj).map((k) => obj[k])
 }
 

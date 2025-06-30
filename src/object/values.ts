@@ -1,3 +1,4 @@
+import isMap from "../is/isMap";
 import keys from "./keys";
 /**
  * 返回对象的所有value数组
@@ -16,6 +17,9 @@ import keys from "./keys";
  * @returns 对象根属性对应的值列表
  */
 function values(obj: unknown): any[] {
+  if (isMap(obj)) {
+    return Array.from((obj as Map<any, any>).values())
+  }
   return keys(obj).map((k) => (obj as any)[k])
 }
 
