@@ -180,13 +180,13 @@ omitBy<V,K extends UnknownMapKey>(predicate?: (v: V, k: K) => boolean):FuncChain
 parseJSON():FuncChain<any>{return get<Function>(FuncChain.prototype,'_parseJSON').call(this,...arguments)}
 pick(...props: (string | string[])[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_pick').call(this,...arguments)}
 pickBy<V,K extends UnknownMapKey>(predicate?: (v: V, k: K) => boolean):FuncChain<any>{return get<Function>(FuncChain.prototype,'_pickBy').call(this,...arguments)}
-prop():FuncChain<any>{return get<Function>(FuncChain.prototype,'_prop').call(this,...arguments)}
+prop<V>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_prop').call(this,...arguments)}
 set(path: Array<string | number> | string | number,value: any):FuncChain<any>{return get<Function>(FuncChain.prototype,'_set').call(this,...arguments)}
 toObject():FuncChain<any>{return get<Function>(FuncChain.prototype,'_toObject').call(this,...arguments)}
 toPairs():FuncChain<any>{return get<Function>(FuncChain.prototype,'_toPairs').call(this,...arguments)}
 unset(path: Array<string | number> | string | number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_unset').call(this,...arguments)}
-values():FuncChain<any>{return get<Function>(FuncChain.prototype,'_values').call(this,...arguments)}
-valuesIn():FuncChain<any>{return get<Function>(FuncChain.prototype,'_valuesIn').call(this,...arguments)}
+values<V>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_values').call(this,...arguments)}
+valuesIn<V>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_valuesIn').call(this,...arguments)}
 camelCase():FuncChain<any>{return get<Function>(FuncChain.prototype,'_camelCase').call(this,...arguments)}
 capitalize():FuncChain<any>{return get<Function>(FuncChain.prototype,'_capitalize').call(this,...arguments)}
 endsWith(searchStr: string,position?: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_endsWith').call(this,...arguments)}
@@ -240,7 +240,7 @@ defaultTo<T,V>(defaultValue: V):FuncChain<any>{return get<Function>(FuncChain.pr
 matcher<T extends Object>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_matcher').call(this,...arguments)}
 noConflict():FuncChain<any>{return get<Function>(FuncChain.prototype,'_noConflict').call(this,...arguments)}
 snowflakeId(epoch?: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_snowflakeId').call(this,...arguments)}
-times(iteratee: (n: number) => any):FuncChain<any>{return get<Function>(FuncChain.prototype,'_times').call(this,...arguments)}
+times<V>(iteratee: (n: number) => V):FuncChain<any>{return get<Function>(FuncChain.prototype,'_times').call(this,...arguments)}
 toPath():FuncChain<any>{return get<Function>(FuncChain.prototype,'_toPath').call(this,...arguments)}
 uniqueId():FuncChain<any>{return get<Function>(FuncChain.prototype,'_uniqueId').call(this,...arguments)}
 uuid():FuncChain<any>{return get<Function>(FuncChain.prototype,'_uuid').call(this,...arguments)}

@@ -16,11 +16,11 @@ import keys from "./keys";
  * @param obj
  * @returns 对象根属性对应的值列表
  */
-function values(obj: unknown): any[] {
+function values<V>(obj: unknown): V[] {
   if (isMap(obj)) {
-    return Array.from((obj as Map<any, any>).values())
+    return Array.from((obj as Map<any, V>).values())
   }
-  return keys(obj).map((k) => (obj as any)[k])
+  return keys(obj).map<V>((k) => (obj as any)[k])
 }
 
 export default values

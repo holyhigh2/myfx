@@ -14,11 +14,11 @@ import keysIn from "./keysIn";
  * @param obj
  * @returns 对象根属性对应的值列表
  */
-function valuesIn(obj: Record<UnknownMapKey, any>): any[] {
+function valuesIn<V>(obj: Record<UnknownMapKey, any>): V[] {
   if (isMap(obj)) {
-    return Array.from((obj as Map<any, any>).values())
+    return Array.from((obj as Map<any, V>).values())
   }
-  return keysIn(obj).map((k) => obj[k])
+  return keysIn(obj).map<V>((k) => obj[k])
 }
 
 export default valuesIn

@@ -28,7 +28,7 @@ function truncate(
   str: any,
   len: number,
   options?: { omission?: '...', separator?: string | RegExp }
-) {
+): string {
   str = toString(str)
   if (str.length <= len) return str
 

@@ -17,11 +17,11 @@ import get from "./get";
  * @returns 接收一个对象作为参数的函数
  * @since 0.17.0
  */
-function prop(
+function prop<V>(
   path: string | string[]
-): (obj: Record<UnknownMapKey, any>) => any {
+): (obj: Record<UnknownMapKey, any>) => V {
   return (obj) => {
-    return get(obj, path)
+    return get(obj, path) as V
   }
 }
 

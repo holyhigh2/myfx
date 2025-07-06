@@ -12,7 +12,7 @@ import range from '../array/range'
  * @returns 返回值数组
  * @since 0.17.0
  */
-function times(n: number, iteratee: (n: number) => any): any[] {
+function times<V>(n: number, iteratee: (n: number) => V): V[] {
   return range(n).map(iteratee)
 }
 
