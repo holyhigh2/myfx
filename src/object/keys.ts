@@ -14,7 +14,7 @@ import isMap from "../is/isMap"
  * @param obj
  * @returns key数组
  */
-function keys(obj: Map<any, any> | Record<string | number | symbol, any>): string[] {
+function keys(obj: Map<any, any> | Record<string | number | symbol, any> | object): string[] {
   if (obj === null || obj === undefined) return []
   if (isMap(obj)) {
     return Array.from((obj as Map<any, any>).keys())

@@ -13,11 +13,11 @@ import keysIn from "./keysIn";
  * @param obj
  * @returns 值列表
  */
-function valuesIn<V>(obj: Map<any, V> | Record<string | number | symbol, V>): V[] {
+function valuesIn<V>(obj: Map<any, V> | Record<string | number | symbol, V> | object): V[] {
   if (isMap(obj)) {
     return Array.from((obj as Map<any, V>).values())
   }
-  return keysIn(obj).map<V>((k) => obj[k])
+  return keysIn(obj).map<V>((k) => (obj as any)[k])
 }
 
 export default valuesIn

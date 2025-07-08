@@ -12,7 +12,7 @@ import isMap from "../is/isMap"
  * @param obj
  * @returns key数组
  */
-function keysIn(obj: Map<any, any> | Record<string | number | symbol, any>): string[] {
+function keysIn(obj: Map<any, any> | Record<string | number | symbol, any> | object): string[] {
   if (isMap(obj)) {
     return Array.from((obj as Map<any, any>).keys())
   }

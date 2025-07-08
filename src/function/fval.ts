@@ -20,8 +20,8 @@ import values from "../object/values"
  * @returns 表达式计算结果
  */
 function fval<T>(expression: string, args?: Record<string, any>, context?: any): T {
-  const ks = keys(args)
-  const val = values(args)
+  const ks = args ? keys(args) : []
+  const val = args ? values(args) : []
   return Function(...ks, '"use strict";return ' + expression).call(context, ...val)
 }
 

@@ -16,7 +16,7 @@ import keys from "./keys";
  * @param obj
  * @returns 值列表
  */
-function values<V>(obj: Map<any, V> | Record<string | number | symbol, V>): V[] {
+function values<V>(obj: Map<any, V> | Record<string | number | symbol, V> | object): V[] {
   if (isMap(obj)) {
     return Array.from((obj as Map<any, V>).values())
   }
