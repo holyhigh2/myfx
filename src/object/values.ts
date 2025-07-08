@@ -1,7 +1,7 @@
 import isMap from "../is/isMap";
 import keys from "./keys";
 /**
- * 返回对象的所有value数组
+ * 返回对象/Map的所有value数组
  * <div class="alert alert-secondary">
       只返回对象的自身可枚举属性
     </div>
@@ -14,9 +14,9 @@ import keys from "./keys";
  * console.log(_.values(new f()))
  *
  * @param obj
- * @returns 对象根属性对应的值列表
+ * @returns 值列表
  */
-function values<V>(obj: unknown): V[] {
+function values<V>(obj: Map<any, V> | Record<string | number | symbol, V>): V[] {
   if (isMap(obj)) {
     return Array.from((obj as Map<any, V>).values())
   }

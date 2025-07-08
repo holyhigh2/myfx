@@ -1,8 +1,7 @@
 import isMap from "../is/isMap"
-import type { UnknownMapKey } from "../types"
 /**
- * 返回对象的所有key数组
- * 包括原型链中的属性key
+ * 返回对象/Map的所有key数组
+ * 包括对象原型链中的属性key
  *
  * @example
  * let f = new Function("this.a=1;this.b=2;");
@@ -11,9 +10,9 @@ import type { UnknownMapKey } from "../types"
  * console.log(_.keysIn(new f()))
  *
  * @param obj
- * @returns 对象的key
+ * @returns key数组
  */
-function keysIn(obj: Record<UnknownMapKey, any>): string[] {
+function keysIn(obj: Map<any, any> | Record<string | number | symbol, any>): string[] {
   if (isMap(obj)) {
     return Array.from((obj as Map<any, any>).keys())
   }

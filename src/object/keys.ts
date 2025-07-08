@@ -1,7 +1,7 @@
 import isMap from "../is/isMap"
 
 /**
- * 返回对象的所有key数组
+ * 返回对象/Map的所有key数组
  * 
  * > 只返回对象的自身可枚举属性
  *
@@ -12,9 +12,9 @@ import isMap from "../is/isMap"
  * console.log(_.keys(new f()))
  *
  * @param obj
- * @returns 对象的key
+ * @returns key数组
  */
-function keys(obj: unknown): string[] {
+function keys(obj: Map<any, any> | Record<string | number | symbol, any>): string[] {
   if (obj === null || obj === undefined) return []
   if (isMap(obj)) {
     return Array.from((obj as Map<any, any>).keys())
