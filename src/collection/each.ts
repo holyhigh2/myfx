@@ -1,4 +1,8 @@
-import _eachIterator from "../_eachIterator";
+import isArrayLike from "../is/isArrayLike";
+import isMap from "../is/isMap";
+import isObject from "../is/isObject";
+import isSet from "../is/isSet";
+import isString from "../is/isString";
 import type { Collection } from "../types";
 
 /**
@@ -44,7 +48,51 @@ function each<V, K extends string | number | symbol>(
   collection: Collection<V, K>,
   callback: (value: V, index: K, collection: Collection<V>) => boolean | void | Promise<void>
 ): void {
-  _eachIterator<V, K>(collection, callback)
+  let values
+  let keys
+  if (isString(collection) || isArrayLike(collection)) {
+    let size = collection.length
+
+    for (let i = 0; i < size; i++) {
+      const r = callback(collection[i] as V, i as K, collection)
+      if (r === false) return
+    }
+
+  } else if (isSet(collection)) {
+    let size = collection.size
+
+    values = collection.values()
+    for (let i = 0; i < size; i++) {
+      const r = callback(values.next().value as V, i as K, collection)
+      if (r === false) return
+    }
+
+  } else if (isMap(collection)) {
+    let size = collection.size
+
+    keys = collection.keys()
+    values = collection.values()
+
+    for (let i = 0; i < size; i++) {
+      const r = callback(
+        values.next().value as V,
+        keys.next().value as K,
+        collection as Collection<V>
+      )
+      if (r === false) return
+    }
+
+  } else if (isObject(collection)) {
+    keys = Object.keys(collection)
+    let size = keys.length
+
+    for (let i = 0; i < size; i++) {
+      const k = keys[i]
+      const r = callback((collection as any)[k] as V, k as K, collection)
+      if (r === false) return
+    }
+
+  }
 }
 
 export default each
