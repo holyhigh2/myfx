@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.12.0] - 2025/7/19
+### Add
+- math -> median
+### Optimize
+- tree Api 增加泛型
+
 ## [1.11.0] - 2025/5/24 ⚠️BreakChange
 ### Remove
 - collection -> head

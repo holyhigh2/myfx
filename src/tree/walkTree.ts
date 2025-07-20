@@ -42,12 +42,12 @@ import type { UnknownMapKey } from '../types'
  * @param options.childrenKey 包含子节点容器的key。默认'children'
  * @since 1.0.0
  */
-function walkTree<V extends Record<UnknownMapKey, any>>(
+function walkTree<V extends Record<string | number | symbol, any>>(
   treeNodes: V | V[],
   callback: (
-    node: Record<UnknownMapKey, any>,
-    parentNode: Record<UnknownMapKey, any>,
-    chain: Record<UnknownMapKey, any>[],
+    node: V,
+    parentNode: V,
+    chain: V[],
     level: number,
     index: number
   ) => boolean | number | void,

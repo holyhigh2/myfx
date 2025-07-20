@@ -1,4 +1,3 @@
-import type { UnknownMapKey } from '../types'
 
 /**
  * 根据指定的node及parentKey属性，查找最近的祖先节点
@@ -8,11 +7,21 @@ import type { UnknownMapKey } from '../types'
  * @returns 断言为true的最近一个祖先节点
  * @since 1.0.0
  */
-function closest<T = Record<UnknownMapKey, any>>(
-  node: Record<UnknownMapKey, any>,
-  predicate: (node: Record<UnknownMapKey, any>, times: number, cancel: () => void) => boolean,
+function closest<V extends Record<string | number | symbol, any>, U extends Record<string | number | symbol, any>>(
+  node: V,
+  predicate: (node: V, times: number, cancel: () => void) => boolean,
   parentKey: string,
-): T | null {
+): U | null
+function closest<U extends Record<string | number | symbol, any>>(
+  node: Record<string | number | symbol, any>,
+  predicate: (node: Record<string | number | symbol, any>, times: number, cancel: () => void) => boolean,
+  parentKey: string,
+): U | null
+function closest<U extends Record<string | number | symbol, any>>(
+  node: Record<string | number | symbol, any>,
+  predicate: (node: Record<string | number | symbol, any>, times: number, cancel: () => void) => boolean,
+  parentKey: string,
+): U | null {
   let p = node
   let t: any = null
   let k = true

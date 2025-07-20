@@ -1,6 +1,5 @@
 import isArray from '../is/isArray'
 import isEmpty from '../is/isEmpty'
-import type { UnknownMapKey } from '../types'
 
 /**
  * 对给定节点及所有子孙节点(同级)排序
@@ -46,16 +45,16 @@ import type { UnknownMapKey } from '../types'
  *
  * @since 1.0.0
  */
-function sortTree(
-  treeNodes: Record<UnknownMapKey, any> | Record<UnknownMapKey, any>[],
+function sortTree<V extends Record<string | number | symbol, any>>(
+  treeNodes: V | V[],
   comparator: (
-    a: Record<UnknownMapKey, any>,
-    b: Record<UnknownMapKey, any>
+    a: V,
+    b: V
   ) => number,
   options: { childrenKey?: string } = { childrenKey: 'children' }
 ): void {
   const childrenKey = options.childrenKey || 'children'
-  const data: Record<UnknownMapKey, any>[] = isArray<any>(treeNodes)
+  const data: V[] = isArray<any>(treeNodes)
     ? treeNodes
     : [treeNodes]
   data.sort((a, b) => comparator(a, b))

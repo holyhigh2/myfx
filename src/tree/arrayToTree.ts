@@ -4,7 +4,6 @@ import sortBy from '../collection/sortBy'
 import isArray from '../is/isArray'
 import isObject from '../is/isObject'
 import get from '../object/get'
-import type { UnknownMapKey } from '../types'
 
 /**
  * 使用高性能算法，将array结构数据变为tree结构数据。*注意，会修改原始数据*
@@ -51,8 +50,8 @@ import type { UnknownMapKey } from '../types'
  * @returns 返回转换好的顶级节点数组或空数组
  * @since 1.0.0
  */
-function arrayToTree(
-  array: Record<UnknownMapKey, any>[],
+function arrayToTree<V extends Record<string | number | symbol, any>>(
+  array: V[],
   idKey: string = 'id',
   pidKey?: string,
   options: {
@@ -61,7 +60,7 @@ function arrayToTree(
     childrenKey?: string
     sortKey?: string
   } = { childrenKey: 'children', rootParentValue: null, attrMap: undefined, sortKey: '' }
-): Record<UnknownMapKey, any>[] {
+): V[] {
   if (!isArray(array)) return []
 
   const pk = pidKey || 'pid'
@@ -71,7 +70,7 @@ function arrayToTree(
   const childrenKey = options.childrenKey || 'children'
   const sortKey = options.sortKey
   const hasSortKey = !!sortKey
-  const roots: Record<any, any>[] = []
+  const roots: V[] = []
   const nodeMap: { [key: string | number]: any } = {}
   const sortMap: { [key: string | number]: any } = {}
   const initParentMap: { [key: string | number]: boolean } = {}
@@ -86,7 +85,7 @@ function arrayToTree(
 
     if (record[pk] === rootParentValue) {
       if (hasAttrMap) {
-        each<any, string>(attrMap, (v, k) => (record[k] = record[v]))
+        each<any, string>(attrMap, (v, k) => ((record as any)[k] = record[v]))
       }
       roots.push(record)
     }
@@ -102,7 +101,7 @@ function arrayToTree(
         initParentMap[parentId] = true
       }
       if (hasAttrMap) {
-        each<any, string>(attrMap, (v, k) => (record[k] = record[v]))
+        each<any, string>(attrMap, (v, k) => ((record as any)[k] = record[v]))
       }
       if (hasSortKey) {
         const [min, max] = sortMap[parentId]

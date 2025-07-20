@@ -1,6 +1,6 @@
 {
   "name": "myfx",
-  "version": "1.11.7",
+  "version": "1.12.0",
   "description": "A modular utility library with more utils, higher performance and simpler declarations ...",
   "main": "index.umd.js",
   "module": "index.esm.mjs",

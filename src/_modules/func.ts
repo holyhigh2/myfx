@@ -142,6 +142,7 @@ add(b: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_add').c
 divide(b: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_divide').call(this,...arguments)}
 max():FuncChain<any>{return get<Function>(FuncChain.prototype,'_max').call(this,...arguments)}
 mean():FuncChain<any>{return get<Function>(FuncChain.prototype,'_mean').call(this,...arguments)}
+median():FuncChain<any>{return get<Function>(FuncChain.prototype,'_median').call(this,...arguments)}
 min():FuncChain<any>{return get<Function>(FuncChain.prototype,'_min').call(this,...arguments)}
 minmax(max: number,value: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_minmax').call(this,...arguments)}
 multiply(b: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_multiply').call(this,...arguments)}
@@ -219,20 +220,20 @@ truncate(len: number,options?: {
 }):FuncChain<any>{return get<Function>(FuncChain.prototype,'_truncate').call(this,...arguments)}
 upperCase():FuncChain<any>{return get<Function>(FuncChain.prototype,'_upperCase').call(this,...arguments)}
 upperFirst():FuncChain<any>{return get<Function>(FuncChain.prototype,'_upperFirst').call(this,...arguments)}
-arrayToTree(idKey: string = 'id',pidKey?: string,options: {
+arrayToTree<V extends Record<string | number | symbol, any>>(idKey: string = 'id',pidKey?: string,options: {
     rootParentValue?: any;
     attrMap?: Record<string, any>;
     childrenKey?: string;
     sortKey?: string;
 } = { childrenKey: 'children', rootParentValue: null, attrMap: undefined, sortKey: '' }):FuncChain<any>{return get<Function>(FuncChain.prototype,'_arrayToTree').call(this,...arguments)}
-closest<T = Record<UnknownMapKey, any>>(predicate: (node: Record<UnknownMapKey, any>, times: number, cancel: () => void) => boolean,parentKey: string):FuncChain<any>{return get<Function>(FuncChain.prototype,'_closest').call(this,...arguments)}
-filterTree(predicate: (node: Record<UnknownMapKey, any>, parentNode: Record<UnknownMapKey, any>, chain: Record<UnknownMapKey, any>[], level: number) => boolean | NonFuncItee,options: {
+closest<U extends Record<string | number | symbol, any>>(predicate: (node: Record<string | number | symbol, any>, times: number, cancel: () => void) => boolean,parentKey: string):FuncChain<any>{return get<Function>(FuncChain.prototype,'_closest').call(this,...arguments)}
+filterTree<V extends Record<string | number | symbol, any>>(predicate: (node: V, parentNode: V, chain: V[], level: number) => boolean | NonFuncItee,options: {
     childrenKey?: string;
 } = { childrenKey: 'children' }):FuncChain<any>{return get<Function>(FuncChain.prototype,'_filterTree').call(this,...arguments)}
-findTreeNode(predicate: (node: Record<UnknownMapKey, any>, parentNode: Record<UnknownMapKey, any>, chain: Record<UnknownMapKey, any>[], level: number, index: number) => boolean | NonFuncItee,options?: {
+findTreeNode<V extends Record<string | number | symbol, any>,U extends Record<string | number | symbol, any>>(predicate: (node: V, parentNode: V, chain: V[], level: number, index: number) => boolean | NonFuncItee,options?: {
     childrenKey?: string;
 }):FuncChain<any>{return get<Function>(FuncChain.prototype,'_findTreeNode').call(this,...arguments)}
-findTreeNodes<V extends Record<UnknownMapKey, any>,U extends V>(predicate: (node: Record<UnknownMapKey, any>, parentNode: Record<UnknownMapKey, any>, chain: Record<UnknownMapKey, any>[], level: number, index: number) => boolean | NonFuncItee,options?: {
+findTreeNodes<V extends Record<string | number | symbol, any>,U extends Record<string | number | symbol, any>>(predicate: (node: V, parentNode: V, chain: V[], level: number, index: number) => boolean | NonFuncItee,options?: {
     childrenKey?: string;
 }):FuncChain<any>{return get<Function>(FuncChain.prototype,'_findTreeNodes').call(this,...arguments)}
 alphaId():FuncChain<any>{return get<Function>(FuncChain.prototype,'_alphaId').call(this,...arguments)}

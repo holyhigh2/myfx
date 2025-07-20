@@ -1,5 +1,5 @@
 import _iteratee from '../_iteratee'
-import type { NonFuncItee, UnknownMapKey } from '../types'
+import type { NonFuncItee } from '../types'
 import walkTree from './walkTree'
 
 /**
@@ -45,17 +45,39 @@ import walkTree from './walkTree'
  * @returns 第一个匹配断言的节点或undefined
  * @since 1.0.0
  */
-function findTreeNode(
-  treeNodes: Record<UnknownMapKey, any> | Record<UnknownMapKey, any>[],
+function findTreeNode<U extends Record<string | number | symbol, any>>(
+  treeNodes: Record<string | number | symbol, any> | Record<string | number | symbol, any>[],
   predicate: (
-    node: Record<UnknownMapKey, any>,
-    parentNode: Record<UnknownMapKey, any>,
-    chain: Record<UnknownMapKey, any>[],
+    node: Record<string | number | symbol, any>,
+    parentNode: Record<string | number | symbol, any>,
+    chain: Record<string | number | symbol, any>[],
     level: number,
     index: number
   ) => boolean | NonFuncItee,
   options?: { childrenKey?: string }
-): Record<UnknownMapKey, any> | undefined {
+): U | undefined
+function findTreeNode<V extends Record<string | number | symbol, any>, U extends Record<string | number | symbol, any>>(
+  treeNodes: V | V[],
+  predicate: (
+    node: V,
+    parentNode: V,
+    chain: V[],
+    level: number,
+    index: number
+  ) => boolean | NonFuncItee,
+  options?: { childrenKey?: string }
+): U | undefined
+function findTreeNode<V extends Record<string | number | symbol, any>, U extends Record<string | number | symbol, any>>(
+  treeNodes: V | V[],
+  predicate: (
+    node: V,
+    parentNode: V,
+    chain: V[],
+    level: number,
+    index: number
+  ) => boolean | NonFuncItee,
+  options?: { childrenKey?: string }
+): U | undefined {
   const callback = _iteratee(predicate)
   let node
   walkTree(

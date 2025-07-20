@@ -2,7 +2,7 @@ import _iteratee from '../_iteratee'
 import includes from '../collection/includes'
 import map from '../collection/map'
 import cloneWith from '../object/cloneWith'
-import type { NonFuncItee, UnknownMapKey } from '../types'
+import type { NonFuncItee } from '../types'
 import walkTree from './walkTree'
 
 /**
@@ -49,23 +49,23 @@ import walkTree from './walkTree'
  * @returns 找到的符合条件的所有节点副本或空数组
  * @since 1.0.0
  */
-function filterTree(
-  treeNodes: Record<UnknownMapKey, any> | Record<UnknownMapKey, any>[],
-  predicate: (node: Record<UnknownMapKey, any>,
-    parentNode: Record<UnknownMapKey, any>,
-    chain: Record<UnknownMapKey, any>[],
+function filterTree<V extends Record<string | number | symbol, any>>(
+  treeNodes: V | V[],
+  predicate: (node: V,
+    parentNode: V,
+    chain: V[],
     level: number) => boolean | NonFuncItee,
   options: { childrenKey?: string } = { childrenKey: 'children' }
-): Record<UnknownMapKey, any>[] {
+): V[] {
   const callback = _iteratee(predicate)
   const childrenKey = options.childrenKey || 'children'
-  let nodes: Record<UnknownMapKey, any>[] = []
+  let nodes: V[] = []
   walkTree(
     treeNodes,
     (n, p, c, l) => {
       const rs = callback(n, p, c, l)
       if (rs) {
-        c.forEach((node: Record<UnknownMapKey, any>) => {
+        c.forEach((node: V) => {
           if (!includes(nodes, node)) {
             nodes.push(node)
           }

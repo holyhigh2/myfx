@@ -1,5 +1,5 @@
 import _iteratee from '../_iteratee'
-import type { NonFuncItee, UnknownMapKey } from '../types'
+import type { NonFuncItee } from '../types'
 import walkTree from './walkTree'
 
 /**
@@ -45,41 +45,41 @@ import walkTree from './walkTree'
  * @returns 找到的符合条件的所有节点或空数组
  * @since 1.0.0
  */
-function findTreeNodes<U extends Record<UnknownMapKey, any>>(
-  treeNodes: Record<UnknownMapKey, any> | Record<UnknownMapKey, any>[],
+function findTreeNodes<U extends Record<string | number | symbol, any>>(
+  treeNodes: Record<string | number | symbol, any> | Record<string | number | symbol, any>[],
   predicate: (
-    node: Record<UnknownMapKey, any>,
-    parentNode: Record<UnknownMapKey, any>,
-    chain: Record<UnknownMapKey, any>[],
+    node: Record<string | number | symbol, any>,
+    parentNode: Record<string | number | symbol, any>,
+    chain: Record<string | number | symbol, any>[],
     level: number,
     index: number
   ) => boolean | NonFuncItee,
   options?: { childrenKey?: string }
 ): U[]
-function findTreeNodes<V extends Record<UnknownMapKey, any>, U extends V>(
+function findTreeNodes<V extends Record<string | number | symbol, any>, U extends Record<string | number | symbol, any>>(
   treeNodes: V | V[],
   predicate: (
-    node: Record<UnknownMapKey, any>,
-    parentNode: Record<UnknownMapKey, any>,
-    chain: Record<UnknownMapKey, any>[],
+    node: V,
+    parentNode: V,
+    chain: V[],
     level: number,
     index: number
   ) => boolean | NonFuncItee,
   options?: { childrenKey?: string }
 ): U[]
-function findTreeNodes<V extends Record<UnknownMapKey, any>, U extends V>(
+function findTreeNodes<V extends Record<string | number | symbol, any>, U extends Record<string | number | symbol, any>>(
   treeNodes: V | V[],
   predicate: (
-    node: Record<UnknownMapKey, any>,
-    parentNode: Record<UnknownMapKey, any>,
-    chain: Record<UnknownMapKey, any>[],
+    node: V,
+    parentNode: V,
+    chain: V[],
     level: number,
     index: number
   ) => boolean | NonFuncItee,
   options?: { childrenKey?: string }
 ): U[] {
   const callback = _iteratee(predicate)
-  const nodes: Record<UnknownMapKey, any>[] = []
+  const nodes: V[] = []
   walkTree(
     treeNodes,
     (n, p, c, l, i) => {
