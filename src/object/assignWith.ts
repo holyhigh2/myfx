@@ -15,10 +15,10 @@ import type { UnknownMapKey } from "../types";
  * @param sources 源对象，可变参数。最后一个参数为函数时，签名为(src[k],target[k],k,src,target) 自定义赋值处理器，返回赋予target[k]的值
  * @returns 返回target
  */
-function assignWith(
-  target: Record<UnknownMapKey, any>,
+function assignWith<T extends Record<UnknownMapKey, any>>(
+  target: T,
   ...sources: any[]
-): Record<UnknownMapKey, any> {
+): T {
   const rs = _checkTarget(target)
   if (rs) return rs
 

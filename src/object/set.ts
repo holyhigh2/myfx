@@ -17,11 +17,11 @@ import type { UnknownMapKey } from "../types"
  * @returns obj 修改后的源对象
  * @since 0.16.0
  */
-function set(
-  obj: Record<UnknownMapKey, any>,
+function set<T extends Record<UnknownMapKey, any>>(
+  obj: T,
   path: Array<string | number> | string | number,
   value: any
-): Record<UnknownMapKey, any> {
+): T {
   if (!isObject(obj)) return obj
   const chain = _toPath(path)
   let target = obj
@@ -32,10 +32,10 @@ function set(
     if (nextSeg) {
       let next = !tmp ? (isNaN(parseInt(nextSeg)) ? {} : []) : tmp
       if (!tmp) {
-        tmp = target[seg] = next
+        tmp = (target[seg] as any) = next
       }
     } else {
-      target[seg] = value
+      (target[seg] as any) = value
       break
     }
     target = tmp

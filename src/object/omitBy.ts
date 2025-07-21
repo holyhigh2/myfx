@@ -14,7 +14,7 @@ import type { UnknownMapKey } from "../types";
 function omitBy<V, K extends UnknownMapKey>(
   obj: Record<UnknownMapKey, any>,
   predicate?: (v: V, k: K) => boolean
-) {
+): Record<UnknownMapKey, any> {
   const rs: Record<UnknownMapKey, any> = {}
   if (obj === null || obj === undefined) return rs
   Object.keys(obj).forEach(k => {

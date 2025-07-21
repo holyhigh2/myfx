@@ -158,12 +158,12 @@ lt(b: any):FuncChain<any>{return get<Function>(FuncChain.prototype,'_lt').call(t
 lte(b: any):FuncChain<any>{return get<Function>(FuncChain.prototype,'_lte').call(this,...arguments)}
 toInteger():FuncChain<any>{return get<Function>(FuncChain.prototype,'_toInteger').call(this,...arguments)}
 toNumber():FuncChain<any>{return get<Function>(FuncChain.prototype,'_toNumber').call(this,...arguments)}
-assign(...sources: any[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_assign').call(this,...arguments)}
-assignWith(...sources: any[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_assignWith').call(this,...arguments)}
-clone<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_clone').call(this,...arguments)}
-cloneDeep<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_cloneDeep').call(this,...arguments)}
-cloneDeepWith<T>(handler?: (v: any, k: UnknownMapKey, obj: Record<UnknownMapKey, any>) => any,skip: (v: any, k: string | number | symbol) => boolean = (value?, key?) => false):FuncChain<any>{return get<Function>(FuncChain.prototype,'_cloneDeepWith').call(this,...arguments)}
-cloneWith<T>(handler: (v: any, k?: string | number | symbol) => any,skip: (v: any, k: string | number | symbol) => boolean = (value?, key?) => false):FuncChain<any>{return get<Function>(FuncChain.prototype,'_cloneWith').call(this,...arguments)}
+assign<T extends Record<UnknownMapKey, any>>(...sources: any[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_assign').call(this,...arguments)}
+assignWith<T extends Record<UnknownMapKey, any>>(...sources: any[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_assignWith').call(this,...arguments)}
+clone<T extends Record<string | number | symbol, any>,U>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_clone').call(this,...arguments)}
+cloneDeep<T extends Record<string | number | symbol, any>>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_cloneDeep').call(this,...arguments)}
+cloneDeepWith<T extends Record<string | number | symbol, any>,U>(handler?: (v: any, k: UnknownMapKey, obj: T) => any,skip: (v: any, k: string | number | symbol) => boolean = (value?, key?) => false):FuncChain<any>{return get<Function>(FuncChain.prototype,'_cloneDeepWith').call(this,...arguments)}
+cloneWith<T extends Record<string | number | symbol, any>>(handler: (v: any, k?: string | number | symbol) => any,skip: (v: any, k: string | number | symbol) => boolean = (value?, key?) => false):FuncChain<any>{return get<Function>(FuncChain.prototype,'_cloneWith').call(this,...arguments)}
 defaults<T extends Record<UnknownMapKey, any>>(...sources: any[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_defaults').call(this,...arguments)}
 defaultsDeep<T extends Record<UnknownMapKey, any>>(...sources: any[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_defaultsDeep').call(this,...arguments)}
 eq(b: unknown):FuncChain<any>{return get<Function>(FuncChain.prototype,'_eq').call(this,...arguments)}
@@ -179,11 +179,11 @@ mergeWith<T extends Record<UnknownMapKey, any>>(...sources: any[]):FuncChain<any
 omit(...props: (string | string[])[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_omit').call(this,...arguments)}
 omitBy<V,K extends UnknownMapKey>(predicate?: (v: V, k: K) => boolean):FuncChain<any>{return get<Function>(FuncChain.prototype,'_omitBy').call(this,...arguments)}
 parseJSON<T = string>(ignore: boolean = false):FuncChain<any>{return get<Function>(FuncChain.prototype,'_parseJSON').call(this,...arguments)}
-pick(...props: (string | string[])[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_pick').call(this,...arguments)}
+pick<T extends Record<UnknownMapKey, any>>(...props: (string | string[])[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_pick').call(this,...arguments)}
 pickBy<V,K extends UnknownMapKey>(predicate?: (v: V, k: K) => boolean):FuncChain<any>{return get<Function>(FuncChain.prototype,'_pickBy').call(this,...arguments)}
 prop<V>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_prop').call(this,...arguments)}
-set(path: Array<string | number> | string | number,value: any):FuncChain<any>{return get<Function>(FuncChain.prototype,'_set').call(this,...arguments)}
-toObject():FuncChain<any>{return get<Function>(FuncChain.prototype,'_toObject').call(this,...arguments)}
+set<T extends Record<UnknownMapKey, any>>(path: Array<string | number> | string | number,value: any):FuncChain<any>{return get<Function>(FuncChain.prototype,'_set').call(this,...arguments)}
+toObject<V extends Record<UnknownMapKey, any>>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_toObject').call(this,...arguments)}
 toPairs():FuncChain<any>{return get<Function>(FuncChain.prototype,'_toPairs').call(this,...arguments)}
 unset(path: Array<string | number> | string | number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_unset').call(this,...arguments)}
 values<V>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_values').call(this,...arguments)}

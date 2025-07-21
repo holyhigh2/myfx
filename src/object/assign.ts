@@ -19,10 +19,10 @@ import assignWith from "./assignWith";
  * @param  {...object} sources 源对象
  * @returns 返回target
  */
-function assign(
-  target: Record<UnknownMapKey, any>,
+function assign<T extends Record<UnknownMapKey, any>>(
+  target: T,
   ...sources: any[]
-): Record<UnknownMapKey, any> {
+): T {
   return assignWith(target, ...sources, _identity)
 }
 

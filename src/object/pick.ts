@@ -17,10 +17,10 @@ import pickBy from "./pickBy"
  * @returns 对象子集
  * @since 0.16.0
  */
-function pick(
-  obj: Record<UnknownMapKey, any>,
+function pick<T extends Record<UnknownMapKey, any>>(
+  obj: T,
   ...props: (string | string[])[]
-): Record<UnknownMapKey, any> {
+): T {
   const keys = flatDeep(props)
   return pickBy(obj, (v, k) => {
     return includes(keys, k)

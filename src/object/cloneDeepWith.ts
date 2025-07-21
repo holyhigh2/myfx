@@ -21,17 +21,27 @@ import clone from "./clone";
  * @param skip (value,key) 返回true 跳过clone该属性
  * @returns 被复制的新对象
  */
-function cloneDeepWith<T>(
-  obj: Record<UnknownMapKey, any>,
-  handler?: (v: any, k: UnknownMapKey, obj: Record<UnknownMapKey, any>) => any,
+function cloneDeepWith<T extends Record<string | number | symbol, any>>(
+  obj: T,
+  handler?: (v: any, k: UnknownMapKey, obj: T) => any,
+  skip?: (v: any, k: string | number | symbol) => boolean
+): T
+function cloneDeepWith<T extends Record<string | number | symbol, any>, U>(
+  obj: T,
+  handler?: (v: any, k: UnknownMapKey, obj: T) => any,
+  skip?: (v: any, k: string | number | symbol) => boolean
+): U
+function cloneDeepWith<T extends Record<string | number | symbol, any>, U>(
+  obj: T,
+  handler?: (v: any, k: UnknownMapKey, obj: T) => any,
   skip: (v: any, k: string | number | symbol) => boolean = (value?, key?) => false
-): T {
+): U {
   if (!isObject(obj)) return obj
   if (isFunction(obj)) return <T>obj
   if (isElement(obj)) return <T>obj
 
   let copy = _cloneBuiltInObject(obj)
-  if (copy !== null) return <T>copy
+  if (copy !== null) return copy as any
 
   copy = new (obj as any).constructor()
   const propNames = Object.keys(obj)
@@ -41,7 +51,7 @@ function cloneDeepWith<T>(
 
     let newProp = (handler || clone)(obj[p], p, obj)
     if (isObject(newProp) && newProp !== obj[p]) {
-      newProp = cloneDeepWith(newProp, handler)
+      newProp = cloneDeepWith<T, U>(<T>newProp, handler)
     }
     try {
       // maybe unwritable
@@ -49,7 +59,7 @@ function cloneDeepWith<T>(
     } catch (e) { }
   })
 
-  return <T>copy
+  return copy as any;
 }
 
 export default cloneDeepWith

@@ -1,4 +1,3 @@
-import type { UnknownMapKey } from "../types";
 import clone from "./clone";
 import cloneDeepWith from "./cloneDeepWith";
 /**
@@ -15,8 +14,14 @@ import cloneDeepWith from "./cloneDeepWith";
  * @param obj
  * @returns 被复制的新对象
  */
-function cloneDeep<T>(
-  obj: Record<UnknownMapKey, any>
+function cloneDeep<T extends Record<string | number | symbol, any>>(
+  obj: T
+): T
+function cloneDeep<T extends Record<string | number | symbol, any>, U>(
+  obj: T
+): U
+function cloneDeep<T extends Record<string | number | symbol, any>>(
+  obj: T
 ): T {
   return cloneDeepWith<T>(obj, clone)
 }

@@ -3,7 +3,6 @@ import _identity from "../_identity";
 import isElement from "../is/isElement";
 import isFunction from "../is/isFunction";
 import isObject from "../is/isObject";
-import type { UnknownMapKey } from "../types";
 
 /**
  * 浅层复制对象，支持赋值处理器
@@ -24,8 +23,18 @@ import type { UnknownMapKey } from "../types";
  * @param skip (value,key) (value,key) 返回true 跳过clone该属性
  * @returns 被复制的新对象
  */
-function cloneWith<T>(
-  obj: Record<UnknownMapKey, any>,
+function cloneWith<T extends Record<string | number | symbol, any>>(
+  obj: T,
+  handler: (v: any, k?: string | number | symbol) => any,
+  skip?: (v: any, k: string | number | symbol) => boolean
+): T
+function cloneWith<T extends Record<string | number | symbol, any>, U>(
+  obj: T,
+  handler: (v: any, k?: string | number | symbol) => any,
+  skip?: (v: any, k: string | number | symbol) => boolean
+): U
+function cloneWith<T extends Record<string | number | symbol, any>>(
+  obj: T,
   handler: (v: any, k?: string | number | symbol) => any,
   skip: (v: any, k: string | number | symbol) => boolean = (value?, key?) => false
 ): T {
@@ -34,7 +43,7 @@ function cloneWith<T>(
   if (isElement(obj)) return <T>obj
 
   let copy = _cloneBuiltInObject(obj)
-  if (copy !== null) return <T>copy
+  if (copy !== null) return copy as any
   copy = new (obj as any).constructor()
   const propNames = Object.keys(obj)
   propNames.forEach((p) => {
@@ -46,7 +55,7 @@ function cloneWith<T>(
       ; (copy as any)[p] = newProp
     } catch (e) { }
   })
-  return <T>copy;
+  return copy as any;
 }
 
 export default cloneWith

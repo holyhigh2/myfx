@@ -23,8 +23,8 @@ import assign from "./assign";
  * @param vals 对象创建参数，可以是一个数组/对象或者多个成对匹配的基本类型或者多个不定的数组/对象
  * @returns 如果没有参数返回空对象
  */
-function toObject(...vals: any[]): Record<UnknownMapKey, any> {
-  if (vals.length === 0) return {}
+function toObject<V extends Record<UnknownMapKey, any>>(...vals: any[]): V {
+  if (vals.length === 0) return {} as V
   const rs: Record<UnknownMapKey, any> = {}
   const pairs: any[] = [] // 存放k/v
   let key: unknown = null
