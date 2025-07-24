@@ -1,4 +1,4 @@
-import toArray from "../collection/toArray";
+import each from "../collection/each";
 import isArrayLike from "../is/isArrayLike";
 /**
  * 合并数组或值并返回新数组，元素可以重复。基于 `Array.prototype.concat` 实现
@@ -18,8 +18,16 @@ import isArrayLike from "../is/isArrayLike";
  */
 function concat(...arrays: any[]): any[] {
   if (arrays.length < 1) return []
-  arrays = arrays.map((alk) => (isArrayLike(alk) ? toArray(alk) : alk))
-  return toArray(arrays[0]).concat(...arrays.slice(1))
+  let rs = [];
+  for (let i = 0; i < arrays.length; i++) {
+    const item = arrays[i];
+    if (isArrayLike(item)) {
+      each(item, (v) => rs.push(v));
+    } else {
+      rs.push(item);
+    }
+  }
+  return rs;
 }
 
 export default concat

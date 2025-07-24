@@ -1,5 +1,7 @@
-import flatMap from '../collection/flatMap'
-import isNil from '../is/isNil'
+import isArray from "../is/isArray";
+import isNumeric from "../is/isNumeric";
+import isSet from "../is/isSet";
+
 /**
  * 返回给定数字序列中最大的一个。忽略NaN，null，undefined
  * @example
@@ -17,10 +19,14 @@ import isNil from '../is/isNil'
 function max(
   values: Set<string | number> | Array<string | number>
 ): number {
-  const vals = flatMap<any>(values, v => isNil(v) || isNaN(v) ? [] : v)
-  let f64a = new Float64Array(vals)
-  f64a.sort()
-  return f64a[f64a.length - 1]
+  if (!isArray(values) && !isSet(values)) return NaN
+  let rs: number | string = isArray(values) ? values[0] : values.values().next().value!
+  values.forEach(v => {
+    if (isNumeric(v) && v > rs) {
+      rs = v
+    }
+  });
+  return Number(rs)
 }
 
 export default max

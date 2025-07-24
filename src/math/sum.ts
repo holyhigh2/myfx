@@ -1,5 +1,6 @@
-import isArrayLike from '../is/isArrayLike'
-import isNil from '../is/isNil'
+import isArray from '../is/isArray'
+import isNumeric from '../is/isNumeric'
+import isSet from '../is/isSet'
 
 /**
  * 对字符/数字数组/Set进行求和并返回结果
@@ -12,7 +13,7 @@ import isNil from '../is/isNil'
  * console.log(_.sum([1,'2',3,4]))
  * //10
  * console.log(_.sum([1,'2',3,4,null,undefined]))
- * //NaN
+ * //9
  * console.log(_.sum([NaN,'2',3,4]))
  * //Infinity
  * console.log(_.sum([Infinity,'2',3,4]))
@@ -25,21 +26,15 @@ import isNil from '../is/isNil'
  */
 function sum(
   values: Set<string | number> | Array<string | number>
-): number
-function sum(...values: any[]): number
-function sum(...values: any[]): number {
-  let ary: any = values
-  if (ary.length === 1 && isArrayLike(ary[0])) {
-    ary = ary[0]
-  }
-
-  const vals = ary.map((v: any) => isNil(v) ? 0 : v)
-  let rs = 0
-  const f64a = new Float64Array(vals)
-  f64a.forEach((v: number) => {
-    rs += v
-  })
-  return rs
+): number {
+  if (!isArray(values) && !isSet(values)) return NaN
+  let total = 0
+  values.forEach(v => {
+    if (isNumeric(v)) {
+      total += Number(v)
+    }
+  });
+  return total
 }
 
 export default sum

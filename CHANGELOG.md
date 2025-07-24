@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.13.0] - 2025/7/24
+### Add
+- is -> isLowerCaseChar/isUpperCaseChar
+### Optimize
+- 性能优化 - toPath/get/concat/max/min/sum/mean/median/kebabCase/pascalCase/snakeCase/escapeRegExp
+
 ## [1.12.0] - 2025/7/19
 ### Add
 - math -> median

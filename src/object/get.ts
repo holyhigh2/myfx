@@ -1,5 +1,6 @@
-import _toPath from "../_toPath"
-import isObject from "../is/isObject"
+import _toPath from "../_toPath";
+import isArray from "../is/isArray";
+import isObject from "../is/isObject";
 /**
  * 通过path获取对象属性值
  *
@@ -28,6 +29,12 @@ function get<V>(
   defaultValue?: any
 ): V {
   if (!isObject(obj)) return defaultValue
+
+  if (!isArray(path) || (path.length === 1 && (path = path[0]) !== undefined)) {
+    let v = (obj as any)[path]
+    if (v !== undefined) return v;
+  }
+
   const chain = _toPath(path)
   let target = obj as any
   for (let i = 0; i < chain.length; i++) {

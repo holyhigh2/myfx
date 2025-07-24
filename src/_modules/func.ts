@@ -117,6 +117,7 @@ isFinite():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isFinite').
 isFunction():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isFunction').call(this,...arguments)}
 isInteger():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isInteger').call(this,...arguments)}
 isIterator():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isIterator').call(this,...arguments)}
+isLowerCaseChar():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isLowerCaseChar').call(this,...arguments)}
 isMap<K,V>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isMap').call(this,...arguments)}
 isMatch<T extends Record<string | number | symbol, any>>(props: T):FuncChain<any>{return get<Function>(FuncChain.prototype,'_isMatch').call(this,...arguments)}
 isMatchWith<T extends Record<string | number | symbol, any>>(props: T,comparator: (v1: any, v2: any, k?: string, target?: T, props?: T) => boolean):FuncChain<any>{return get<Function>(FuncChain.prototype,'_isMatchWith').call(this,...arguments)}
@@ -136,6 +137,7 @@ isSet<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isSet').cal
 isString():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isString').call(this,...arguments)}
 isSymbol():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isSymbol').call(this,...arguments)}
 isUndefined():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isUndefined').call(this,...arguments)}
+isUpperCaseChar():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isUpperCaseChar').call(this,...arguments)}
 isWeakMap<K extends object,V>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isWeakMap').call(this,...arguments)}
 isWeakSet<T extends object>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isWeakSet').call(this,...arguments)}
 add(b: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_add').call(this,...arguments)}

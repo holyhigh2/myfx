@@ -1,6 +1,7 @@
-import _getGrouped from "../_getGrouped"
-import toString from "./toString"
-import upperFirst from './upperFirst'
+import isLowerCaseChar from "../is/isLowerCaseChar";
+import isUpperCaseChar from "../is/isUpperCaseChar";
+import toString from "./toString";
+
 /**
  * 返回帕斯卡风格的字符串
  *
@@ -20,10 +21,33 @@ import upperFirst from './upperFirst'
  * @returns 返回新字符串
  */
 function pascalCase(str: string): string {
-  return _getGrouped(toString(str)).reduce(
-    (acc, v) => acc + upperFirst(v.toLowerCase()),
-    ''
-  )
+  let rs = "";
+  str = toString(str)
+  let prevType = 0; //1小写字母；2大写字母；3分隔符
+  for (let i = 0; i < str.length; i++) {
+    let s = str[i];
+    if (isLowerCaseChar(s)) {
+      if (prevType === 3 || prevType === 0) {
+        s = s.toUpperCase();
+      }
+      rs += s;
+      prevType = 1;
+      continue;
+    }
+    if (s === " " || s === "-" || s === "_") {
+      if (prevType === 3) continue;
+      prevType = 3;
+      continue;
+    }
+    if (isUpperCaseChar(s)) {
+      if (prevType === 2) {
+        s = s.toLowerCase();
+      }
+      rs += s;
+      prevType = 2;
+    }
+  }
+  return rs;
 }
 
 export default pascalCase

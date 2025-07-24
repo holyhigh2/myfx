@@ -30,7 +30,7 @@ function each<V>(
     value: V,
     index: number,
     collection: Collection<V>
-  ) => boolean | void | Promise<void>
+  ) => any
 ): void
 function each<V>(
   collection: Record<string, V> | Map<string, V>,
@@ -38,15 +38,15 @@ function each<V>(
     value: V,
     index: string,
     collection: Collection<V, string>
-  ) => boolean | void | Promise<void>
+  ) => any
 ): void
 function each<V, K extends string | number | symbol>(
   collection: Collection<V, K>,
-  callback: (value: V, index: K, collection: Collection<V>) => boolean | void | Promise<void>
+  callback: (value: V, index: K, collection: Collection<V>) => any
 ): void
 function each<V, K extends string | number | symbol>(
   collection: Collection<V, K>,
-  callback: (value: V, index: K, collection: Collection<V>) => boolean | void | Promise<void>
+  callback: (value: V, index: K, collection: Collection<V>) => any
 ): void {
   let values
   let keys

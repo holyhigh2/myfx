@@ -1,4 +1,6 @@
-import map from '../collection/map'
+import isArray from '../is/isArray'
+import isNumeric from '../is/isNumeric'
+import isSet from '../is/isSet'
 /**
  * 对多个数字或数字列表计算中间值并返回结果
  * @example
@@ -14,15 +16,21 @@ import map from '../collection/map'
  * @since 1.12.0
  */
 function median(values: Set<string | number> | Array<string | number>): number {
-  const vals = map<any>(values, v => v ?? 0)
-  let f64a = new Float64Array(vals)
-  f64a.sort()
+  if (!isArray(values) && !isSet(values)) return NaN
+  let sortNumbers: Array<number> = []
+  values.forEach(v => {
+    if (isNumeric(v)) {
+      sortNumbers.push(Number(v))
+    }
+  });
+  sortNumbers.sort()
+
   let rs
-  if (f64a.length % 2 === 0) {
-    let i = f64a.length / 2 - 1
-    rs = (f64a[i] + f64a[i + 1]) / 2
+  if (sortNumbers.length % 2 === 0) {
+    let i = sortNumbers.length / 2 - 1
+    rs = (sortNumbers[i] + sortNumbers[i + 1]) / 2
   } else {
-    rs = f64a[Math.ceil(f64a.length / 2) - 1]
+    rs = sortNumbers[Math.ceil(sortNumbers.length / 2) - 1]
   }
 
   return rs

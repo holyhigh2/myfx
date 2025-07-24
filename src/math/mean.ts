@@ -1,4 +1,6 @@
-import map from '../collection/map'
+import isArray from '../is/isArray';
+import isNumeric from '../is/isNumeric';
+import isSet from '../is/isSet';
 /**
  * 对多个数字或数字列表计算平均值并返回结果
  * @example
@@ -14,14 +16,16 @@ import map from '../collection/map'
  * @since 1.0.0
  */
 function mean(values: Set<string | number> | Array<string | number>): number {
-  const vals = map<any>(values, v => v ?? 0)
-  let f64a = new Float64Array(vals)
-  let rs = 0
-  f64a.forEach(v => {
-    rs += v
-  })
-
-  return rs / f64a.length
+  if (!isArray(values) && !isSet(values)) return NaN
+  let total = 0
+  let len = 0
+  values.forEach(v => {
+    if (isNumeric(v)) {
+      total += Number(v)
+      len++
+    }
+  });
+  return total / len
 }
 
 export default mean

@@ -13,6 +13,7 @@ import isFinite from '../is/isFinite'
 import isFunction from '../is/isFunction'
 import isInteger from '../is/isInteger'
 import isIterator from '../is/isIterator'
+import isLowerCaseChar from '../is/isLowerCaseChar'
 import isMap from '../is/isMap'
 import isMatch from '../is/isMatch'
 import isMatchWith from '../is/isMatchWith'
@@ -32,7 +33,8 @@ import isSet from '../is/isSet'
 import isString from '../is/isString'
 import isSymbol from '../is/isSymbol'
 import isUndefined from '../is/isUndefined'
+import isUpperCaseChar from '../is/isUpperCaseChar'
 import isWeakMap from '../is/isWeakMap'
 import isWeakSet from '../is/isWeakSet'
 
-export {isArray,isArrayLike,isBlank,isBoolean,isDate,isDefined,isElement,isEmpty,isEqual,isEqualWith,isError,isFinite,isFunction,isInteger,isIterator,isMap,isMatch,isMatchWith,isNaN,isNative,isNil,isNode,isNull,isNumber,isNumeric,isObject,isPlainObject,isPrimitive,isRegExp,isSafeInteger,isSet,isString,isSymbol,isUndefined,isWeakMap,isWeakSet}
+export {isArray,isArrayLike,isBlank,isBoolean,isDate,isDefined,isElement,isEmpty,isEqual,isEqualWith,isError,isFinite,isFunction,isInteger,isIterator,isLowerCaseChar,isMap,isMatch,isMatchWith,isNaN,isNative,isNil,isNode,isNull,isNumber,isNumeric,isObject,isPlainObject,isPrimitive,isRegExp,isSafeInteger,isSet,isString,isSymbol,isUndefined,isUpperCaseChar,isWeakMap,isWeakSet}

@@ -1,6 +1,6 @@
-import _getGrouped from "../_getGrouped"
-import lowerCase from "./lowerCase"
-import toString from "./toString"
+import isLowerCaseChar from "../is/isLowerCaseChar";
+import isUpperCaseChar from "../is/isUpperCaseChar";
+import toString from "./toString";
 /**
  * 返回下划线风格的字符串
  *
@@ -18,7 +18,32 @@ import toString from "./toString"
  * @returns 返回新字符串
  */
 function snakeCase(str: string): string {
-  return lowerCase(_getGrouped(toString(str)).join('_'))
+  let rs = "";
+  str = toString(str)
+  let prevType = 0; //1小写字母；2大写字母；3分隔符
+  let lastPos = str.length - 1
+  for (let i = 0; i < str.length; i++) {
+    const s = str[i];
+    if (isLowerCaseChar(s)) {
+      rs += s;
+      prevType = 1;
+      continue;
+    }
+    if (s === " " || s === "-" || s === "_") {
+      if (prevType === 3 || i === lastPos) continue;
+      rs += "_";
+      prevType = 3;
+      continue;
+    }
+    if (isUpperCaseChar(s)) {
+      if (prevType === 1) {
+        rs += "_";
+      }
+      rs += s.toLowerCase();
+      prevType = 2;
+    }
+  }
+  return rs;
 }
 
 export default snakeCase

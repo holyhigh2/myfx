@@ -1,4 +1,5 @@
 import isArray from "../is/isArray";
+import isMap from "../is/isMap";
 import isObject from "../is/isObject";
 import type { UnknownMapKey } from "../types";
 import assign from "./assign";
@@ -33,6 +34,10 @@ function toObject<V extends Record<UnknownMapKey, any>>(...vals: any[]): V {
     if (isArray(v)) {
       const tmp = toObject(...v)
       assign(rs, tmp)
+    } else if (isMap(v)) {
+      v.forEach((val, k: any) => {
+        rs[k] = val
+      })
     } else if (isObject(v)) {
       if (key) {
         pairs.push(key, v)
