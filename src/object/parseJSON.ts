@@ -21,7 +21,7 @@ import isString from "../is/isString"
  * @returns 解析后的对象或空对象
  * @since 1.9.0
  */
-function parseJSON<T = string>(str: T, ignore: boolean = false): Record<string, any> | T {
+function parseJSON<T extends Record<string, any>>(str: string, ignore: boolean = false): T {
   if (!isString(str)) return str
   let s = (str + '').replace(/:\s*(['`])(.*)\1(?=\s*[},])/mg, ':"$2"').replace(/([{,])\s*([a-zA-Z0-9_$]+)\s*:/mg, '$1"$2":')
   s = ignore ? s.replace(/[{,]\s*"[a-zA-Z0-9_$]+"\s*:\s*([-+]?NaN|[-+]?Infinity)\s*/mg, '') : s.replace(/:\s*([-+]?NaN|[-+]?Infinity)\s*([,}])/mg, ':"$1"$2')

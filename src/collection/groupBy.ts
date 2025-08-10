@@ -27,16 +27,16 @@ import each from "./each";
 function groupBy<V>(
   collection: Collection<V>,
   itee?: ((value: V) => UnknownMapKey) | NonFuncItee
-): Record<UnknownMapKey, unknown[]>
-function groupBy<V, U>(
+): Record<string, V[]>
+function groupBy<V, K extends string>(
   collection: Collection<V>,
   itee?: ((value: V) => UnknownMapKey) | NonFuncItee
-): U
-function groupBy<V, U>(
+): Record<K, V[]>
+function groupBy<V, K extends string>(
   collection: Collection<V>,
   itee?: ((value: V) => UnknownMapKey) | NonFuncItee
-): U {
-  const stat: Record<UnknownMapKey, unknown[]> = {}
+): Record<K, V[]> {
+  const stat: Record<UnknownMapKey, V[]> = {} as any
   const cb = _iteratee(itee || _identity)
   each(collection, (el) => {
     const key = cb(el)
@@ -44,7 +44,7 @@ function groupBy<V, U>(
 
     stat[key].push(el)
   })
-  return <U>stat
+  return stat
 }
 
 export default groupBy
