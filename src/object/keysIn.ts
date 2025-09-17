@@ -12,14 +12,16 @@ import isMap from "../is/isMap"
  * @param obj
  * @returns key数组
  */
-function keysIn(obj: Map<any, any> | Record<string | number | symbol, any> | object): string[] {
+function keysIn<K>(obj: Map<K, any>): K[]
+function keysIn<K extends keyof any>(obj: Record<K, any> | object): K[]
+function keysIn<K extends keyof any>(obj: Record<K, any> | object): K[] {
   if (isMap(obj)) {
     return Array.from((obj as Map<any, any>).keys())
   }
-  const rs: string[] = []
+  const rs: K[] = []
   // eslint-disable-next-line guard-for-in
   for (const k in obj) {
-    if (k) rs.push(k)
+    if (k) rs.push(k as K)
   }
 
   return rs

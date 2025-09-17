@@ -14,7 +14,9 @@ import isMap from "../is/isMap"
  * @param obj
  * @returns key数组
  */
-function keys<K extends keyof any>(obj: Map<K, any> | Record<K, any> | object): K[] {
+function keys<K>(obj: Map<K, any>): K[]
+function keys<K extends keyof any>(obj: Record<K, any> | object): K[]
+function keys<K extends keyof any>(obj: Record<K, any> | object): K[] {
   if (obj === null || obj === undefined) return []
   if (isMap(obj)) {
     return Array.from((obj as Map<K, any>).keys())

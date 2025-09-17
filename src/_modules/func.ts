@@ -175,7 +175,7 @@ functions():FuncChain<any>{return get<Function>(FuncChain.prototype,'_functions'
 get<V>(path: Array<string | number> | string | number,defaultValue?: any):FuncChain<any>{return get<Function>(FuncChain.prototype,'_get').call(this,...arguments)}
 has(key: UnknownMapKey):FuncChain<any>{return get<Function>(FuncChain.prototype,'_has').call(this,...arguments)}
 keys<K extends keyof any>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_keys').call(this,...arguments)}
-keysIn():FuncChain<any>{return get<Function>(FuncChain.prototype,'_keysIn').call(this,...arguments)}
+keysIn<K extends keyof any>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_keysIn').call(this,...arguments)}
 merge<T extends Record<UnknownMapKey, any>>(...sources: any[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_merge').call(this,...arguments)}
 mergeWith<T extends Record<UnknownMapKey, any>>(...sources: any[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_mergeWith').call(this,...arguments)}
 omit(...props: (string | string[])[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_omit').call(this,...arguments)}
