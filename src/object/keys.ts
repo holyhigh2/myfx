@@ -14,12 +14,12 @@ import isMap from "../is/isMap"
  * @param obj
  * @returns key数组
  */
-function keys(obj: Map<any, any> | Record<string | number | symbol, any> | object): string[] {
+function keys<K extends keyof any>(obj: Map<K, any> | Record<K, any> | object): K[] {
   if (obj === null || obj === undefined) return []
   if (isMap(obj)) {
-    return Array.from((obj as Map<any, any>).keys())
+    return Array.from((obj as Map<K, any>).keys())
   }
-  return Object.keys(obj)
+  return Object.keys(obj) as K[]
 }
 
 export default keys
