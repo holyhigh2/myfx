@@ -21,7 +21,7 @@ function isArrayLike<T>(v: unknown): v is ArrayLike<T> {
   if (!isObject(v)) return false
   // 具有length属性
   const list = v as IList
-  if (list.length !== undefined) {
+  if ('length' in list) {
     const proto = Reflect.getPrototypeOf(list) as Record<string, unknown> | null
     // NodeList/HTMLCollection/CSSRuleList/...
     if (isFunction(proto?.item)) return true
