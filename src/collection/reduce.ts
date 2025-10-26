@@ -63,7 +63,7 @@ function reduce<V>(
   ) => V,
   initialValue: V
 ): V
-function reduce<V, K extends string | number | symbol, U>(
+function reduce<V, K extends string | number | symbol | object, U>(
   collection: Collection<V, K>,
   callback: (
     accumulator: U,
@@ -73,7 +73,7 @@ function reduce<V, K extends string | number | symbol, U>(
   ) => U,
   initialValue: U
 ): U
-function reduce<V, K extends string | number | symbol, U>(
+function reduce<V, K extends string | number | symbol | object, U>(
   collection: Collection<V, K>,
   callback: (
     accumulator: U,

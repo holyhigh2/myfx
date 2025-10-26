@@ -38,11 +38,11 @@ function eachRight<V>(
     collection: Collection<V, string>
   ) => boolean | void | Promise<void>
 ): void
-function eachRight<V, K extends string | number | symbol>(
+function eachRight<V, K extends string | number | symbol | object>(
   collection: Collection<V, K>,
   callback: (value: V, index: K, collection: Collection<V>) => boolean | void | Promise<void>
 ): void
-function eachRight<V, K extends string | number | symbol>(
+function eachRight<V, K extends string | number | symbol | object>(
   collection: Collection<V, K>,
   callback: (value: V, index: K, collection: Collection<V>) => boolean | void | Promise<void>
 ): void {

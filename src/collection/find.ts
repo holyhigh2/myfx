@@ -69,13 +69,13 @@ function find<V>(
     ) => boolean)
     | NonFuncItee
 ): V | undefined
-function find<V, K extends string | number | symbol>(
+function find<V, K extends string | number | symbol | object>(
   collection: Collection<V, K>,
   predicate:
     | ((value: V, index: K, collection: Collection<V>) => boolean)
     | NonFuncItee
 ): V | undefined
-function find<V, K extends string | number | symbol>(
+function find<V, K extends string | number | symbol | object>(
   collection: Collection<V, K>,
   predicate:
     | ((value: V, index: K, collection: Collection<V>) => boolean)

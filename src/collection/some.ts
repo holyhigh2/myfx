@@ -43,13 +43,13 @@ function some<V>(
     | ((value: V, index: string, collection: Collection<V, string>) => boolean)
     | NonFuncItee
 ): boolean
-function some<V, K extends string | number | symbol>(
+function some<V, K extends string | number | symbol | object>(
   collection: Collection<V, K>,
   predicate:
     | ((value: V, index: K, collection: Collection<V, K>) => boolean)
     | NonFuncItee
 ): boolean
-function some<V, K extends string | number | symbol>(
+function some<V, K extends string | number | symbol | object>(
   collection: Collection<V, K>,
   predicate:
     | ((value: V, index: K, collection: Collection<V, K>) => boolean)

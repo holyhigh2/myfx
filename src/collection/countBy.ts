@@ -28,14 +28,14 @@ function countBy<V>(
   collection: Collection<V>,
   itee?: ((value: V) => string) | NonFuncItee
 ): Record<string, number>
-function countBy<V, K extends string | number | symbol>(
+function countBy<V, K extends string | number | symbol | object>(
   collection: Collection<V, K>,
   itee?: ((value: V) => K) | NonFuncItee
-): Record<K, number>
-function countBy<V, K extends string | number | symbol>(
+): Record<Exclude<K, object>, number>
+function countBy<V, K extends string | number | symbol | object>(
   collection: Collection<V, K>,
   itee?: ((value: V) => K) | NonFuncItee
-): Record<K, number> {
+): Record<Exclude<K, object>, number> {
   const stat: Record<UnknownMapKey, any> = {}
   const cb = _iteratee(itee || _identity)
   each(collection, (el) => {

@@ -43,13 +43,13 @@ function every<V>(
     | ((value: V, index: string, collection: Collection<V, string>) => boolean)
     | NonFuncItee
 ): boolean
-function every<V, K extends string | number | symbol>(
+function every<V, K extends string | number | symbol | object>(
   collection: Collection<V, K>,
   predicate:
     | ((value: V, index: K, collection: Collection<V>) => boolean)
     | NonFuncItee
 ): boolean
-function every<V, K extends string | number | symbol>(
+function every<V, K extends string | number | symbol | object>(
   collection: Collection<V, K>,
   predicate:
     | ((value: V, index: K, collection: Collection<V>) => boolean)

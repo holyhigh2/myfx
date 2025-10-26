@@ -49,13 +49,13 @@ function findLast<V>(
     ) => boolean)
     | NonFuncItee
 ): V | undefined
-function findLast<V, K extends string | number | symbol>(
+function findLast<V, K extends string | number | symbol | object>(
   collection: Collection<V, K>,
   predicate:
     | ((value: V, index: K, collection: Collection<V>) => boolean)
     | NonFuncItee
 ): V | undefined
-function findLast<V, K extends string | number | symbol>(
+function findLast<V, K extends string | number | symbol | object>(
   collection: Collection<V, K>,
   predicate:
     | ((value: V, index: K, collection: Collection<V>) => boolean)

@@ -49,13 +49,13 @@ function partition<V>(
     ) => boolean)
     | NonFuncItee
 ): V[][]
-function partition<V, K extends string | number | symbol>(
+function partition<V, K extends string | number | symbol | object>(
   collection: Collection<V, K>,
   predicate:
     | ((value: V, index: K, collection: Collection<V, K>) => boolean)
     | NonFuncItee
 ): V[][]
-function partition<V, K extends string | number | symbol>(
+function partition<V, K extends string | number | symbol | object>(
   collection: Collection<V, K>,
   predicate:
     | ((value: V, index: K, collection: Collection<V, K>) => boolean)

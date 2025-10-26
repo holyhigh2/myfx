@@ -53,15 +53,15 @@ function flatMapDeep<V, U>(
     ) => U | Promise<U>)
     | NonFuncItee
 ): U[]
-function flatMapDeep<V, K extends string | number | symbol>(
+function flatMapDeep<V, K extends string | number | symbol | object>(
   collection: Collection<V, K>,
   itee: ((value: V, index: K, collection: Collection<V>) => V) | NonFuncItee
 ): V[]
-function flatMapDeep<V, K extends string | number | symbol, U>(
+function flatMapDeep<V, K extends string | number | symbol | object, U>(
   collection: Collection<V, K>,
   itee: ((value: V, index: K, collection: Collection<V>) => U) | NonFuncItee
 ): U[]
-function flatMapDeep<V, K extends string | number | symbol, U>(
+function flatMapDeep<V, K extends string | number | symbol | object, U>(
   collection: Collection<V, K>,
   itee: ((value: V, index: K, collection: Collection<V>) => U) | NonFuncItee
 ): U[] {

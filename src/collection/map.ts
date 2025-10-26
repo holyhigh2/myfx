@@ -56,15 +56,15 @@ function map<V, U>(
     | ((value: V, index: string, collection: Collection<V, string>) => U | Promise<U>)
     | NonFuncItee
 ): U[]
-function map<V, K extends string | number | symbol>(
+function map<V, K extends string | number | symbol | object>(
   collection: Collection<V, K>,
   itee: ((value: V, index: K, collection: Collection<V, K>) => V | Promise<any>) | NonFuncItee
 ): V[]
-function map<V, K extends string | number | symbol, U>(
+function map<V, K extends string | number | symbol | object, U>(
   collection: Collection<V, K>,
   itee: ((value: V, index: K, collection: Collection<V, K>) => U | Promise<any>) | NonFuncItee
 ): U[]
-function map<V, K extends string | number | symbol, U>(
+function map<V, K extends string | number | symbol | object, U>(
   collection: Collection<V, K>,
   itee: ((value: V, index: K, collection: Collection<V, K>) => U | Promise<any>) | NonFuncItee
 ): U[] {
@@ -78,9 +78,3 @@ function map<V, K extends string | number | symbol, U>(
 }
 
 export default map
-
-function xx() {
-  let x = map({ a: 1, b: '3' }, (v, k) => {
-    return v + ''
-  })
-}

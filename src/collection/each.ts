@@ -40,11 +40,11 @@ function each<V>(
     collection: Collection<V, string>
   ) => any
 ): void
-function each<V, K extends string | number | symbol>(
+function each<V, K extends string | number | symbol | object>(
   collection: Collection<V, K>,
   callback: (value: V, index: K, collection: Collection<V>) => any
 ): void
-function each<V, K extends string | number | symbol>(
+function each<V, K extends string | number | symbol | object>(
   collection: Collection<V, K>,
   callback: (value: V, index: K, collection: Collection<V>) => any
 ): void {
