@@ -106,6 +106,7 @@ isArray<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isArray')
 isArrayLike<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isArrayLike').call(this,...arguments)}
 isBlank():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isBlank').call(this,...arguments)}
 isBoolean():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isBoolean').call(this,...arguments)}
+isCustomElement():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isCustomElement').call(this,...arguments)}
 isDate():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isDate').call(this,...arguments)}
 isDefined():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isDefined').call(this,...arguments)}
 isElement():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isElement').call(this,...arguments)}

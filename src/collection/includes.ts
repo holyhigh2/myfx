@@ -4,6 +4,7 @@ import isArrayLike from "../is/isArrayLike";
 import isString from "../is/isString";
 import type { Collection } from "../types";
 import each from "./each";
+import toArray from "./toArray";
 
 /**
  * 判断集合中是否包含给定的值。使用<code>eq</code>函数进行等值判断。
@@ -38,7 +39,7 @@ function includes(collection: Collection<any>, value: any, fromIndex?: number): 
     return collection.includes(value, fromIndex)
   }
   collection = isArrayLike(collection)
-    ? slice(collection, fromIndex)
+    ? slice(toArray(collection), fromIndex)
     : collection
   each(collection, (v) => {
     if (_eq(v, value)) {

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.14.0] - 2025/11/14
+### Add
+- is -> isCustomElement
+### Change
+- includes 修复当collection参数为NodeList时结果错误的问题
+
 ## [1.13.0] - 2025/7/24
 ### Add
 - is -> isLowerCaseChar/isUpperCaseChar
