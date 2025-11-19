@@ -9,7 +9,7 @@
  * @param v
  * @returns
  */
-function isUpperCaseChar(v: string): boolean {
+function isUpperCaseChar(v: string): v is Uppercase<string> {
   if (v === null || v === undefined || Number.isNaN(v)) return false
   const code = (v + '').charCodeAt(0);
   return code >= 65 && code <= 90;

@@ -11,7 +11,7 @@
  * @param v
  * @returns
  */
-function isLowerCaseChar(v: string): boolean {
+function isLowerCaseChar(v: string): v is Lowercase<string> {
   if (v === null || v === undefined || Number.isNaN(v)) return false
   const code = (v + '').charCodeAt(0);
   return code >= 97 && code <= 122;

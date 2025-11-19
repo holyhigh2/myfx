@@ -1,4 +1,5 @@
 import isLowerCaseChar from "../is/isLowerCaseChar";
+import isNumeric from "../is/isNumeric";
 import isUpperCaseChar from "../is/isUpperCaseChar";
 import toString from "./toString";
 
@@ -25,7 +26,7 @@ function kebabCase(str: any): string {
   let lastPos = str.length - 1
   for (let i = 0; i < str.length; i++) {
     const s = str[i];
-    if (isLowerCaseChar(s)) {
+    if (isLowerCaseChar(s) || isNumeric(s)) {
       rs += s;
       prevType = 1;
       continue;

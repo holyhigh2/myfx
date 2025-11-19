@@ -1,4 +1,5 @@
 import isLowerCaseChar from "../is/isLowerCaseChar";
+import isNumeric from "../is/isNumeric";
 import isUpperCaseChar from "../is/isUpperCaseChar";
 import toString from "./toString";
 
@@ -26,7 +27,7 @@ function pascalCase(str: string): string {
   let prevType = 0; //1小写字母；2大写字母；3分隔符
   for (let i = 0; i < str.length; i++) {
     let s = str[i];
-    if (isLowerCaseChar(s)) {
+    if (isLowerCaseChar(s) || isNumeric(s)) {
       if (prevType === 3 || prevType === 0) {
         s = s.toUpperCase();
       }
@@ -41,7 +42,7 @@ function pascalCase(str: string): string {
     }
     if (isUpperCaseChar(s)) {
       if (prevType === 2) {
-        s = s.toLowerCase();
+        s = (s as string).toLowerCase();
       }
       rs += s;
       prevType = 2;
