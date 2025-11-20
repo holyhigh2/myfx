@@ -4,6 +4,7 @@
  * @param node Element节点或普通对象节点
  * @param predicate (node,times,cancel)断言函数，如果返回true表示节点匹配。或调用cancel中断查找
  * @param parentKey 父节点引用属性名
+ * @param composed 是否跨越web组件边界查找，默认为false
  * @returns 断言为true的最近一个祖先节点
  * @since 1.0.0
  */
@@ -11,22 +12,28 @@ function closest<V extends Record<string | number | symbol, any>, U extends Reco
   node: V,
   predicate: (node: V, times: number, cancel: () => void) => boolean,
   parentKey: string,
+  composed?: boolean
 ): U | null
 function closest<U extends Record<string | number | symbol, any>>(
   node: Record<string | number | symbol, any>,
   predicate: (node: Record<string | number | symbol, any>, times: number, cancel: () => void) => boolean,
   parentKey: string,
+  composed?: boolean
 ): U | null
 function closest<U extends Record<string | number | symbol, any>>(
   node: Record<string | number | symbol, any>,
   predicate: (node: Record<string | number | symbol, any>, times: number, cancel: () => void) => boolean,
   parentKey: string,
+  composed: boolean = false
 ): U | null {
   let p = node
   let t: any = null
   let k = true
   let i = 0
   while (k && p) {
+    if (composed && p instanceof ShadowRoot) {
+      p = p.host
+    }
     if (predicate(p, i++, () => { k = false })) {
       t = p
       break

@@ -229,7 +229,7 @@ arrayToTree<V extends Record<string | number | symbol, any>>(idKey: string = 'id
     childrenKey?: string;
     sortKey?: string;
 } = { childrenKey: 'children', rootParentValue: null, attrMap: undefined, sortKey: '' }):FuncChain<any>{return get<Function>(FuncChain.prototype,'_arrayToTree').call(this,...arguments)}
-closest<U extends Record<string | number | symbol, any>>(predicate: (node: Record<string | number | symbol, any>, times: number, cancel: () => void) => boolean,parentKey: string):FuncChain<any>{return get<Function>(FuncChain.prototype,'_closest').call(this,...arguments)}
+closest<U extends Record<string | number | symbol, any>>(predicate: (node: Record<string | number | symbol, any>, times: number, cancel: () => void) => boolean,parentKey: string,composed: boolean = false):FuncChain<any>{return get<Function>(FuncChain.prototype,'_closest').call(this,...arguments)}
 filterTree<V extends Record<string | number | symbol, any>>(predicate: (node: V, parentNode: V, chain: V[], level: number) => boolean | NonFuncItee,options: {
     childrenKey?: string;
 } = { childrenKey: 'children' }):FuncChain<any>{return get<Function>(FuncChain.prototype,'_filterTree').call(this,...arguments)}
