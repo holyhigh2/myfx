@@ -102,6 +102,8 @@ throttle<T extends (...args: any[]) => any>(wait: number,options?: {
     leading?: boolean;
     trailing?: boolean;
 }):FuncChain<any>{return get<Function>(FuncChain.prototype,'_throttle').call(this,...arguments)}
+isAlnum():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isAlnum').call(this,...arguments)}
+isAlpha():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isAlpha').call(this,...arguments)}
 isArray<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isArray').call(this,...arguments)}
 isArrayLike<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isArrayLike').call(this,...arguments)}
 isBlank():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isBlank').call(this,...arguments)}

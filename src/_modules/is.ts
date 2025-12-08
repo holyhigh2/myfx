@@ -1,3 +1,5 @@
+import isAlnum from '../is/isAlnum'
+import isAlpha from '../is/isAlpha'
 import isArray from '../is/isArray'
 import isArrayLike from '../is/isArrayLike'
 import isBlank from '../is/isBlank'
@@ -38,4 +40,4 @@ import isUpperCaseChar from '../is/isUpperCaseChar'
 import isWeakMap from '../is/isWeakMap'
 import isWeakSet from '../is/isWeakSet'
 
-export {isArray,isArrayLike,isBlank,isBoolean,isCustomElement,isDate,isDefined,isElement,isEmpty,isEqual,isEqualWith,isError,isFinite,isFunction,isInteger,isIterator,isLowerCaseChar,isMap,isMatch,isMatchWith,isNaN,isNative,isNil,isNode,isNull,isNumber,isNumeric,isObject,isPlainObject,isPrimitive,isRegExp,isSafeInteger,isSet,isString,isSymbol,isUndefined,isUpperCaseChar,isWeakMap,isWeakSet}
+export {isAlnum,isAlpha,isArray,isArrayLike,isBlank,isBoolean,isCustomElement,isDate,isDefined,isElement,isEmpty,isEqual,isEqualWith,isError,isFinite,isFunction,isInteger,isIterator,isLowerCaseChar,isMap,isMatch,isMatchWith,isNaN,isNative,isNil,isNode,isNull,isNumber,isNumeric,isObject,isPlainObject,isPrimitive,isRegExp,isSafeInteger,isSet,isString,isSymbol,isUndefined,isUpperCaseChar,isWeakMap,isWeakSet}

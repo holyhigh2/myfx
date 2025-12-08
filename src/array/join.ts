@@ -13,7 +13,7 @@
  */
 function join(array: any[], separator?: string): string {
   if (!Array.isArray(array)) return ''
-  return array.join(separator || ',')
+  return array.join(separator ?? ',')
 }
 
 export default join

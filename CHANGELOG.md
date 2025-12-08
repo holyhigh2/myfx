@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.15.0] - 2025/12/8
+### Add
+- is -> isAlnum/isAlpha
+### Change
+- join 修复无法取消间隔符的问题
+
 ## [1.14.0] - 2025/11/14
 ### Add
 - is -> isCustomElement
