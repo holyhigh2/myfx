@@ -8,6 +8,7 @@
  *
  * @param v
  * @returns
+ * @since 1.13.0
  */
 function isUpperCaseChar(v: string): v is Uppercase<string> {
   if (v === null || v === undefined || Number.isNaN(v)) return false

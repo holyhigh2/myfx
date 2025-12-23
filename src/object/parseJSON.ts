@@ -11,9 +11,9 @@ import isString from "../is/isString"
  * //{a:1,b:2,c:'3"'}
  * console.log(_.parseJSON(`[{"a":1,"b":2,"c":"3\\""}]`))
  * //true
- * console.log(_.parseJSON('true')
+ * console.log(_.parseJSON('true'))
  * //12
- * console.log(_.parseJSON('12')
+ * console.log(_.parseJSON('12'))
  * 
  *
  * @param str JSON字符串
@@ -23,7 +23,7 @@ import isString from "../is/isString"
  */
 function parseJSON<T extends Record<string, any>>(str: string, ignore: boolean = false): T {
   if (!isString(str)) return str
-  let s = (str + '').replace(/:\s*(['`])(.*)\1(?=\s*[},])/mg, ':"$2"').replace(/([{,])\s*([a-zA-Z0-9_$]+)\s*:/mg, '$1"$2":').replace(/([\[,])(['`])(.*)\2(?=\s*[,\]])/mg, '$1"$3"')
+  let s = (str + '').replace(/:\s*(['`])(.*)\1(?=\s*[},])/mg, ':"$2"').replace(/([{,])\s*(['`])?([\p{L}0-9_$]+)\2?\s*:/umg, '$1"$3":').replace(/([\[,])(['`])(.*)\2(?=\s*[,\]])/mg, '$1"$3"')
   s = ignore ? s.replace(/[{,]\s*"[a-zA-Z0-9_$]+"\s*:\s*([-+]?NaN|[-+]?Infinity)\s*/mg, '') : s.replace(/:\s*([-+]?NaN|[-+]?Infinity)\s*([,}])/mg, ':"$1"$2')
   let rs
   try {

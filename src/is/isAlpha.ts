@@ -9,6 +9,7 @@
  *
  * @param v
  * @returns 
+ * @since 1.15.0
  */
 function isAlpha(v: unknown): v is string {
   return typeof v === 'string' && v.length > 0 && /^\p{L}+$/u.test(v)

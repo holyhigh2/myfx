@@ -10,6 +10,7 @@
  *
  * @param v
  * @returns
+ * @since 1.13.0
  */
 function isLowerCaseChar(v: string): v is Lowercase<string> {
   if (v === null || v === undefined || Number.isNaN(v)) return false
