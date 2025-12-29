@@ -53,8 +53,8 @@ function toFixed(v: string | number, scale?: number): string {
       startZ = true
     }
     let n = Math.round(parseFloat(keep + '.' + round))
-    let nStr = n + ''
-    const strN = n + ''
+    let nStr = keep || n > 0 ? n + '' : ''
+    const strN = keep || n > 0 ? n + '' : ''
     if (n > 0 && strN.length > keep.length) {
       integ += 1 * isNeg
       nStr = strN.substring(1)
