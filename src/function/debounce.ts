@@ -16,16 +16,17 @@
 function debounce<T extends (...args: any[]) => any>(fn: T, wait: number, immediate: boolean = false): T {
   let proxy = fn
   let timer: any = null
-  let counting = false
+  let firstCalled = false
   if (immediate) {
     return (function (this: any, ...args: any[]) {
-      if (!counting)
+      if (!firstCalled) {
         proxy.apply(this, args)
-      counting = true;
+        firstCalled = true;
+        return
+      }
 
       clearTimeout(timer)
       timer = setTimeout(() => {
-        counting = false;
         proxy.apply(this, args)
       }, wait);
     }) as T

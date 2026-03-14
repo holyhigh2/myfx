@@ -22,6 +22,8 @@ function isEmpty(v: unknown): boolean {
   if (0 === v) return true
   if (isArrayLike(v) && v.length < 1) return true
   if (v instanceof Object && Object.keys(v).length < 1) return true
+  if (v instanceof Map && v.size < 1) return true
+  if (v instanceof Set && v.size < 1) return true
   return false
 }
 
