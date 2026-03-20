@@ -1,4 +1,5 @@
 import toArray from "../collection/toArray";
+import isSet from "../is/isSet";
 /**
  * 按照指定的嵌套深度递归遍历数组，并将所有元素与子数组中的元素合并为一个新数组返回
  *
@@ -16,11 +17,11 @@ import toArray from "../collection/toArray";
  * @param [depth=1] 嵌套深度
  * @returns 扁平化后的新数组
  */
-function flat<T>(array: any[], depth: number = 1): T[] {
-  if (depth < 1) return array.concat() as T[]
+function flat<T>(array: any[] | Set<any>, depth: number = 1): T[] {
+  if (depth < 1) return toArray<T>(array)
   const rs = toArray<T>(array).reduce((acc, val: any) => {
     return acc.concat(
-      Array.isArray(val) && depth > 0 ? flat<T>(val, depth - 1) : val
+      (Array.isArray(val) || isSet(val)) && depth > 0 ? flat<T>(val, depth - 1) : val
     )
   }, [])
 

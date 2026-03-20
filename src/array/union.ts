@@ -3,6 +3,7 @@ import toArray from "../collection/toArray"
 import isArray from "../is/isArray"
 import isArrayLike from "../is/isArrayLike"
 import isFunction from "../is/isFunction"
+import isSet from "../is/isSet"
 import flat from './flat'
 /**
  * 对所有集合做并集并返回并集元素组成的新数组。并集类似concat()但不允许重复值
@@ -33,7 +34,7 @@ function union<T>(...params: any): T[] {
     list = params.slice(0, sl - 1)
   }
 
-  list = list.filter((v: any) => isArrayLike(v) || isArray(v))
+  list = list.filter((v: any) => isArrayLike(v) || isArray(v) || isSet(v))
   if (list.length < 1) return list
   let rs
   if (comparator) {
