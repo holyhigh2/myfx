@@ -1,8 +1,12 @@
+const SUB_PATTERN_EXP = /^(?<pos>.+)((?<!\\=);)(?<neg>.+)$/
+const PATTERN_EXP = /(?<integer>[0,#]+)(?:\.(?<fraction>[0#]+))?(?<suffix>[%\u2030E])?/
 /**
  * 通过表达式格式化数字
  * 
  * ``` 
  * #,##0.00 => 1,234.00
+ * 
+ * #,##0.00;(#,##0.00) => 1,234.00 / (1,234.00)
  * ```
  * 
  * pattern解释：
@@ -14,6 +18,7 @@
  * - `%` 后缀符号，数字乘100，并追加%
  * - `\u2030` 后缀符号，数字乘1000，并追加‰
  * - `E` 后缀符号，转为科学计数法格式
+ * - `;` 正/负数子模式分隔符
  *
  * @example
  * //小数位截取时会自动四舍五入
@@ -39,136 +44,151 @@ function formatNumber(v: string | number, pattern = '#,##0.00'): string {
   if (v === Infinity) return '\u221E'
   if (v === -Infinity) return '-\u221E'
   if (Number.isNaN(v)) return '\uFFFD'
-  if (isNaN(parseFloat(v + ''))) return v + ''
+  let num = parseFloat(v + '')
+  if (isNaN(num)) return v + ''
 
-  let formatter: Function = cache[pattern]
+  let posPattern = pattern
+  let negPattern = ''
+  let subPatterns = pattern.match(SUB_PATTERN_EXP)
+  if (subPatterns && subPatterns.groups) {
+    posPattern = subPatterns.groups.pos
+    negPattern = subPatterns.groups.neg
+  }
+
+  let formatter: Function = num < 0 && negPattern ? cache[negPattern] : cache[posPattern]
   if (!formatter) {
-    const match = pattern.match(
-      /(?<integer>[0,#]+)(?:\.(?<fraction>[0#]+))?(?<suffix>[%\u2030E])?/
-    )
-    if (match == null) {
-      return v + ''
-    }
-    let integerPtn = match.groups?.integer || ''
-    const fractionPtn = match.groups?.fraction || ''
-    let suffix = match.groups?.suffix || ''
-    if (
-      !integerPtn ||
-      integerPtn.indexOf('0#') > -1 ||
-      fractionPtn.indexOf('#0') > -1
-    )
-      return v + ''
-
-    const ptnPart = match[0]
-    const endsPart = pattern.split(ptnPart)
-
-    const rnd = true // round
-    const isPercentage = suffix === '%'
-    const isPermillage = suffix === '\u2030'
-    const isScientific = suffix === 'E'
-
-    const groupMatch = integerPtn.match(/,[#0]+$/)
-    let groupLen = -1
-    if (groupMatch) {
-      groupLen = groupMatch[0].substring(1).length
-      integerPtn = integerPtn.replace(/^.*,(?=[^,])/, '')
-    }
-
-    let zeroizeLen = integerPtn.indexOf('0')
-    if (zeroizeLen > -1) {
-      zeroizeLen = integerPtn.length - zeroizeLen
-    }
-    let fixedLen = Math.max(
-      fractionPtn.lastIndexOf('0'),
-      fractionPtn.lastIndexOf('#')
-    )
-    if (fixedLen > -1) {
-      fixedLen += 1
-    }
-    formatter = (val: string | number): string => {
-      const num = parseFloat(val + '')
-
-      let number = num
-      let exponent = 0
-
-      if (isPercentage) {
-        number = number * 100
-      } else if (isPermillage) {
-        number = number * 1000
-      } else if (isScientific) {
-        const str = number + ''
-        const pair = str.split('.')
-        if (number >= 1) {
-          exponent = pair[0].length - 1
-        } else if (number < 1) {
-          const fraStr = pair[1]
-          exponent = fraStr.replace(/^0+/, '').length - fraStr.length - 1
-        }
-        number = number / 10 ** exponent
-      }
-
-      const numStr = number + ''
-      let integer = parseInt(numStr)
-      const pair = numStr.split('.')
-      const fraction = pair[1] || ''
-
-      // 处理小数
-      let dStr = ''
-      if (fractionPtn) {
-        if (fraction.length >= fixedLen) {
-          dStr = parseFloat('0.' + fraction).toFixed(fixedLen)
-          if (dStr[0] === '1') {
-            integer += 1
-          }
-          dStr = dStr.substring(1)
-        } else {
-          dStr =
-            '.' +
-            fractionPtn.replace(/[0#]/g, (tag, i) => {
-              const l = fraction[i]
-              return l == undefined ? (tag === '0' ? '0' : '') : l
-            })
-        }
-        if (dStr.length < 2) {
-          dStr = ''
-        }
-      } else {
-        let carry = 0
-        if (fraction && rnd) {
-          carry = Math.round(parseFloat('0.' + fraction))
-        }
-
-        integer += carry
-      }
-      // 处理整数
-      let iStr = integer + ''
-      let sym = num < 0 ? '-' : ''
-      if (iStr[0] === '-' || iStr[0] === '+') {
-        sym = iStr[0]
-        iStr = iStr.substring(1)
-      }
-      if (groupLen > -1 && iStr.length > groupLen) {
-        const reg = new RegExp('\\B(?=(\\d{' + groupLen + '})+$)', 'g')
-        iStr = iStr.replace(reg, ',')
-      } else if (iStr.length < integerPtn.length) {
-        const integerPtnLen = integerPtn.length
-        const iStrLen = iStr.length
-        iStr = integerPtn.replace(/[0#]/g, (tag, i) => {
-          if (integerPtnLen - i > iStrLen) return tag === '0' ? '0' : ''
-          const l = iStr[iStrLen - (integerPtnLen - i)]
-          return l == undefined ? (tag === '0' ? '0' : '') : l
-        })
-      }
-
-      // 合并
-      if (isScientific) {
-        suffix = 'e' + exponent
-      }
-      let rs = sym + iStr + dStr + suffix
-      return (endsPart[0] || '') + rs + (endsPart[1] || '')
+    if (num < 0 && negPattern) {
+      formatter = makeFormatter(negPattern, v, true) as Function
+    } else {
+      formatter = makeFormatter(posPattern, v) as Function
     }
   }
   return formatter(v)
+}
+
+function makeFormatter(pattern: string, v: string | number, isNeg = false) {
+  const match = pattern.match(PATTERN_EXP)
+  if (match == null) {
+    return v + ''
+  }
+  let integerPtn = match.groups?.integer || ''
+  const fractionPtn = match.groups?.fraction || ''
+  let suffix = match.groups?.suffix || ''
+  if (
+    !integerPtn ||
+    integerPtn.indexOf('0#') > -1 ||
+    fractionPtn.indexOf('#0') > -1
+  )
+    return v + ''
+
+  const ptnPart = match[0]
+  const endsPart = pattern.split(ptnPart)
+
+  const rnd = true // round
+  const isPercentage = suffix === '%'
+  const isPermillage = suffix === '\u2030'
+  const isScientific = suffix === 'E'
+
+  const groupMatch = integerPtn.match(/,[#0]+$/)
+  let groupLen = -1
+  if (groupMatch) {
+    groupLen = groupMatch[0].substring(1).length
+    integerPtn = integerPtn.replace(/^.*,(?=[^,])/, '')
+  }
+
+  let zeroizeLen = integerPtn.indexOf('0')
+  if (zeroizeLen > -1) {
+    zeroizeLen = integerPtn.length - zeroizeLen
+  }
+  let fixedLen = Math.max(
+    fractionPtn.lastIndexOf('0'),
+    fractionPtn.lastIndexOf('#')
+  )
+  if (fixedLen > -1) {
+    fixedLen += 1
+  }
+  return (val: string | number): string => {
+    const num = parseFloat(val + '')
+
+    let number = num
+    let exponent = 0
+
+    if (isPercentage) {
+      number = number * 100
+    } else if (isPermillage) {
+      number = number * 1000
+    } else if (isScientific) {
+      const str = number + ''
+      const pair = str.split('.')
+      if (number >= 1) {
+        exponent = pair[0].length - 1
+      } else if (number < 1) {
+        const fraStr = pair[1]
+        exponent = fraStr.replace(/^0+/, '').length - fraStr.length - 1
+      }
+      number = number / 10 ** exponent
+    }
+
+    const numStr = number + ''
+    let integer = parseInt(numStr)
+    const pair = numStr.split('.')
+    const fraction = pair[1] || ''
+
+    // 处理小数
+    let dStr = ''
+    if (fractionPtn) {
+      if (fraction.length >= fixedLen) {
+        dStr = parseFloat('0.' + fraction).toFixed(fixedLen)
+        if (dStr[0] === '1') {
+          integer += 1
+        }
+        dStr = dStr.substring(1)
+      } else {
+        dStr =
+          '.' +
+          fractionPtn.replace(/[0#]/g, (tag, i) => {
+            const l = fraction[i]
+            return l == undefined ? (tag === '0' ? '0' : '') : l
+          })
+      }
+      if (dStr.length < 2) {
+        dStr = ''
+      }
+    } else {
+      let carry = 0
+      if (fraction && rnd) {
+        carry = Math.round(parseFloat('0.' + fraction))
+      }
+
+      integer += carry
+    }
+    // 处理整数
+    let iStr = integer + ''
+    let sym = num < 0 ? '-' : ''
+    if (iStr[0] === '-' || iStr[0] === '+') {
+      sym = iStr[0]
+      iStr = iStr.substring(1)
+    }
+    if (groupLen > -1 && iStr.length > groupLen) {
+      const reg = new RegExp('\\B(?=(\\d{' + groupLen + '})+$)', 'g')
+      iStr = iStr.replace(reg, ',')
+    } else if (iStr.length < integerPtn.length) {
+      const integerPtnLen = integerPtn.length
+      const iStrLen = iStr.length
+      iStr = integerPtn.replace(/[0#]/g, (tag, i) => {
+        if (integerPtnLen - i > iStrLen) return tag === '0' ? '0' : ''
+        const l = iStr[iStrLen - (integerPtnLen - i)]
+        return l == undefined ? (tag === '0' ? '0' : '') : l
+      })
+    }
+
+    // 合并
+    if (isScientific) {
+      suffix = 'e' + exponent
+    }
+    let rs = (isNeg ? '' : sym) + iStr + dStr + suffix
+    return (endsPart[0] || '') + rs + (endsPart[1] || '')
+  }
 }
 const cache: Record<string, Function> = {}
 
