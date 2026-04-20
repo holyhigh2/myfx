@@ -22,7 +22,7 @@ import isNil from "../is/isNil"
 function toString(v: any): string {
   if (isNil(v)) return ''
   if (v === 0 && 1 / v < 0) return '-0'
-  return v.toString()
+  return v.toString ? v.toString() : Object.prototype.toString.call(v)
 }
 
 export default toString
