@@ -16,6 +16,9 @@ import toArray from "../collection/toArray";
  */
 function fill<T>(array: T[], value: any, start: number = 0, end?: number): T[] {
   const rs = toArray<T>(array)
+  if (end && end > 0 && rs.length < end) {
+    rs.length = end
+  }
   rs.fill(value, start, end)
   return rs
 }
