@@ -69,7 +69,7 @@ function formatNumber(v: string | number, pattern = '#,##0.00'): string {
 function makeFormatter(pattern: string, v: string | number, isNeg = false) {
   const match = pattern.match(PATTERN_EXP)
   if (match == null) {
-    return v + ''
+    return (v: string | number) => v + ''
   }
   let integerPtn = match.groups?.integer || ''
   const fractionPtn = match.groups?.fraction || ''
@@ -79,7 +79,7 @@ function makeFormatter(pattern: string, v: string | number, isNeg = false) {
     integerPtn.indexOf('0#') > -1 ||
     fractionPtn.indexOf('#0') > -1
   )
-    return v + ''
+    return (v: string | number) => v + ''
 
   const ptnPart = match[0]
   const endsPart = pattern.split(ptnPart)
