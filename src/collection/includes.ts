@@ -29,10 +29,10 @@ import toArray from "./toArray";
  *
  * @param collection 如果集合是map/object对象，则只对value进行比对
  * @param value
- * @param [fromIndex=0] 从集合的fromIndex 索引处开始查找。如果集合是map/object对象，无效
+ * @param fromIndex 从集合的fromIndex 索引处开始查找。如果集合是map/object对象，无效
  * @returns 如果包含返回true否则返回false
  */
-function includes(collection: Collection<any>, value: any, fromIndex?: number): boolean {
+function includes(collection: Collection<any>, value: any, fromIndex: number = 0): boolean {
   let rs = false
   fromIndex = fromIndex || 0
   if (isString(collection)) {

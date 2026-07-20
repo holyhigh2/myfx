@@ -17,10 +17,10 @@ import padEnd from "./padEnd"
  * console.log((2.465).toFixed(2))
  *
  * @param v 数字或数字字符串
- * @param [scale=0] 小数位长度
+ * @param scale 小数位长度
  * @returns 截取后的字符串
  */
-function toFixed(v: string | number, scale?: number): string {
+function toFixed(v: string | number, scale: number = 0): string {
   scale = scale || 0
   const num = parseFloat(v + '')
   if (isNaN(num)) return v as string

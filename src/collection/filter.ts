@@ -2,6 +2,24 @@ import _iteratee from "../_iteratee";
 import type { ArrayLike, Collection, NonFuncItee } from "../types";
 import each from "./each";
 
+function filter<V>(
+  collection: Set<V> | ArrayLike<V>,
+  predicate:
+    ((value: V, index: number, collection: Collection<V>) => boolean)
+    | NonFuncItee
+): V[]
+function filter<V>(
+  collection: Record<string, V> | Map<string, V>,
+  predicate:
+    ((value: V, index: string, collection: Collection<V, string>) => boolean)
+    | NonFuncItee
+): V[]
+function filter<V, K extends string | number | symbol | object>(
+  collection: Collection<V, K>,
+  predicate:
+    ((value: V, index: K, collection: Collection<V>) => boolean)
+    | NonFuncItee
+): V[]
 /**
  * 返回一个新数组，数组内容由集合内所有断言结果为真的元素组成
  *
@@ -33,28 +51,10 @@ import each from "./each";
  * <br>其他类型请参考 {@link utils!iteratee}
  * @returns 由通过断言的元素组成的新数组
  */
-function filter<V>(
-  collection: Set<V> | ArrayLike<V>,
-  predicate:
-    | ((value: V, index: number, collection: Collection<V>) => boolean)
-    | NonFuncItee
-): V[]
-function filter<V>(
-  collection: Record<string, V> | Map<string, V>,
-  predicate:
-    | ((value: V, index: string, collection: Collection<V, string>) => boolean)
-    | NonFuncItee
-): V[]
 function filter<V, K extends string | number | symbol | object>(
   collection: Collection<V, K>,
   predicate:
-    | ((value: V, index: K, collection: Collection<V>) => boolean)
-    | NonFuncItee
-): V[]
-function filter<V, K extends string | number | symbol | object>(
-  collection: Collection<V, K>,
-  predicate:
-    | ((value: V, index: K, collection: Collection<V>) => boolean)
+    ((value: V, index: K, collection: Collection<V>) => boolean)
     | NonFuncItee
 ): V[] {
   const rs: V[] = []

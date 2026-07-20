@@ -10,11 +10,11 @@ import type { ArrayLike } from "../types";
  *
  *
  * @param array 数组，非数组返回空数组
- * @param [begin=0] 切片起始下标，包含下标位置元素
- * @param [end] 切片结束下标，<b>不包含</b>下标位置元素
+ * @param begin 切片起始下标，包含下标位置元素，默认0
+ * @param end 切片结束下标，<b>不包含</b>下标位置元素
  * @returns 切片元素组成的新数组
  */
-function slice<T>(array: Set<T> | ArrayLike, begin?: number, end?: number): T[] {
+function slice<T>(array: Set<T> | ArrayLike, begin: number = 0, end?: number): T[] {
   if (!Array.isArray(array)) return []
   return array.slice(begin || 0, end)
 }

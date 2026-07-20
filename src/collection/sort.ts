@@ -28,7 +28,7 @@ import toArray from "./toArray";
  * console.log(_.sort(users,(a,b)=>b.age-a.age))
  *
  * @param collection 任何可遍历的集合类型，比如array / arraylike / set / map / object / ...
- * @param [comparator] (a,b) 排序函数，如果为空使用sortBy逻辑
+ * @param comparator (a,b) 排序函数，如果为空使用sortBy逻辑
  * @returns 排序后的数组
  */
 function sort<T>(

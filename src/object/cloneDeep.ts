@@ -1,5 +1,12 @@
 import clone from "./clone";
 import cloneDeepWith from "./cloneDeepWith";
+
+function cloneDeep<T extends Record<string | number | symbol, any>>(
+  obj: T
+): T
+function cloneDeep<T extends Record<string | number | symbol, any>, U>(
+  obj: T
+): U
 /**
  * 完整复制对象,可以保持被复制属性的原有类型
  *
@@ -14,12 +21,6 @@ import cloneDeepWith from "./cloneDeepWith";
  * @param obj
  * @returns 被复制的新对象
  */
-function cloneDeep<T extends Record<string | number | symbol, any>>(
-  obj: T
-): T
-function cloneDeep<T extends Record<string | number | symbol, any>, U>(
-  obj: T
-): U
 function cloneDeep<T extends Record<string | number | symbol, any>>(
   obj: T
 ): T {

@@ -1,6 +1,6 @@
 import functions from "../object/functions"
 /**
- * 为func.js扩展额外函数，扩展后的函数同样具有函数链访问能力
+ * 为 myfx 扩展额外函数，扩展后的函数同样具有函数链访问能力
  *
  * @example
  * //增加扩展
@@ -12,7 +12,7 @@ import functions from "../object/functions"
  * });
  *
  * const libs = [
- *  {name:'func.js',platform:['web','nodejs'],tags:{utils:true},js:true},
+ *  {name:'myfx',platform:['web','nodejs'],tags:{utils:true},js:true},
  *  {name:'juth2',platform:['web','java'],tags:{utils:false,middleware:true},js:false},
  *  {name:'soya2d',platform:['web'],tags:{utils:true},js:true}
  * ];

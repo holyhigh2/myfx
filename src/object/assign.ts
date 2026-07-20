@@ -16,7 +16,7 @@ import assignWith from "./assignWith";
  * console.log(_.assign({x:1},{y:3}))
  *
  * @param target 目标对象
- * @param  {...object} sources 源对象
+ * @param sources 源对象
  * @returns 返回target
  */
 function assign<T extends Record<UnknownMapKey, any>>(

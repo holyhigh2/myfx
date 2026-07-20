@@ -8,10 +8,10 @@
  * console.log(_.join([1, 2, 3, 4]))
  *
  * @param array 数组，非数组返回空字符串
- * @param [separator=','] 分隔符
+ * @param separator 分隔符
  * @returns 拼接字符串
  */
-function join(array: any[], separator?: string): string {
+function join(array: any[], separator: string = ','): string {
   if (!Array.isArray(array)) return ''
   return array.join(separator ?? ',')
 }

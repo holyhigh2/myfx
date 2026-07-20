@@ -12,16 +12,16 @@ import isRegExp from "../is/isRegExp"
  *
  * @param str
  * @param pattern 指定正则。如果非正则类型会自动转换为正则再进行匹配
- * @param [flags] 如果pattern参数不是正则类型，会使用该标记作为正则构造的第二个参数
+ * @param flags 如果pattern参数不是正则类型，会使用该标记作为正则构造的第二个参数
  * @returns 匹配返回true
  * @since 0.19.0
  */
 function test(str: any, pattern: RegExp | string, flags?: string): boolean {
-  let regExp = pattern
-  if (!isRegExp(regExp)) {
-    regExp = new RegExp(pattern, flags)
+  let regExp: RegExp | undefined
+  if (!isRegExp(pattern)) {
+    regExp = new RegExp(pattern.replace(/([+/\\()\[\].{}])/mg, '\\$1'), flags)
   }
-  return regExp.test(str)
+  return (regExp ?? pattern as RegExp).test(str)
 }
 
 export default test

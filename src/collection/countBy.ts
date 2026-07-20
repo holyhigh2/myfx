@@ -1,8 +1,16 @@
-import _identity from "../_identity";
+import { default as _identity, default as identity } from "../_identity";
 import _iteratee from "../_iteratee";
 import type { Collection, NonFuncItee, UnknownMapKey } from "../types";
 import each from "./each";
 
+function countBy<V>(
+  collection: Collection<V>,
+  itee?: ((value: V) => string) | NonFuncItee
+): Record<string, number>
+function countBy<V, K extends string | number | symbol | object>(
+  collection: Collection<V, K>,
+  itee?: ((value: V) => K) | NonFuncItee
+): Record<Exclude<K, object>, number>
 /**
  * 创建一个统计对象，对象的key是iteratee返回的值，对应的值是相同key出现的次数
  * @example
@@ -20,21 +28,13 @@ import each from "./each";
  * console.log(_.countBy(users,u=>(u.age/10>>0)*10))
  *
  * @param collection 任何可遍历的集合类型，比如array / arraylike / set / map / object / ...
- * @param [iteratee=identity] (value) 回调函数，返回统计key
+ * @param iteratee (value) 回调函数，返回统计key
  * @returns 统计对象
  * @since 1.0.0
  */
-function countBy<V>(
-  collection: Collection<V>,
-  itee?: ((value: V) => string) | NonFuncItee
-): Record<string, number>
 function countBy<V, K extends string | number | symbol | object>(
   collection: Collection<V, K>,
-  itee?: ((value: V) => K) | NonFuncItee
-): Record<Exclude<K, object>, number>
-function countBy<V, K extends string | number | symbol | object>(
-  collection: Collection<V, K>,
-  itee?: ((value: V) => K) | NonFuncItee
+  itee: ((value: V) => K) | NonFuncItee = identity
 ): Record<Exclude<K, object>, number> {
   const stat: Record<UnknownMapKey, any> = {}
   const cb = _iteratee(itee || _identity)

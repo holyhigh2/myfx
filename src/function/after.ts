@@ -8,10 +8,10 @@
  * console.log(saveTip(),saveTip(),saveTip())
  *
  * @param fn 需要调用的函数
- * @param [count=0] 计数
+ * @param count 计数
  * @returns 包装后的函数
  */
-function after<T extends (...args: any[]) => any>(fn: T, count?: number): T {
+function after<T extends (...args: any[]) => any>(fn: T, count: number = 0): T {
   const proxy = fn
   let i = count || 0
   let rtn: any

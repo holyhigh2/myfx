@@ -17,7 +17,7 @@ const TIME_MAP: Record<string, number> = {
  *
  * @param date 原日期时间
  * @param amount 变化量，可以为负数
- * @param [type='s'] 量变时间类型
+ * @param type 量变时间类型
  * <ul>
  * <li><code>y</code> 年</li>
  * <li><code>M</code> 月</li>
@@ -31,7 +31,7 @@ const TIME_MAP: Record<string, number> = {
 function addTime(
   date: Date | string | number,
   amount: number,
-  type?: string
+  type: string = 's'
 ): Date {
   type = type || 's'
   const d = new Date(date)

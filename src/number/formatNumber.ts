@@ -36,7 +36,7 @@ const PATTERN_EXP = /(?<integer>[0,#]+)(?:\.(?<fraction>[0#]+))?(?<suffix>[%\u20
  * console.log(_.formatNumber(123.456,'#.##'))//123.46
  *
  * @param v 需要格式化的值，可以是数字或字符串类型
- * @param [pattern='#,##0.00'] 格式化模式
+ * @param pattern 格式化模式
  *
  * @returns 格式化后的字符串或原始值字符串(如果格式无效时)或特殊值(Infinity\u221E、NaN\uFFFD)
  */

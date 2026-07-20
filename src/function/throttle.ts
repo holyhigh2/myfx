@@ -15,7 +15,6 @@
  * @returns 包装后的函数
  * @since 1.4.0
  */
-const EventTargetMap = new WeakMap
 function throttle<T extends (...args: any[]) => any>(fn: T, wait: number, options?: { leading?: boolean, trailing?: boolean }): T {
   let proxy = fn
   let lastExec = 0
@@ -81,5 +80,7 @@ function throttle<T extends (...args: any[]) => any>(fn: T, wait: number, option
     }
   }) as T
 }
+
+const EventTargetMap = new WeakMap
 
 export default throttle

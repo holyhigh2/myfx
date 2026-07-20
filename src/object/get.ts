@@ -20,7 +20,7 @@ import isObject from "../is/isObject";
  *
  * @param obj 需要获取属性值的对象，如果obj不是对象(isObject返回false)，则返回defaultValue
  * @param path 属性路径，可以是索引数字，字符串key，或者多级属性数组
- * @param [defaultValue] 如果path未定义，返回默认值
+ * @param defaultValue 如果path未定义，返回默认值
  * @returns 属性值或默认值
  */
 function get<V>(

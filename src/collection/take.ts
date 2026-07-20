@@ -10,7 +10,7 @@ import type { Collection } from "../types";
  * console.log(_.take([1, 2, 3, 4, 5]))
  *
  * @param array 数组
- * @param [length] 获取元素数量，默认数组长度
+ * @param length 获取元素数量，默认数组长度
  * @returns 新数组
  */
 function take<T>(array: Collection<T>, length?: number): T[] {

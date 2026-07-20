@@ -14,7 +14,7 @@ import isSet from "../is/isSet";
  * console.log(_.flat(new Set([1,1,[2,[1,[3,4]]]]),Infinity))
  *
  * @param array 数组
- * @param [depth=1] 嵌套深度
+ * @param depth 嵌套深度
  * @returns 扁平化后的新数组
  */
 function flat<T>(array: any[] | Set<any>, depth: number = 1): T[] {

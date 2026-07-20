@@ -34,7 +34,7 @@ const TIME_MAP: Record<string, number> = {
  * 对于字符串格式，可以时<a href="https://www.iso.org/iso-8601-date-and-time-format.html">UTC格式</a>，或者
  * <a href="https://tools.ietf.org/html/rfc2822#section-3.3">RFC2822</a>格式
  * @param date2 同date1
- * @param [type='d'] 比较时间单位
+ * @param type 比较时间单位
  * <ul>
  * <li><code>y</code> 年</li>
  * <li><code>M</code> 月</li>
@@ -48,7 +48,7 @@ const TIME_MAP: Record<string, number> = {
 function compareDate(
   date1: Date | string | number,
   date2: Date | string | number,
-  type?: string
+  type: string = 'd'
 ): number {
   const d1 = new Date(date1)
   const d2 = new Date(date2)

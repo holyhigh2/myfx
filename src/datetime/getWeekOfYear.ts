@@ -4,9 +4,9 @@ import toDate from "./toDate"
 /**
  * 获取指定日期在当前年中的周数并返回
  * @param date 日期对象
- * @returns {number} 当前年中的第几周
+ * @returns 当前年中的第几周
  */
-function getWeekOfYear(date: Date): number {
+function getWeekOfYear(date: Date | string | number): number {
   date = toDate(date)
   const year = date.getFullYear()
   let firstDayOfYear = new Date(year, 0, 1)

@@ -1,8 +1,17 @@
-import _identity from "../_identity";
+import { default as _identity, default as identity } from "../_identity";
 import _iteratee from "../_iteratee";
 import type { Collection, NonFuncItee, UnknownMapKey } from "../types";
 import each from "./each";
 
+
+function keyBy<K extends string | number | symbol>(
+  collection: Collection<any>,
+  itee?: ((value: unknown) => K) | NonFuncItee
+): Record<K, unknown>
+function keyBy<V, K extends string | number | symbol>(
+  collection: Collection<V, K>,
+  itee?: ((value: V) => K) | NonFuncItee
+): Record<K, V>
 /**
  * 创建一个对象，对象的key是iteratee返回的值，对象的值是collection中最后一个key对应的值
  * @example
@@ -20,24 +29,16 @@ import each from "./each";
  * console.log(_.keyBy(users,u=>(u.age/10>>0)*10))
  *
  * @param collection 任何可遍历的集合类型，比如array / arraylike / set / map / object / ...
- * @param [iteratee=identity] (value)回调函数，返回统计key
+ * @param iteratee (value)回调函数，返回统计key
  * @returns 统计对象
  * @since 1.0.0
  */
-function keyBy<K extends string | number | symbol>(
-  collection: Collection<any>,
-  itee?: ((value: unknown) => K) | NonFuncItee
-): Record<K, unknown>
 function keyBy<V, K extends string | number | symbol>(
   collection: Collection<V, K>,
-  itee?: ((value: V) => K) | NonFuncItee
-): Record<K, V>
-function keyBy<V, K extends string | number | symbol>(
-  collection: Collection<V, K>,
-  itee?: ((value: V) => K) | NonFuncItee
+  iteratee: ((value: V) => K) | NonFuncItee = identity
 ): Record<K, V> {
   const stat: Record<UnknownMapKey, unknown> = {}
-  const cb = _iteratee(itee || _identity)
+  const cb = _iteratee(iteratee || _identity)
   each(collection, (el) => {
     const key = cb(el)
     stat[key] = el

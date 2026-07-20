@@ -2,6 +2,25 @@ import _iteratee from "../_iteratee";
 import type { Collection, NonFuncItee } from "../types";
 import each from "./each";
 
+
+function reject<V>(
+  collection: Set<V> | ArrayLike<V>,
+  predicate:
+    ((value: V, index: number, collection: Collection<V>) => boolean)
+    | NonFuncItee
+): V[]
+function reject<V>(
+  collection: Record<string, V> | Map<string, V>,
+  predicate:
+    ((value: V, index: string, collection: Collection<V, string>) => boolean)
+    | NonFuncItee
+): V[]
+function reject<V, K extends string | number | symbol>(
+  collection: Collection<V, K>,
+  predicate:
+    ((value: V, index: K, collection: Collection<V, K>) => boolean)
+    | NonFuncItee
+): V[]
 /**
  * <code>filter</code>的反函数，数组内容由集合内所有断言结果为假的元素组成
  *
@@ -20,28 +39,10 @@ import each from "./each";
  * @returns 由通过断言的元素组成的新数组
  * @since 1.0.0
  */
-function reject<V>(
-  collection: Set<V> | ArrayLike<V>,
-  predicate:
-    | ((value: V, index: number, collection: Collection<V>) => boolean)
-    | NonFuncItee
-): V[]
-function reject<V>(
-  collection: Record<string, V> | Map<string, V>,
-  predicate:
-    | ((value: V, index: string, collection: Collection<V, string>) => boolean)
-    | NonFuncItee
-): V[]
 function reject<V, K extends string | number | symbol>(
   collection: Collection<V, K>,
   predicate:
-    | ((value: V, index: K, collection: Collection<V, K>) => boolean)
-    | NonFuncItee
-): V[]
-function reject<V, K extends string | number | symbol>(
-  collection: Collection<V, K>,
-  predicate:
-    | ((value: V, index: K, collection: Collection<V, K>) => boolean)
+    ((value: V, index: K, collection: Collection<V, K>) => boolean)
     | NonFuncItee
 ): V[] {
   const rs: V[] = []

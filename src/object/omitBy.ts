@@ -7,7 +7,7 @@ import type { UnknownMapKey } from "../types";
  * console.log(_.omitBy({a:1,b:2,c:'3'},_.isNumber))
  *
  * @param obj 选取对象
- * @param [predicate=identity] (v,k)断言函数
+ * @param predicate (v,k)断言函数
  * @returns 对象子集
  * @since 0.23.0
  */

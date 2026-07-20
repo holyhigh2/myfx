@@ -20,7 +20,7 @@ import type { UnknownMapKey } from "../types";
  * top.onclick = obj.click2
  *
  * @param object 绑定对象
- * @param  {...(string | Array<string>)} methodNames 属性名或path
+ * @param methodNames 属性名或path
  * @returns 绑定对象
  * @since 0.17.0
  */

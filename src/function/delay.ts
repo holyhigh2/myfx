@@ -7,11 +7,11 @@
  * _.delay(console.log,1000,'some text','!');
  *
  * @param fn 需要调用的函数
- * @param [wait=0] 倒计时。单位ms
- * @param [args] 传入定时函数的参数
+ * @param wait 倒计时。单位ms
+ * @param args 传入定时函数的参数
  * @returns 计时器id
  */
-function delay(fn: any, wait?: number, ...args: any[]): NodeJS.Timeout {
+function delay(fn: any, wait: number = 0, ...args: any[]): any {
   return setTimeout(() => {
     fn(...args)
   }, wait || 0)

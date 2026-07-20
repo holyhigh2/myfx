@@ -1,8 +1,16 @@
-import _identity from "../_identity";
+import { default as _identity, default as identity } from "../_identity";
 import _iteratee from "../_iteratee";
 import type { Collection, NonFuncItee, UnknownMapKey } from "../types";
 import each from "./each";
 
+function groupBy<V>(
+  collection: Collection<V>,
+  itee?: ((value: V) => UnknownMapKey) | NonFuncItee
+): Record<string, V[]>
+function groupBy<V, K extends string>(
+  collection: Collection<V>,
+  itee?: ((value: V) => UnknownMapKey) | NonFuncItee
+): Record<K, V[]>
 /**
  * 创建一个统计对象，对象的key是iteratee返回的值，对应的值是由所有key对应值组成的数组
  * @example
@@ -20,24 +28,16 @@ import each from "./each";
  * console.log(_.groupBy(users,u=>(u.age/10>>0)*10))
  *
  * @param collection 任何可遍历的集合类型，比如array / arraylike / set / map / object / ...
- * @param [iteratee=identity] (value)回调函数，返回统计key
+ * @param iteratee (value)回调函数，返回统计key
  * @returns 统计对象
  * @since 1.0.0
  */
-function groupBy<V>(
-  collection: Collection<V>,
-  itee?: ((value: V) => UnknownMapKey) | NonFuncItee
-): Record<string, V[]>
 function groupBy<V, K extends string>(
   collection: Collection<V>,
-  itee?: ((value: V) => UnknownMapKey) | NonFuncItee
-): Record<K, V[]>
-function groupBy<V, K extends string>(
-  collection: Collection<V>,
-  itee?: ((value: V) => UnknownMapKey) | NonFuncItee
+  iteratee: ((value: V) => UnknownMapKey) | NonFuncItee = identity
 ): Record<K, V[]> {
   const stat: Record<UnknownMapKey, V[]> = {} as any
-  const cb = _iteratee(itee || _identity)
+  const cb = _iteratee(iteratee || _identity)
   each(collection, (el) => {
     const key = cb(el)
     if (stat[key] === undefined) stat[key] = []

@@ -2,10 +2,7 @@ import includes from "../collection/includes";
 import remove from "./remove";
 /**
  * 与without相同，但会修改原数组
- * <div class="alert alert-secondary">
-      该函数会修改原数组
-    </div>
- *
+ * @effect 修改原数组
  * @example
  * //[1, 1] true
  * let ary = [1,2,3,4,3,2,1];

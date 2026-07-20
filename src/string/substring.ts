@@ -11,13 +11,13 @@ import toString from "./toString"
  * console.log(_.substring())
  *
  * @param str 需要截取的字符串，如果非字符串对象会进行字符化处理。基本类型会直接转为字符值，对象类型会调用toString()方法
- * @param [indexStart=0] 起始索引，包含
- * @param [indexEnd=str.length] 结束索引，不包含
+ * @param indexStart 起始索引，包含
+ * @param indexEnd 结束索引，不包含
  * @returns
  */
 function substring(
   str: any,
-  indexStart?: number,
+  indexStart: number = 0,
   indexEnd?: number
 ): string {
   str = toString(str)

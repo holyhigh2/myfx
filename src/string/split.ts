@@ -10,7 +10,7 @@ import toString from "./toString"
  *
  * @param str 原字符串。如果非字符串则会自动转换成字符串
  * @param separator 分隔符
- * @param [limit] 限制返回的结果数量，为空返回所有结果
+ * @param limit 限制返回的结果数量，为空返回所有结果
  * @returns 分割后的数组
  */
 function split(

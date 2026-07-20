@@ -53,7 +53,7 @@ import type { INode, IOptions, UnknownMapKey } from "../types";
  * console.log(render())
  *
  * @param string 模板字符串
- * @param {object} options MTL参数
+ * @param options MTL参数
  * @param options.delimiters 分隔符，默认 ['[%' , '%]']
  * @param options.mixins 混入对象。\{名称:模板字符串\}
  * @param options.globals 全局变量对象，可以在任意位置引用。模板内置的全局对象有两个：`print(content)`函数、`_` 对象，Myfx的命名空间

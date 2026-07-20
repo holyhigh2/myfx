@@ -2,8 +2,7 @@ import toNumber from "../number/toNumber";
 /**
  * 删除数组末尾或指定索引的一个元素并返回被删除的元素
  * 
- * > 该函数会修改原数组
- *
+ * @effect 修改原数组
  * @example
  * //3, [1, 2]
  * let ary = [1,2,3];
@@ -13,10 +12,10 @@ import toNumber from "../number/toNumber";
  * console.log(_.pop(ary,0),ary)
  *
  * @param array 数组对象。如果非数组类型会直接返回null
- * @param [index=-1] 要删除元素的索引。默认删除最后一个元素
+ * @param index 要删除元素的索引。默认删除最后一个元素
  * @returns 被删除的值或null
  */
-function pop<T>(array: unknown[], index?: number): T | null {
+function pop<T>(array: unknown[], index: number = -1): T | null {
   index = index || -1
   let rs = null
   if (Array.isArray(array)) {

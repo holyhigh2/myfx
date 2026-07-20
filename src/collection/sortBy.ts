@@ -1,5 +1,5 @@
 import _eq from "../_eq";
-import _identity from "../_identity";
+import { default as _identity, default as identity } from "../_identity";
 import _iteratee from "../_iteratee";
 import compareDate from "../datetime/compareDate";
 import isDate from "../is/isDate";
@@ -10,6 +10,19 @@ import type { Collection, NonFuncItee, UnknownMapKey } from "../types";
 import map from "./map";
 import size from "./size";
 
+
+function sortBy<V>(
+  collection: Set<V> | ArrayLike<V>,
+  itee?: ((value: V, index: number) => any) | NonFuncItee
+): V[]
+function sortBy<V>(
+  collection: Record<string, V> | Map<string, V>,
+  itee?: ((value: V, index: string) => any) | NonFuncItee
+): V[]
+function sortBy<V, K extends string | number | symbol>(
+  collection: Collection<V, K>,
+  itee?: ((value: V, index: K) => any) | NonFuncItee
+): V[]
 /**
  * 使用指定回调对集合结果进行升序排序。根据集合结果的第一个元素确定排序逻辑，内置排序逻辑包括
  * <ul>
@@ -27,30 +40,18 @@ import size from "./size";
  * console.log(_.sortBy(['2020-3-1','2020/1/1','3/1/2019'],_.toDate))
  *
  * @param collection 任何可遍历的集合类型，比如array / arraylike / set / map / object / ...
- * @param [iteratee=identity] (value,key|index) 筛选函数，返回排序值
+ * @param iteratee (value,key|index) 筛选函数，返回排序值
  * <br>当iteratee是函数时回调参数见定义
  * <br>其他类型请参考 {@link utils!iteratee}
  * @returns 排序后的数组
  * @since 1.0.0
  */
-function sortBy<V>(
-  collection: Set<V> | ArrayLike<V>,
-  itee?: ((value: V, index: number) => any) | NonFuncItee
-): V[]
-function sortBy<V>(
-  collection: Record<string, V> | Map<string, V>,
-  itee?: ((value: V, index: string) => any) | NonFuncItee
-): V[]
 function sortBy<V, K extends string | number | symbol>(
   collection: Collection<V, K>,
-  itee?: ((value: V, index: K) => any) | NonFuncItee
-): V[]
-function sortBy<V, K extends string | number | symbol>(
-  collection: Collection<V, K>,
-  itee?: ((value: V, index: K) => any) | NonFuncItee
+  iteratee: ((value: V, index: K) => any) | NonFuncItee = identity
 ): V[] {
   if (size(collection) < 1) return []
-  const cb = _iteratee(itee || _identity)
+  const cb = _iteratee(iteratee || _identity)
   let i = 0
   const list = map<V, UnknownMapKey, { src: any; index: number; value: any }>(
     collection,

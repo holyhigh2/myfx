@@ -1,6 +1,6 @@
 {
   "name": "myfx",
-  "version": "1.15.8",
+  "version": "1.15.9",
   "description": "A modular utility library with more utils, higher performance and simpler declarations ...",
   "main": "index.umd.js",
   "module": "index.esm.mjs",
@@ -24,7 +24,7 @@
     "build": "node ./config/build.chainfx.mjs & node ./config/build.modules.mjs & rollup --config ./config/rollup.config.mjs & rollup --config ./config/rollup.config.dts.mjs",
     "jest": "rollup --config ./config/rollup.config.jest.mjs --bundleConfigAsCjs & jest --no-cache --verbose test/index.spec.ts",
     "dev": "rollup --config ./config/rollup.config.dev.js --bundleConfigAsCjs --watch",
-    "doc": "npx typedoc"
+    "doc": "node extract-docs.js"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "24.0.0",

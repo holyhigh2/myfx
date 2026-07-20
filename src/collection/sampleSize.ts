@@ -14,12 +14,12 @@ import type { Collection, UnknownMapKey } from "../types";
  * console.log(_.sampleSize([{a:1},{b:2},{c:3},{d:4},{e:5}],2))
  *
  * @param collection 任何可遍历的集合类型，比如array / arraylike / set / map / object / ...
- * @param [count=1] 采样数量
+ * @param count 采样数量
  * @returns 采样结果
  * @since 0.16.0
  */
-function sampleSize<T>(collection: Collection<T>, count?: number): T[] {
-  count = count || 1
+function sampleSize<T>(collection: Collection<T>, count: number = 1): T[] {
+  count = count ?? 1
   const ary = toArray<T>(collection)
   const seeds = range(0, ary.length)
   const ks: number[] = []

@@ -7,7 +7,7 @@
  * //1
  * console.log(_.uniqueId())
  *
- * @param [prefix] id前缀
+ * @param prefix id前缀
  * @returns 唯一id
  * @since 0.16.0
  */

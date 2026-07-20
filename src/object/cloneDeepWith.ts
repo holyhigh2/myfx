@@ -4,6 +4,17 @@ import isFunction from "../is/isFunction";
 import isObject from "../is/isObject";
 import type { UnknownMapKey } from "../types";
 import clone from "./clone";
+
+function cloneDeepWith<T extends Record<string | number | symbol, any>>(
+  obj: T,
+  handler?: (v: any, k: UnknownMapKey, obj: T) => any,
+  skip?: (v: any, k: string | number | symbol) => boolean
+): T
+function cloneDeepWith<T extends Record<string | number | symbol, any>, U>(
+  obj: T,
+  handler?: (v: any, k: UnknownMapKey, obj: T) => any,
+  skip?: (v: any, k: string | number | symbol) => boolean
+): U
 /**
  * 完整复制对象,可以保持被复制属性的原有类型。支持赋值处理器
  *
@@ -21,16 +32,6 @@ import clone from "./clone";
  * @param skip (value,key) 返回true 跳过clone该属性
  * @returns 被复制的新对象
  */
-function cloneDeepWith<T extends Record<string | number | symbol, any>>(
-  obj: T,
-  handler?: (v: any, k: UnknownMapKey, obj: T) => any,
-  skip?: (v: any, k: string | number | symbol) => boolean
-): T
-function cloneDeepWith<T extends Record<string | number | symbol, any>, U>(
-  obj: T,
-  handler?: (v: any, k: UnknownMapKey, obj: T) => any,
-  skip?: (v: any, k: string | number | symbol) => boolean
-): U
 function cloneDeepWith<T extends Record<string | number | symbol, any>, U>(
   obj: T,
   handler?: (v: any, k: UnknownMapKey, obj: T) => any,

@@ -3,7 +3,7 @@ import isArray from "../is/isArray";
 /**
  * 向数组末尾追加一个或多个元素并返回
  * 
- * > 该函数会修改原数组
+ * @effect 修改原数组
  *
  * @example
  * //[1, 2, 3, 4]

@@ -44,7 +44,7 @@ import walkTree from './walkTree'
  * @param predicate (node,parentNode,chain,level) 断言
  * <br>当断言是函数时回调参数见定义
  * <br>其他类型请参考 {@link utils!iteratee}
- * @param {object} options 自定义选项
+ * @param options 自定义选项
  * @param options.childrenKey 包含子节点容器的key。默认'children'
  * @returns 找到的符合条件的所有节点副本或空数组
  * @since 1.0.0

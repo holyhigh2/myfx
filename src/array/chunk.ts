@@ -7,7 +7,7 @@
  * console.log(_.chunk([1,2,3,4],3))
  *
  * @param array 数组，非数组返回空数组
- * @param [size=1] 子数组长度
+ * @param size 子数组长度
  * @returns 拆分后的新数组
  * @since 0.23.0
  */

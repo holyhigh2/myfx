@@ -12,7 +12,7 @@ import isSet from '../is/isSet'
  * console.log(_.median([1,'2',-3]))
  *
  * @param values 数字/字符数组/Set
- * @returns mean value
+ * @returns median value
  * @since 1.12.0
  */
 function median(values: Set<string | number> | Array<string | number>): number {

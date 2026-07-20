@@ -4,7 +4,7 @@ import isNumber from "../is/isNumber";
 /**
  * 向数组中指定位置插入一个或多个元素并返回
  * 
- * > 该函数会修改原数组
+ * @effect 修改原数组
  *
  * @example
  * //[1, 2, Array(1), 'a', 3, 4]
@@ -23,11 +23,11 @@ import isNumber from "../is/isNumber";
  * @param values 1-n个需要插入列表的值
  * @returns 插入值后的数组对象
  */
-    function insert<T>(array: T[], index: number, ...values: any[]): T[] {
-      const rs = isArray(array) ? array : toArray<T>(array)
-      if (!isNumber(index) || index < 0) index = 0
-      rs.splice(index, 0, ...values)
-      return rs
-    }
+function insert<T>(array: T[], index: number, ...values: any[]): T[] {
+  const rs = isArray(array) ? array : toArray<T>(array)
+  if (!isNumber(index) || index < 0) index = 0
+  rs.splice(index, 0, ...values)
+  return rs
+}
 
 export default insert

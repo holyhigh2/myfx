@@ -12,13 +12,13 @@ import toString from "./toString"
  *
  * @param str
  * @param searchStr 查询字符串
- * @param [position=0] 索引
+ * @param position 索引
  * @returns 如果以查询子字符串开头返回true，否则返回false
  */
 function startsWith(
   str: any,
   searchStr: string,
-  position?: number
+  position: number = 0
 ): boolean {
   return toString(str).startsWith(searchStr, position)
 }

@@ -4,6 +4,17 @@ import isElement from "../is/isElement";
 import isFunction from "../is/isFunction";
 import isObject from "../is/isObject";
 
+
+function cloneWith<T extends Record<string | number | symbol, any>>(
+  obj: T,
+  handler: (v: any, k?: string | number | symbol) => any,
+  skip?: (v: any, k: string | number | symbol) => boolean
+): T
+function cloneWith<T extends Record<string | number | symbol, any>, U>(
+  obj: T,
+  handler: (v: any, k?: string | number | symbol) => any,
+  skip?: (v: any, k: string | number | symbol) => boolean
+): U
 /**
  * 浅层复制对象，支持赋值处理器
  * 如果obj是基本类型，返回原值
@@ -23,16 +34,6 @@ import isObject from "../is/isObject";
  * @param skip (value,key) (value,key) 返回true 跳过clone该属性
  * @returns 被复制的新对象
  */
-function cloneWith<T extends Record<string | number | symbol, any>>(
-  obj: T,
-  handler: (v: any, k?: string | number | symbol) => any,
-  skip?: (v: any, k: string | number | symbol) => boolean
-): T
-function cloneWith<T extends Record<string | number | symbol, any>, U>(
-  obj: T,
-  handler: (v: any, k?: string | number | symbol) => any,
-  skip?: (v: any, k: string | number | symbol) => boolean
-): U
 function cloneWith<T extends Record<string | number | symbol, any>>(
   obj: T,
   handler: (v: any, k?: string | number | symbol) => any,

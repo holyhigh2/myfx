@@ -2,6 +2,33 @@ import _iteratee from "../_iteratee";
 import type { Collection, NonFuncItee } from "../types";
 import each from "./each";
 
+
+function partition<V>(
+  collection: Set<V> | ArrayLike<V>,
+  predicate:
+    ((
+      value: V,
+      index: number,
+      collection: Collection<V>
+    ) => boolean)
+    | NonFuncItee
+): V[][]
+function partition<V>(
+  collection: Record<string, V> | Map<string, V>,
+  predicate:
+    ((
+      value: V,
+      index: string,
+      collection: Collection<V, string>
+    ) => boolean)
+    | NonFuncItee
+): V[][]
+function partition<V, K extends string | number | symbol | object>(
+  collection: Collection<V, K>,
+  predicate:
+    ((value: V, index: K, collection: Collection<V, K>) => boolean)
+    | NonFuncItee
+): V[][]
 /**
  * 类似<code>filter</code>函数，但返回固定长度为2的二维数组 - [[matched...],[mismatched...]]
  *
@@ -29,36 +56,10 @@ import each from "./each";
  * @returns 由匹配列表，非匹配列表构成的二维数组
  * @since 0.17.0
  */
-function partition<V>(
-  collection: Set<V> | ArrayLike<V>,
-  predicate:
-    | ((
-      value: V,
-      index: number,
-      collection: Collection<V>
-    ) => boolean)
-    | NonFuncItee
-): V[][]
-function partition<V>(
-  collection: Record<string, V> | Map<string, V>,
-  predicate:
-    | ((
-      value: V,
-      index: string,
-      collection: Collection<V, string>
-    ) => boolean)
-    | NonFuncItee
-): V[][]
 function partition<V, K extends string | number | symbol | object>(
   collection: Collection<V, K>,
   predicate:
-    | ((value: V, index: K, collection: Collection<V, K>) => boolean)
-    | NonFuncItee
-): V[][]
-function partition<V, K extends string | number | symbol | object>(
-  collection: Collection<V, K>,
-  predicate:
-    | ((value: V, index: K, collection: Collection<V, K>) => boolean)
+    ((value: V, index: K, collection: Collection<V, K>) => boolean)
     | NonFuncItee
 ): V[][] {
   const matched: V[] = []

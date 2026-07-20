@@ -40,7 +40,7 @@ import isEmpty from '../is/isEmpty'
  *
  * @param treeNodes 一组节点或一个节点
  * @param comparator (a,b) 排序函数
- * @param {object} options 自定义选项
+ * @param options 自定义选项
  * @param options.childrenKey 包含子节点容器的key。默认'children'
  *
  * @since 1.0.0

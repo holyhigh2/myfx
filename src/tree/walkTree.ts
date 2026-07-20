@@ -38,7 +38,7 @@ import type { UnknownMapKey } from '../types'
  *
  * @param treeNodes 一组节点或一个节点
  * @param callback (node,parentNode,chain,level,index)回调函数，如果返回false则中断遍历，如果返回-1则停止分支遍历
- * @param {object} options 自定义选项
+ * @param options 自定义选项
  * @param options.childrenKey 包含子节点容器的key。默认'children'
  * @since 1.0.0
  */

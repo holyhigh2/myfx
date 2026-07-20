@@ -10,10 +10,10 @@ import toString from "./toString"
  *
  * @param str
  * @param search 指定字符串
- * @param [fromIndex=0] 起始索引
+ * @param fromIndex 起始索引
  * @returns 第一个匹配搜索字符串的位置索引或-1
  */
-function indexOf(str: any, search: string, fromIndex?: number): number {
+function indexOf(str: any, search: string, fromIndex: number = 0): number {
   str = toString(str)
   return str.indexOf(search, fromIndex || 0)
 }

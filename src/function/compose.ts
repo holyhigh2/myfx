@@ -14,7 +14,7 @@ import isFunction from "../is/isFunction";
  * let formatName = _.compose(_.lowerCase,_.capitalize);
  * console.log(formatName('HOLYHIGH'))
  *
- * @param  {...function} fns
+ * @param fns 多个函数
  * @returns 组合后的入口函数
  */
 function compose<T extends (...args: any[]) => any>(...fns: any[]): T {

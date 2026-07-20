@@ -2,6 +2,32 @@ import _iteratee from "../_iteratee";
 import type { Collection, NonFuncItee } from "../types";
 import eachRight from "./eachRight";
 
+function findLast<V>(
+  collection: Set<V> | ArrayLike<V>,
+  predicate:
+    ((
+      value: V,
+      index: number,
+      collection: Collection<V>
+    ) => boolean)
+    | NonFuncItee
+): V | undefined
+function findLast<V>(
+  collection: Record<string, V> | Map<string, V>,
+  predicate:
+    ((
+      value: V,
+      index: string,
+      collection: Collection<V, string>
+    ) => boolean)
+    | NonFuncItee
+): V | undefined
+function findLast<V, K extends string | number | symbol | object>(
+  collection: Collection<V, K>,
+  predicate:
+    ((value: V, index: K, collection: Collection<V>) => boolean)
+    | NonFuncItee
+): V | undefined
 /**
  * 对集合内的所有元素进行断言并返回最后一个匹配的元素
  *
@@ -29,36 +55,10 @@ import eachRight from "./eachRight";
  * <br>其他类型请参考 {@link utils!iteratee}
  * @returns 第一个匹配断言的元素或undefined
  */
-function findLast<V>(
-  collection: Set<V> | ArrayLike<V>,
-  predicate:
-    | ((
-      value: V,
-      index: number,
-      collection: Collection<V>
-    ) => boolean)
-    | NonFuncItee
-): V | undefined
-function findLast<V>(
-  collection: Record<string, V> | Map<string, V>,
-  predicate:
-    | ((
-      value: V,
-      index: string,
-      collection: Collection<V, string>
-    ) => boolean)
-    | NonFuncItee
-): V | undefined
 function findLast<V, K extends string | number | symbol | object>(
   collection: Collection<V, K>,
   predicate:
-    | ((value: V, index: K, collection: Collection<V>) => boolean)
-    | NonFuncItee
-): V | undefined
-function findLast<V, K extends string | number | symbol | object>(
-  collection: Collection<V, K>,
-  predicate:
-    | ((value: V, index: K, collection: Collection<V>) => boolean)
+    ((value: V, index: K, collection: Collection<V>) => boolean)
     | NonFuncItee
 ): V | undefined {
   const callback = _iteratee(predicate)

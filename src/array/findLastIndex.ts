@@ -14,7 +14,7 @@ import type { NonFuncItee } from "../types";
  * @param predicate (value[,index[,array]]);断言
  * <br>当断言是函数时回调参数见定义
  * <br>其他类型请参考 {@link utils!iteratee}
- * @param [fromIndex=array.length - 1] 从集合长度-1开始的起始索引。设置该参数可以减少实际遍历次数
+ * @param fromIndex 从集合长度-1开始的起始索引。设置该参数可以减少实际遍历次数
  * @returns 最后一个匹配断言的元素索引或-1
  * @since 0.19.0
  */

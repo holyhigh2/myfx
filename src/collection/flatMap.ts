@@ -1,27 +1,12 @@
+import identity from "../_identity";
 import flat from "../array/flat";
 import type { Collection, NonFuncItee } from "../types";
 import map from "./map";
 
-/**
- * 类似<code>map</code>，但会对返回值进行<code>flat</code>处理。
- * 除此之外，与map函数最大的不同在于返回值与元素的映射关系并不一定是一一对应，此时更像<code>filter</code>
- *
- * @example
- * //[1, 2, [3]]
- * console.log(_.flatMap([[1,2],[[3]]]))
- * //[3,5]
- * console.log(_.flatMap([[1,2],3,4,5],n=>n%2?n:[]))
- *
- * @param collection 任何可遍历的集合类型，比如array / arraylike / set / map / object / ...
- * @param [iteratee=identity] (value[,index|key[,collection]]) 回调函数，返回值作为新数组元素。
- * @param [depth=1] 嵌套深度
- * @returns 映射值的新数组
- * @since 1.0.0
- */
 function flatMap<V>(
   collection: Set<V> | ArrayLike<V>,
   itee:
-    | ((
+    ((
       value: V,
       index: number,
       collection: Collection<V>
@@ -32,7 +17,7 @@ function flatMap<V>(
 function flatMap<V>(
   collection: Record<string, V> | Map<string, V>,
   itee:
-    | ((
+    ((
       value: V,
       index: string,
       collection: Collection<V, string>
@@ -43,7 +28,7 @@ function flatMap<V>(
 function flatMap<V, U>(
   collection: Set<V> | ArrayLike<V>,
   itee:
-    | ((
+    ((
       value: V,
       index: number,
       collection: Collection<V>
@@ -54,7 +39,7 @@ function flatMap<V, U>(
 function flatMap<V, U>(
   collection: Record<string, V> | Map<string, V>,
   itee:
-    | ((
+    ((
       value: V,
       index: string,
       collection: Collection<V, string>
@@ -72,10 +57,26 @@ function flatMap<V, K extends string | number | symbol | object, U>(
   itee: ((value: V, index: K, collection: Collection<V>) => U | Promise<any>) | NonFuncItee,
   depth?: number
 ): U[]
+/**
+ * 类似<code>map</code>，但会对返回值进行<code>flat</code>处理。
+ * 除此之外，与map函数最大的不同在于返回值与元素的映射关系并不一定是一一对应，此时更像<code>filter</code>
+ *
+ * @example
+ * //[1, 2, [3]]
+ * console.log(_.flatMap([[1,2],[[3]]]))
+ * //[3,5]
+ * console.log(_.flatMap([[1,2],3,4,5],n=>n%2?n:[]))
+ *
+ * @param collection 任何可遍历的集合类型，比如array / arraylike / set / map / object / ...
+ * @param iteratee (value[,index|key[,collection]]) 回调函数，返回值作为新数组元素。
+ * @param depth 嵌套深度
+ * @returns 映射值的新数组
+ * @since 1.0.0
+ */
 function flatMap<V, K extends string | number | symbol | object, U>(
   collection: Collection<V, K>,
-  itee: ((value: V, index: K, collection: Collection<V>) => U | Promise<any>) | NonFuncItee,
-  depth?: number
+  itee: ((value: V, index: K, collection: Collection<V>) => U | Promise<any>) | NonFuncItee = identity,
+  depth: number = 1
 ): U[] {
   return flat(map<V, K, U>(collection, itee), depth || 1)
 }

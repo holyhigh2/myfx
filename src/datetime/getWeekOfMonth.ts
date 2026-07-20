@@ -3,9 +3,9 @@ import toDate from "./toDate"
 /**
  * 获取指定日期在当前月中的周数并返回
  * @param date 日期对象
- * @returns {number} 当前月中的第几周
+ * @returns 当前月中的第几周
  */
-function getWeekOfMonth(date: Date): number {
+function getWeekOfMonth(date: Date | string | number): number {
   date = toDate(date)
   const year = date.getFullYear()
   let firstDayOfMonth = new Date(year, date.getMonth(), 1)

@@ -22,14 +22,14 @@ import lt from './lt'
  * console.log(_.inRange(-1,-2))
  *
  * @param v
- * @param [start=0] 最小值
+ * @param start 最小值
  * @param end 最大值
  * @returns
  * @since 1.0.0
  */
 function inRange(v: any, end: number): boolean
 function inRange(v: any, start: number, end: number): boolean
-function inRange(v: any, start?: number, end?: number): boolean {
+function inRange(v: any, start: number = 0, end?: number): boolean {
   start = start || 0
   if (end === undefined) {
     end = start

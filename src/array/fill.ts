@@ -10,8 +10,8 @@ import toArray from "../collection/toArray";
  *
  * @param array 数组
  * @param value 填充值
- * @param [start=0] 起始索引，包含
- * @param [end] 终止索引，不包含
+ * @param start 起始索引，包含
+ * @param end 终止索引，不包含
  * @returns 填充后的新数组
  */
 function fill<T>(array: T[], value: any, start: number = 0, end?: number): T[] {

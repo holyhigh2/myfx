@@ -8,11 +8,11 @@ const ALPHABET =
  * // Ii6cPyfw-Ql5YC8OIhVwH1lpGY9x
  * console.log(_.alphaId(28))
  *
- * @param [len=16] id长度
+ * @param len id长度
  * @returns alphaId
  * @since 1.0.0
  */
-function alphaId(len?: number): string {
+function alphaId(len: number = 16): string {
   const bytes = globalThis.crypto.getRandomValues(new Uint8Array(len || 16))
   let rs = ''
   bytes.forEach(b => rs += ALPHABET[b % ALPHABET.length])

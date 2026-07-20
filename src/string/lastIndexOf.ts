@@ -10,12 +10,12 @@ import toString from "./toString"
  *
  * @param str
  * @param search 指定字符串
- * @param [fromIndex=Infinity] 起始索引，从起始索引位置向左查找指定字符串
+ * @param fromIndex 起始索引，从起始索引位置向左查找指定字符串
  * @returns 最后一个匹配搜索字符串的位置索引或-1
  */
-function lastIndexOf(str: any, search: string, fromIndex?: number): number {
+function lastIndexOf(str: any, search: string, fromIndex: number = Infinity): number {
   str = toString(str)
-  return str.lastIndexOf(search, fromIndex || Infinity)
+  return str.lastIndexOf(search, fromIndex ?? Infinity)
 }
 
 export default lastIndexOf
