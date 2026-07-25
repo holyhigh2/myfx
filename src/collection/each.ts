@@ -10,7 +10,7 @@ function each<V>(
   callback: (
     value: V,
     index: number,
-    collection: Collection<V>
+    collection: Collection<V>, i: number
   ) => any,
   startIndex?: number
 ): void
@@ -19,13 +19,13 @@ function each<V>(
   callback: (
     value: V,
     index: string,
-    collection: Collection<V, string>
+    collection: Collection<V, string>, i: number
   ) => any,
   startIndex?: number
 ): void
 function each<V, K extends string | number | symbol | object>(
   collection: Collection<V, K>,
-  callback: (value: V, index: K, collection: Collection<V>) => any,
+  callback: (value: V, index: K, collection: Collection<V>, i: number) => any,
   startIndex?: number
 ): void
 /**
@@ -45,12 +45,12 @@ function each<V, K extends string | number | symbol | object>(
  * const x=[];_.each(document.body.children,v=>x.push(v));console.log(x)
  *
  * @param collection 任何可遍历的集合类型，比如array / arraylike / set / map / object / ...
- * @param callback (value[,index|key[,collection]]);回调函数，如果返回false会立即中断遍历
+ * @param callback (value[,index|key[,collection][,i]]);回调函数，如果返回false会立即中断遍历
  * @param startIndex 遍历起始索引
  */
 function each<V, K extends string | number | symbol | object>(
   collection: Collection<V, K>,
-  callback: (value: V, index: K, collection: Collection<V>) => any,
+  callback: (value: V, index: K, collection: Collection<V>, i: number) => any,
   startIndex = 0
 ): void {
   let values
@@ -59,7 +59,7 @@ function each<V, K extends string | number | symbol | object>(
     let size = collection.length
 
     for (let i = startIndex; i < size; i++) {
-      const r = callback(collection[i] as V, i as K, collection)
+      const r = callback(collection[i] as V, i as K, collection, i)
       if (r === false) return
     }
 
@@ -68,7 +68,7 @@ function each<V, K extends string | number | symbol | object>(
 
     values = collection.values()
     for (let i = startIndex; i < size; i++) {
-      const r = callback(values.next().value as V, i as K, collection)
+      const r = callback(values.next().value as V, i as K, collection, i)
       if (r === false) return
     }
 
@@ -82,7 +82,7 @@ function each<V, K extends string | number | symbol | object>(
       const r = callback(
         values.next().value as V,
         keys.next().value as K,
-        collection as Collection<V>
+        collection as Collection<V>, i
       )
       if (r === false) return
     }
@@ -93,7 +93,7 @@ function each<V, K extends string | number | symbol | object>(
 
     for (let i = startIndex; i < size; i++) {
       const k = keys[i]
-      const r = callback((collection as any)[k] as V, k as K, collection)
+      const r = callback((collection as any)[k] as V, k as K, collection, i)
       if (r === false) return
     }
 

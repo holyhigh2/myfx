@@ -10,7 +10,7 @@ function eachRight<V>(
   callback: (
     value: V,
     index: number,
-    collection: Collection<V>
+    collection: Collection<V>, i: number
   ) => boolean | void | Promise<void>
 ): void
 function eachRight<V>(
@@ -18,12 +18,12 @@ function eachRight<V>(
   callback: (
     value: V,
     index: string,
-    collection: Collection<V, string>
+    collection: Collection<V, string>, i: number
   ) => boolean | void | Promise<void>
 ): void
 function eachRight<V, K extends string | number | symbol | object>(
   collection: Collection<V, K>,
-  callback: (value: V, index: K, collection: Collection<V>) => boolean | void | Promise<void>
+  callback: (value: V, index: K, collection: Collection<V>, i: number) => boolean | void | Promise<void>
 ): void
 /**
  * 对集合元素进行顺序遍历，与 forEach 不同在于遍历顺序是从右到左
@@ -44,7 +44,7 @@ function eachRight<V, K extends string | number | symbol | object>(
  */
 function eachRight<V, K extends string | number | symbol | object>(
   collection: Collection<V, K>,
-  callback: (value: V, index: K, collection: Collection<V>) => boolean | void | Promise<void>
+  callback: (value: V, index: K, collection: Collection<V>, i: number) => boolean | void | Promise<void>
 ): void {
   let values
   let keys
@@ -52,7 +52,7 @@ function eachRight<V, K extends string | number | symbol | object>(
     let size = collection.length
 
     while (size--) {
-      const r = callback(collection[size] as V, size as K, collection)
+      const r = callback(collection[size] as V, size as K, collection, size)
       if (r === false) return
     }
 
@@ -61,7 +61,7 @@ function eachRight<V, K extends string | number | symbol | object>(
 
     values = Array.from(collection)
     while (size--) {
-      const r = callback(values[size] as V, size as K, collection)
+      const r = callback(values[size] as V, size as K, collection, size)
       if (r === false) return
     }
   } else if (isMap(collection)) {
@@ -73,7 +73,7 @@ function eachRight<V, K extends string | number | symbol | object>(
     keys = Array.from(keys)
     values = Array.from(values)
     while (size--) {
-      const r = callback(values[size] as V, keys[size] as K, collection as Collection<V>)
+      const r = callback(values[size] as V, keys[size] as K, collection as Collection<V>, size)
       if (r === false) return
     }
   } else if (isObject(collection)) {
@@ -82,7 +82,7 @@ function eachRight<V, K extends string | number | symbol | object>(
 
     while (size--) {
       const k = keys[size]
-      const r = callback((collection as any)[k] as V, k as K, collection)
+      const r = callback((collection as any)[k] as V, k as K, collection, size)
       if (r === false) return
     }
   }
