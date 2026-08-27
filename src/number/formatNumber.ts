@@ -184,7 +184,7 @@ function makeFormatter(pattern: string, v: string | number, isNeg = false) {
 
     // 合并
     if (isScientific) {
-      suffix = 'e' + exponent
+      suffix = 'E' + exponent
     }
     let rs = (isNeg ? '' : sym) + iStr + dStr + suffix
     return (endsPart[0] || '') + rs + (endsPart[1] || '')

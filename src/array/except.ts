@@ -1,4 +1,3 @@
-import each from "../collection/each"
 import isArray from "../is/isArray"
 import isArrayLike from "../is/isArrayLike"
 import isFunction from "../is/isFunction"
@@ -42,21 +41,23 @@ function except<T>(...params: any): T[] {
     for (let i = 0; i < ary.length; i++) {
       const v = ary[i]
       const id = comparator ? comparator(v) : v
-      if (!kvMap.get(id)) {
+      let entry = kvMap.get(id)
+      if (!entry) {
         // 防止组内重复
-        kvMap.set(id, { i: 0, v: v })
+        entry = { i: 0, v: v }
+        kvMap.set(id, entry)
       }
-      if (kvMap.get(id) && !localMap.get(id)) {
-        kvMap.get(id).i++
+      if (!localMap.get(id)) {
+        entry.i++
         // 相同id本组内不再匹配
         localMap.set(id, true)
       }
     }
   }
   const rs: any[] = []
-  each(kvMap, (v: any) => {
-    if (v.i < len) {
-      rs.push(v.v)
+  kvMap.forEach((entry) => {
+    if (entry.i < len) {
+      rs.push(entry.v)
     }
   })
   return rs

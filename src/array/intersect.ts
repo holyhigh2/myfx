@@ -1,4 +1,3 @@
-import each from "../collection/each"
 import isArray from "../is/isArray"
 import isArrayLike from "../is/isArrayLike"
 import isFunction from "../is/isFunction"
@@ -62,8 +61,9 @@ function intersect<T>(...params: any): T[] {
     for (let i = 0; i < ary.length; i++) {
       const v = ary[i]
       const id = comparator ? comparator(v) : v
-      if (kvMap.get(id) && !localMap.get(id)) {
-        kvMap.get(id).i++
+      const entry = kvMap.get(id)
+      if (entry && !localMap.get(id)) {
+        entry.i++
         // 相同id本组内不再匹配
         localMap.set(id, true)
         // 匹配次数加1
@@ -74,12 +74,11 @@ function intersect<T>(...params: any): T[] {
     }
   }
   const rs: any[] = []
-  each(kvMap, (v: any) => {
-    if (v.i === len) {
-      rs.push(v.v)
+  kvMap.forEach((entry) => {
+    if (entry.i === len) {
+      rs.push(entry.v)
     }
   })
-
   return rs
 }
 

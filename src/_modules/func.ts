@@ -114,7 +114,7 @@ isDefined():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isDefined'
 isElement():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isElement').call(this,...arguments)}
 isEmpty():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isEmpty').call(this,...arguments)}
 isEqual(b: unknown):FuncChain<any>{return get<Function>(FuncChain.prototype,'_isEqual').call(this,...arguments)}
-isEqualWith(b: any,comparator?: Function):FuncChain<any>{return get<Function>(FuncChain.prototype,'_isEqualWith').call(this,...arguments)}
+isEqualWith(b: any,comparator?: Function,_depth = 0):FuncChain<any>{return get<Function>(FuncChain.prototype,'_isEqualWith').call(this,...arguments)}
 isError():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isError').call(this,...arguments)}
 isFinite():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isFinite').call(this,...arguments)}
 isFunction():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isFunction').call(this,...arguments)}

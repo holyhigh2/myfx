@@ -1,8 +1,3 @@
-import isArrayLike from "../is/isArrayLike";
-import isMap from "../is/isMap";
-import isObject from "../is/isObject";
-import isSet from "../is/isSet";
-import isString from "../is/isString";
 import type { Collection } from "../types";
 
 function each<V>(
@@ -53,50 +48,57 @@ function each<V, K extends string | number | symbol | object>(
   callback: (value: V, index: K, collection: Collection<V>, i: number) => any,
   startIndex = 0
 ): void {
-  let values
-  let keys
-  if (isString(collection) || isArrayLike(collection)) {
-    let size = collection.length
+  if (collection == null) return
 
+  // 快速路径：数组
+  if (Array.isArray(collection)) {
+    const size = collection.length
     for (let i = startIndex; i < size; i++) {
-      const r = callback(collection[i] as V, i as K, collection, i)
-      if (r === false) return
+      if (callback(collection[i] as V, i as K, collection, i) === false) return
     }
+    return
+  }
 
-  } else if (isSet(collection)) {
-    let size = collection.size
-
-    values = collection.values()
+  // 快速路径：字符串
+  if (typeof collection === 'string') {
+    const size = (collection as unknown as string).length
     for (let i = startIndex; i < size; i++) {
-      const r = callback(values.next().value as V, i as K, collection, i)
-      if (r === false) return
+      if (callback((collection as unknown as string)[i] as V, i as K, collection, i) === false) return
     }
+    return
+  }
 
-  } else if (isMap(collection)) {
-    let size = collection.size
-
-    keys = collection.keys()
-    values = collection.values()
-
+  // Set
+  if (collection instanceof Set) {
+    const size = (collection as Set<V>).size
+    const values = (collection as Set<V>).values()
     for (let i = startIndex; i < size; i++) {
-      const r = callback(
+      if (callback(values.next().value as V, i as K, collection, i) === false) return
+    }
+    return
+  }
+
+  // Map
+  if (collection instanceof Map) {
+    const size = (collection as Map<any, V>).size
+    const keys = (collection as Map<any, V>).keys()
+    const values = (collection as Map<any, V>).values()
+    for (let i = startIndex; i < size; i++) {
+      if (callback(
         values.next().value as V,
         keys.next().value as K,
         collection as Collection<V>, i
-      )
-      if (r === false) return
+      ) === false) return
     }
+    return
+  }
 
-  } else if (isObject(collection)) {
-    keys = Object.keys(collection)
-    let size = keys.length
-
-    for (let i = startIndex; i < size; i++) {
-      const k = keys[i]
-      const r = callback((collection as any)[k] as V, k as K, collection, i)
-      if (r === false) return
-    }
-
+  // ArrayLike / Object
+  const keys = Object.keys(collection as object)
+  const size = keys.length
+  for (let i = startIndex; i < size; i++) {
+    const k = keys[i]
+    if (callback((collection as any)[k] as V, k as K, collection, i) === false) return
   }
 }
 

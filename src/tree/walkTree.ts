@@ -3,6 +3,8 @@ import isEmpty from '../is/isEmpty'
 import isObject from '../is/isObject'
 import type { UnknownMapKey } from '../types'
 
+const MAX_DEPTH = 128;
+
 /**
  * 以给定节点为根遍历所有子孙节点。深度优先
  * @example
@@ -80,18 +82,21 @@ function _walkTree(
     if (rs === -1) continue
 
     if (!isEmpty(node[childrenKey])) {
-      let nextChain = [node]
-      if (parentNode) {
-        nextChain = chain.concat(nextChain)
-      }
-      const rs = _walkTree(
+      // 限制最大递归深度
+      if (chain.length >= MAX_DEPTH) continue
+      
+      // 使用push/pop代替concat，避免创建新数组
+      chain.push(node)
+      const childRs = _walkTree(
         node[childrenKey],
         callback,
         options,
         node,
-        nextChain
+        chain
       )
-      if (rs === false) return
+      chain.pop()
+      
+      if (childRs === false) return
     }
   }
 }

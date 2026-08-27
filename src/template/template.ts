@@ -161,7 +161,7 @@ function parse(
         // 获取最近信息
         const recInfo = takeRight(fullStack, 5);
         const tipInfo = map(recInfo, "source").join("") + rs[0];
-        let tipIndicator = map(rs[0], () => "^").join("");
+        let tipIndicator = "^".repeat(rs[0].length);
 
         const tipLineStartIndex =
           lastIndexOf(substring(str, 0, rs.index), "\n") + 1;
