@@ -1,0 +1,503 @@
+# Myfx - Full API Reference
+
+## Overview
+
+Myfx is a modular utility library with 200+ pure functions. Written in TypeScript with lazy evaluation support. Zero dependencies.
+
+## Installation
+
+```sh
+npm install myfx
+```
+
+## Import Options
+
+```ts
+// Default import (full library)
+import _ from 'myfx'
+
+// Named imports
+import { each, map, filter } from 'myfx'
+
+// Module-specific imports
+import { each, map } from 'myfx/collection'
+import { debounce, throttle } from 'myfx/function'
+import { format } from 'myfx/number'
+
+// CDN
+import _ from 'https://cdn.skypack.dev/myfx'
+```
+
+---
+
+## Collection Module
+
+### each(collection, iteratee)
+Iterate over collection, calling iteratee for each element.
+
+```ts
+_.each([1, 2, 3], (item, index) => console.log(item, index))
+_.each({ a: 1, b: 2 }, (value, key) => console.log(key, value))
+```
+
+### map(collection, iteratee)
+Transform each element using iteratee.
+
+```ts
+_.map([1, 2, 3], (item) => item * 2) // [2, 4, 6]
+_.map({ a: 1, b: 2 }, (v, k) => v * 2) // { a: 2, b: 4 }
+```
+
+### filter(collection, predicate)
+Filter elements matching predicate.
+
+```ts
+_.filter([1, 2, 3, 4], (item) => item % 2 === 0) // [2, 4]
+```
+
+### reduce(collection, accumulator, initial)
+Reduce collection to single value.
+
+```ts
+_.reduce([1, 2, 3], (acc, item) => acc + item, 0) // 6
+```
+
+### find(collection, predicate)
+Find first element matching predicate.
+
+```ts
+_.find([1, 2, 3], (item) => item > 1) // 2
+```
+
+### every(collection, predicate)
+Check if all elements match.
+
+```ts
+_.every([1, 2, 3], (item) => item > 0) // true
+```
+
+### some(collection, predicate)
+Check if any element matches.
+
+```ts
+_.some([1, 2, 3], (item) => item > 2) // true
+```
+
+### flatMap(collection, iteratee)
+Map and flatten result.
+
+### flatten(collection, [depth])
+Flatten nested arrays.
+
+### unique(collection)
+Remove duplicates.
+
+### compact(collection)
+Remove falsy values.
+
+### head(collection)
+Get first element.
+
+### tail(collection)
+Get all but first element.
+
+### last(collection)
+Get last element.
+
+### size(collection)
+Get collection size.
+
+### includes(collection, value)
+Check if value exists.
+
+---
+
+## Array Module
+
+### chunk(array, size)
+Split array into chunks.
+
+### difference(array, ...values)
+Get values not in other arrays.
+
+### intersection(...arrays)
+Get common values.
+
+### union(...arrays)
+Get all unique values.
+
+### without(array, ...values)
+Remove specified values.
+
+### zip(...arrays)
+Zip arrays together.
+
+### unzip(array)
+Unzip zipped array.
+
+### flattenDeep(array)
+Deep flatten array.
+
+### orderBy(collection, iteratees, orders)
+Sort by multiple criteria.
+
+### groupBy(collection, iteratee)
+Group elements by key.
+
+### keyBy(collection, iteratee)
+Index by key.
+
+### uniqBy(collection, iteratee)
+Remove duplicates by iteratee.
+
+---
+
+## Object Module
+
+### keys(object)
+Get object keys.
+
+### values(object)
+Get object values.
+
+### entries(object)
+Get object entries.
+
+### fromEntries(entries)
+Create object from entries.
+
+### pick(object, ...paths)
+Pick specified paths.
+
+### omit(object, ...paths)
+Omit specified paths.
+
+### merge(object, ...sources)
+Deep merge objects.
+
+### clone(object)
+Clone object.
+
+### defaults(object, ...sources)
+Assign defaults.
+
+### mapKeys(object, iteratee)
+Map object keys.
+
+### mapValues(object, iteratee)
+Map object values.
+
+---
+
+## String Module
+
+### capitalize(string)
+Capitalize first letter.
+
+### camelCase(string)
+Convert to camelCase.
+
+### snakeCase(string)
+Convert to snake_case.
+
+### kebabCase(string)
+Convert to kebab-case.
+
+### startCase(string)
+Convert to Start Case.
+
+### lowerCase(string)
+Convert to lower case.
+
+### upperCase(string)
+Convert to UPPER CASE.
+
+### trim(string, [chars])
+Trim whitespace/chars.
+
+### repeat(string, n)
+Repeat string n times.
+
+### replace(string, pattern, replacement)
+Replace pattern.
+
+### substring(string, start, [end])
+Get substring.
+
+### includes(string, search)
+Check if contains.
+
+### startsWith(string, target)
+Check if starts with.
+
+### endsWith(string, target)
+Check if ends with.
+
+---
+
+## Number Module
+
+### format(number, [options])
+Format number with locale.
+
+### formatCurrency(number, [options])
+Format as currency.
+
+### formatPercent(number)
+Format as percentage.
+
+### parseInt(string, [radix])
+Parse integer.
+
+### parseFloat(string)
+Parse float.
+
+### isFinite(number)
+Check if finite.
+
+### isInteger(number)
+Check if integer.
+
+### isSafeInteger(number)
+Check if safe integer.
+
+### clamp(number, [lower], upper)
+Clamp to range.
+
+### inRange(number, start, [end])
+Check if in range.
+
+### random([lower], upper)
+Generate random number.
+
+---
+
+## DateTime Module
+
+### now()
+Get current timestamp.
+
+### format(date, formatString)
+Format date.
+
+### parse(dateString)
+Parse date string.
+
+### addDays(date, amount)
+Add days.
+
+### addMonths(date, amount)
+Add months.
+
+### addYears(date, amount)
+Add years.
+
+### diff(date1, date2, unit)
+Calculate difference.
+
+### startOf(date, unit)
+Get start of unit.
+
+### endOf(date, unit)
+Get end of unit.
+
+### isBefore(date1, date2)
+Check if before.
+
+### isAfter(date1, date2)
+Check if after.
+
+### isBetween(date, start, end)
+Check if between.
+
+---
+
+## Function Module
+
+### debounce(fn, wait, [options])
+Debounce function.
+
+### throttle(fn, wait, [options])
+Throttle function.
+
+### once(fn)
+Create function that runs once.
+
+### memoize(fn, [resolver])
+Memoize function.
+
+### curry(fn)
+Curry function.
+
+### partial(fn, ...args)
+Partial application.
+
+### delay(fn, wait, ...args)
+Delayed execution.
+
+### defer(fn, ...args)
+Defer to next tick.
+
+---
+
+## Is Module
+
+### is(value, type)
+Check value type.
+
+### isArray(value)
+Check if array.
+
+### isObject(value)
+Check if object.
+
+### isString(value)
+Check if string.
+
+### isNumber(value)
+Check if number.
+
+### isBoolean(value)
+Check if boolean.
+
+### isFunction(value)
+Check if function.
+
+### isNull(value)
+Check if null.
+
+### isUndefined(value)
+Check if undefined.
+
+### isNil(value)
+Check if null or undefined.
+
+### isEmpty(value)
+Check if empty.
+
+### isNaN(value)
+Check if NaN.
+
+### isDate(value)
+Check if date.
+
+### isRegExp(value)
+Check if RegExp.
+
+### isError(value)
+Check if Error.
+
+### isMap(value)
+Check if Map.
+
+### isSet(value)
+Check if Set.
+
+### isPromise(value)
+Check if Promise.
+
+### isTypedArray(value)
+Check if typed array.
+
+### isArrayBuffer(value)
+Check if ArrayBuffer.
+
+---
+
+## Math Module
+
+### add(a, b)
+Add two numbers.
+
+### subtract(a, b)
+Subtract b from a.
+
+### multiply(a, b)
+Multiply two numbers.
+
+### divide(a, b)
+Divide a by b.
+
+### modulo(a, b)
+Modulo operation.
+
+### power(base, exponent)
+Raise to power.
+
+### sqrt(number)
+Square root.
+
+### abs(number)
+Absolute value.
+
+### min(...numbers)
+Get minimum.
+
+### max(...numbers)
+Get maximum.
+
+### sum(...numbers)
+Sum numbers.
+
+### average(...numbers)
+Calculate average.
+
+### round(number, [precision])
+Round number.
+
+### floor(number, [precision])
+Floor number.
+
+### ceil(number, [precision])
+Ceil number.
+
+### random([min], max)
+Random number in range.
+
+---
+
+## Tree Module
+
+### toArray(tree)
+Convert tree to array.
+
+### toTree(array, options)
+Convert array to tree.
+
+### traverse(tree, iteratee)
+Traverse tree.
+
+### findNode(tree, predicate)
+Find node in tree.
+
+### mapTree(tree, iteratee)
+Map tree nodes.
+
+### filterTree(tree, predicate)
+Filter tree nodes.
+
+### depth(tree)
+Get tree depth.
+
+### flattenTree(tree)
+Flatten tree.
+
+---
+
+## Template Module
+
+### compile(templateString)
+Compile template.
+
+### render(template, data)
+Render template.
+
+---
+
+## Types
+
+```ts
+type Collection<T> = T[] | Record<string, T>
+type Iteratee<T, R> = (value: T, key: any, collection: Collection<T>) => R
+type Predicate<T> = (value: T, index: any, collection: Collection<T>) => boolean
+```

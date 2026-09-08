@@ -1,0 +1,62 @@
+# Myfx
+
+> A modular utility library with 200+ pure functions for collections, formatting, and more. Written in TypeScript with lazy evaluation support.
+
+## Docs
+
+- [README](./README.md) - Installation, quick start, and overview
+- [API Documentation](https://holyhigh2.github.io/myfx/) - Complete API reference
+- [GitHub Repository](https://github.com/holyhigh2/myfx) - Source code and issues
+
+## Modules
+
+- [Collection](./src/collection/) - each, map, filter, reduce, find, and more
+- [Array](./src/array/) - Array manipulation utilities
+- [Object](./src/object/) - Object utilities
+- [String](./src/string/) - String manipulation
+- [Number](./src/number/) - Number formatting and utilities
+- [DateTime](./src/datetime/) - Date/time formatting and parsing
+- [Math](./src/math/) - Math utilities
+- [Function](./src/function/) - debounce, throttle, and more
+- [Is](./src/is/) - Type checking functions
+- [Tree](./src/tree/) - Tree data structures
+- [Template](./src/template/) - Template engine
+
+## Examples
+
+```ts
+// Import the library
+import _ from 'myfx'
+
+// Collection operations
+_.each([1, 2, 3], (item) => console.log(item))
+_.map([1, 2, 3], (item) => item * 2)
+_.filter([1, 2, 3], (item) => item > 1)
+_.reduce([1, 2, 3], (acc, item) => acc + item, 0)
+
+// Object operations
+_.map({ a: 1, b: 2 }, (v, k) => v * 2)
+
+// Import specific modules
+import { each, map } from 'myfx/collection'
+import { debounce, throttle } from 'myfx/function'
+```
+
+## Quick Reference
+
+### Collection Functions
+- `each(collection, iteratee)` - Iterate over collection
+- `map(collection, iteratee)` - Transform collection
+- `filter(collection, predicate)` - Filter collection
+- `reduce(collection, accumulator, initial)` - Reduce collection
+- `find(collection, predicate)` - Find first match
+- `every(collection, predicate)` - Check if all match
+- `some(collection, predicate)` - Check if any match
+
+### Type Checking
+- `is(value, type)` - Check value type
+- `isArray(value)` - Check if array
+- `isObject(value)` - Check if object
+- `isString(value)` - Check if string
+- `isNumber(value)` - Check if number
+- `isFunction(value)` - Check if function
