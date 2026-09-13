@@ -1,10 +1,15 @@
 {
   "name": "myfx",
-  "version": "1.15.11",
+  "version": "1.15.12",
   "description": "A modular utility library with more utils, higher performance and simpler declarations ...",
-  "main": "index.umd.js",
-  "module": "index.esm.mjs",
-  "types": "index.d.ts",
+  "main": "dist/index.umd.js",
+  "module": "dist/index.esm.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    ".agents",
+    "llms.txt"
+  ],
   "author": "holyhigh2",
   "license": "MIT",
   "repository": {
@@ -21,6 +26,7 @@
     "stdlib"
   ],
   "scripts": {
+    "prepack": "npm run build",
     "build": "node ./config/build.chainfx.mjs & node ./config/build.modules.mjs & rollup --config ./config/rollup.config.mjs & rollup --config ./config/rollup.config.dts.mjs",
     "jest": "rollup --config ./config/rollup.config.jest.mjs --bundleConfigAsCjs & jest --no-cache --verbose test/index.spec.ts",
     "dev": "rollup --config ./config/rollup.config.dev.js --bundleConfigAsCjs --watch",
@@ -39,7 +45,6 @@
     "rollup": "^3.29.5",
     "rollup-plugin-banner2": "1.2.2",
     "rollup-plugin-clear": "2.0.7",
-    "rollup-plugin-copy": "3.4.0",
     "rollup-plugin-dts": "^6.1.1",
     "rollup-plugin-livereload": "^2.0.0",
     "rollup-plugin-serve": "^1.1",

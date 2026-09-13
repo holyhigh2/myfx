@@ -40,7 +40,6 @@ function buildChainFx(dir) {
         let params = fn.getParameters()
         params.shift()
         let paramStr = params.map(p => p.print()).reduce((p, c) => p + ',' + c, '').replace(/^,/, '')
-        // console.log(fnName,'<',typeStr,'>(',paramStr,')',rt.isVoid())
         txt = `${fnName}${typeStr}(${paramStr}):FuncChain<any>{return get<Function>(FuncChain.prototype,'_${fnName}').call(this,...arguments)}`
         funcAry.push(txt)
       });

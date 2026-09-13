@@ -5,7 +5,6 @@ import fs from 'fs'
 import path from 'path'
 import banner2 from 'rollup-plugin-banner2'
 import clear from 'rollup-plugin-clear'
-import copy from 'rollup-plugin-copy'
 import typescript from 'rollup-plugin-typescript2'
 const text = fs.readFileSync('./package.json', 'utf8')
 const pkg = JSON.parse(text)
@@ -54,20 +53,7 @@ const targets = [
    */
   `
       ),
-      json(),
-      copy({
-        targets: [
-          {
-            src: [
-              'CHANGELOG.md',
-              'LICENSE',
-              'README.md',
-              'package.json',
-            ],
-            dest: 'dist',
-          },
-        ],
-      }),
+      json()
     ],
     output: [
       {
