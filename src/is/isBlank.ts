@@ -15,7 +15,25 @@
  * @since 0.16.0
  */
 function isBlank(v: unknown): boolean {
-  return v === null || v === undefined || (v + '').trim().replace(/\t|\n|\f|\r/mg, '').length === 0
+  if (v === null || v === undefined) return true
+  const t = typeof v
+  if (t === 'number' || t === 'boolean' || t === 'function') {
+    return false
+  }
+  if (Array.isArray(v)) {
+    const n = v.length
+    if (n === 0) return true
+    if (n === 1) return isBlank(v[0])
+    return false
+  }
+  if (typeof v === 'string') {
+    const len = v.length
+    if (len === 0) return true
+    const c0 = v.charCodeAt(0)
+    if (c0 > 32 && c0 < 127) return false
+    return v.trim().length === 0
+  }
+  return (v + '').trim().length === 0
 }
 
 export default isBlank
