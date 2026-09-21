@@ -1,5 +1,3 @@
-import { PRIMITIVE_TYPES } from "../types"
-
 /**
  * 判断值是不是一个非基本类型外的值，如果true则认为值是一个对象
  * 同样，该方法还可以用来判断一个值是不是基本类型
@@ -18,7 +16,7 @@ import { PRIMITIVE_TYPES } from "../types"
  * @returns 是否对象。如果值是null返回false，即使typeof null === 'object'
  */
 function isObject<T extends object>(v: unknown): v is T {
-  return null !== v && PRIMITIVE_TYPES.indexOf(typeof v) < 0
+  return v !== null && typeof v === 'object'
 }
 
 export default isObject

@@ -17,11 +17,23 @@ import isArrayLike from "../is/isArrayLike";
  * @returns 如果参数为空，返回空数组
  */
 function concat(...arrays: any[]): any[] {
-  if (arrays.length < 1) return []
+  const argc = arrays.length
+  if (argc < 1) return []
+  if (argc === 1) {
+    const only = arrays[0]
+    if (Array.isArray(only)) {
+      const size = only.length
+      const copy = []
+      for (let j = 0; j < size; j++) copy.push(only[j])
+      return copy
+    }
+  }
   let rs = [];
-  for (let i = 0; i < arrays.length; i++) {
+  for (let i = 0; i < argc; i++) {
     const item = arrays[i];
-    if (isArrayLike(item)) {
+    if (Array.isArray(item)) {
+      for (let j = 0, size = item.length; j < size; j++) rs.push(item[j]);
+    } else if (isArrayLike(item)) {
       each(item, (v) => rs.push(v));
     } else {
       rs.push(item);

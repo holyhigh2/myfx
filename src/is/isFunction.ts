@@ -11,7 +11,7 @@
  * @returns
  */
 function isFunction(v: unknown): v is Function {
-  return v instanceof Function || typeof v == 'function'
+  return typeof v === 'function'
 }
 
 export default isFunction

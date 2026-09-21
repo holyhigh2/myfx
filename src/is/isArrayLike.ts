@@ -1,7 +1,5 @@
 import type { ArrayLike, IList } from "../types";
 import isFunction from "./isFunction";
-import isObject from "./isObject";
-import isString from "./isString";
 /**
  * 判断参数是否为类数组对象
  *
@@ -17,8 +15,12 @@ import isString from "./isString";
  * @returns
  */
 function isArrayLike<T>(v: unknown): v is ArrayLike<T> {
-  if (isString(v) && v.length > 0) return true
-  if (!isObject(v)) return false
+  const t = typeof v
+  if (t === 'string') return (v as string).length > 0
+  if ((t !== 'object' && t !== 'function') || v === null) return false
+  if (v instanceof String) return v.length > 0
+  if (Array.isArray(v)) return true
+
   // 具有length属性
   const list = v as IList
   if ('length' in list) {

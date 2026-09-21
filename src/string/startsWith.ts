@@ -20,6 +20,7 @@ function startsWith(
   searchStr: string,
   position: number = 0
 ): boolean {
+  if (typeof str === 'string') return str.startsWith(searchStr, position)
   return toString(str).startsWith(searchStr, position)
 }
 
