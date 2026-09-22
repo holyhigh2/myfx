@@ -1,5 +1,3 @@
-import toArray from "../collection/toArray"
-
 /**
  * 对数组内的值进行去重
  * @example
@@ -11,7 +9,7 @@ import toArray from "../collection/toArray"
  */
 function uniq<T>(array: T[]): T[] {
   if (!Array.isArray(array)) return []
-  return toArray(new Set(array))
+  return Array.from(new Set(array))
 }
 
 export default uniq

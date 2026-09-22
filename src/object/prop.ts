@@ -18,7 +18,7 @@ import get from "./get";
  * @since 0.17.0
  */
 function prop<V>(
-  path: string | string[]
+  path: string | Array<string | number>
 ): (obj: Record<UnknownMapKey, any>) => V {
   return (obj) => {
     return get(obj, path) as V

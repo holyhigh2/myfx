@@ -15,7 +15,9 @@ const ALPHABET =
 function alphaId(len: number = 16): string {
   const bytes = globalThis.crypto.getRandomValues(new Uint8Array(len || 16))
   let rs = ''
-  bytes.forEach(b => rs += ALPHABET[b % ALPHABET.length])
+  for (let i = 0; i < bytes.length; i++) {
+    rs += ALPHABET[bytes[i] % ALPHABET.length]
+  }
   return rs
 }
 

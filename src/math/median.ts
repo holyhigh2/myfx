@@ -18,12 +18,21 @@ import isSet from '../is/isSet'
 function median(values: Set<string | number> | Array<string | number>): number {
   if (!isArray(values) && !isSet(values)) return NaN
   let sortNumbers: Array<number> = []
-  values.forEach(v => {
-    if (isNumeric(v)) {
-      sortNumbers.push(Number(v))
+  if (isArray(values)) {
+    for (let i = 0; i < values.length; i++) {
+      const v = values[i]
+      if (isNumeric(v)) {
+        sortNumbers.push(Number(v))
+      }
     }
-  });
-  sortNumbers.sort()
+  } else {
+    values.forEach(v => {
+      if (isNumeric(v)) {
+        sortNumbers.push(Number(v))
+      }
+    })
+  }
+  sortNumbers.sort((a, b) => a - b)
 
   let rs
   if (sortNumbers.length % 2 === 0) {

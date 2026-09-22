@@ -1,4 +1,5 @@
 import isArray from '../is/isArray';
+import isNil from '../is/isNil';
 import isNumeric from '../is/isNumeric';
 import isSet from '../is/isSet';
 /**
@@ -19,12 +20,17 @@ function mean(values: Set<string | number> | Array<string | number>): number {
   if (!isArray(values) && !isSet(values)) return NaN
   let total = 0
   let len = 0
-  values.forEach(v => {
+  const items: Array<string | number> = isArray(values) ? values : Array.from(values)
+  for (let i = 0; i < items.length; i++) {
+    const v = items[i]
+    len++
+    if (isNil(v)) continue
     if (isNumeric(v)) {
       total += Number(v)
-      len++
+    } else {
+      return NaN
     }
-  });
+  }
   return total / len
 }
 

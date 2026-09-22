@@ -18,13 +18,23 @@ const Datas: Record<string, any[]> = {
   lt: [
     [1, 2, true],
     [5, '5', false],
+    [3, 2, false],
   ],
-  lte: [[5, '5', true]],
+  lte: [
+    [5, '5', true],
+    [4, 5, true],
+    [6, 5, false],
+  ],
   gt: [
     [2, 1, true],
     [5, '5', false],
+    [3, 3, false],
   ],
-  gte: [[5, '5', true]],
+  gte: [
+    [5, '5', true],
+    [4, 5, false],
+    [5, 5, true],
+  ],
   toInteger: [
     [9.99, 9],
     ['12.34', 12],

@@ -9,6 +9,6 @@
  * @returns undefined
  * @since 0.16.0
  */
-export default function noop() {
+export default function noop(..._args: any[]): undefined {
   return undefined
 }

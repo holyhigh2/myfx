@@ -17,12 +17,14 @@ function omitBy<V, K extends UnknownMapKey>(
 ): Record<UnknownMapKey, any> {
   const rs: Record<UnknownMapKey, any> = {}
   if (obj === null || obj === undefined) return rs
-  Object.keys(obj).forEach(k => {
-    let v = obj[k]
+  const ks = Object.keys(obj)
+  for (let i = 0; i < ks.length; i++) {
+    const k = ks[i]
+    const v = obj[k]
     if (!(predicate || _identity)(v, k as K)) {
       rs[k] = v
     }
-  })
+  }
   return rs
 }
 

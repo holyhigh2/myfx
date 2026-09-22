@@ -18,11 +18,12 @@ const Datas: Record<string, any[]> = {
   trim: [
     ['  holyhigh ', 'holyhigh'],
     ['holy  high', 'holy  high'],
+    [null, ''],
   ],
-  trimStart: [['  holyhigh ', 'holyhigh ']],
-  trimEnd: [['  holyhigh ', '  holyhigh']],
-  padZ: [['1', 3, '001']],
-  padStart: [['1', 3, '0', '001']],
+  trimStart: [['  holyhigh ', 'holyhigh '], ['', ''], [null, '']],
+  trimEnd: [['  holyhigh ', '  holyhigh'], ['  ', ''], [undefined, '']],
+  padZ: [['1', 3, '001'], ['12', 5, '00012'], ['abc', 2, 'abc']],
+  padStart: [['1', 3, '0', '001'], ['12', 5, '0', '00012'], ['abc', 2, ' ', 'abc']],
   padEnd: [
     ['1', 3, '0', '100'],
     ['1', 6, '-0', '1-0-0-'],
@@ -33,10 +34,11 @@ const Datas: Record<string, any[]> = {
     [-14.6, '-15'],
     [14.00005, 4, '14.0001'],
   ],
-  repeat: [['func', 3, 'funcfuncfunc']],
+  repeat: [['func', 3, 'funcfuncfunc'], ['a', 0, ''], ['ab', 2, 'abab']],
   substring: [
     ['12345678', 2, '345678'],
     ['12345678', 2, 7, '34567'],
+    [null, 0, ''],
   ],
   startsWith: [
     ['func.js', 'func', true],
@@ -46,9 +48,10 @@ const Datas: Record<string, any[]> = {
   endsWith: [
     ['func.js', 'js', true],
     ['func.js', 'c', 4, true],
+    ['func.js', 'func', false],
   ],
-  upperCase: [['func.js', 'FUNC.JS']],
-  lowerCase: [['FUNC.JS', 'func.js']],
+  upperCase: [['func.js', 'FUNC.JS'], ['', ''], [null, '']],
+  lowerCase: [['FUNC.JS', 'func.js'], ['', ''], [undefined, '']],
   replace: [
     ['a.b.c', '.', '-', 'a-b.c'],
     ['geligeli', /ge/g, 'ke', 'kelikeli'],
@@ -65,10 +68,13 @@ const Datas: Record<string, any[]> = {
       '^[func.js] + {crud-vue} = .*?$',
       '\\^\\[func\\.js\\] \\+ \\{crud-vue\\} = \\.\\*\\?\\$',
     ],
+    ['a.b', 'a\\.b'],
+    ['x', 'x'],
   ],
   split: [
     ['func.js', '.', ['func', 'js']],
     ['func.js', '.', 1, ['func']],
+    ['abc', '', ['a', 'b', 'c']],
   ],
   kebabCase: [
     ['a B-c', 'a-b-c'],
@@ -78,26 +84,31 @@ const Datas: Record<string, any[]> = {
   snakeCase: [
     ['a-b c', 'a_b_c'],
     ['Love loves to love Love', 'love_loves_to_love_love'],
+    ['getMyURL', 'get_my_url'],
   ],
   camelCase: [
     ['getMyURL', 'getMyUrl'],
     ['a B-c', 'aBC'],
+    ['hello world', 'helloWorld'],
   ],
   pascalCase: [
     ['aBc   D__EF_GH----XY_', 'ABcDEfGhXy'],
     ['getMyURL', 'GetMyUrl'],
+    ['AB_CD_EF', 'AbCdEf'],
   ],
-  lowerFirst: [['FIRST', 'fIRST']],
-  upperFirst: [['first', 'First']],
-  indexOf: [['cyberfunc.js', 'js', 5, 10]],
-  lastIndexOf: [['cyberfunc.js', 'js', 5, -1]],
+  lowerFirst: [['FIRST', 'fIRST'], ['', ''], [null, '']],
+  upperFirst: [['first', 'First'], ['', ''], [undefined, '']],
+  indexOf: [['cyberfunc.js', 'js', 5, 10], ['abc', 'z', -1], ['abc', 'a', 0, 0]],
+  lastIndexOf: [['cyberfunc.js', 'js', 5, -1], ['abcabc', 'b', 5, 4], ['abc', 'z', 5, -1]],
   test: [
     ['func.js', 'Func', 'i', true],
     ['func.js', /FUNC/, false],
+    ['func.js', /^func/, true],
   ],
   truncate: [
     ['func.js', 4, 'func...'],
     ['func.js', 3, { omission: '!!!' }, 'fun!!!'],
+    ['ab', 10, 'ab'],
   ],
 }
 

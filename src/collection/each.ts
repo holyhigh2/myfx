@@ -53,6 +53,7 @@ function each<V, K extends string | number | symbol | object>(
   // 快速路径：数组
   if (Array.isArray(collection)) {
     const size = collection.length
+    if (size === 0 || startIndex >= size) return
     for (let i = startIndex; i < size; i++) {
       if (callback(collection[i] as V, i as K, collection, i) === false) return
     }
@@ -61,17 +62,19 @@ function each<V, K extends string | number | symbol | object>(
 
   // 快速路径：字符串
   if (typeof collection === 'string') {
-    const size = (collection as unknown as string).length
+    const size = collection.length
+    if (size === 0 || startIndex >= size) return
     for (let i = startIndex; i < size; i++) {
-      if (callback((collection as unknown as string)[i] as V, i as K, collection, i) === false) return
+      if (callback(collection[i] as V, i as K, collection, i) === false) return
     }
     return
   }
 
   // Set
   if (collection instanceof Set) {
-    const size = (collection as Set<V>).size
-    const values = (collection as Set<V>).values()
+    const size = collection.size
+    if (size === 0 || startIndex >= size) return
+    const values = collection.values()
     for (let i = startIndex; i < size; i++) {
       if (callback(values.next().value as V, i as K, collection, i) === false) return
     }
@@ -80,9 +83,10 @@ function each<V, K extends string | number | symbol | object>(
 
   // Map
   if (collection instanceof Map) {
-    const size = (collection as Map<any, V>).size
-    const keys = (collection as Map<any, V>).keys()
-    const values = (collection as Map<any, V>).values()
+    const size = collection.size
+    if (size === 0 || startIndex >= size) return
+    const keys = collection.keys()
+    const values = collection.values()
     for (let i = startIndex; i < size; i++) {
       if (callback(
         values.next().value as V,
@@ -96,9 +100,10 @@ function each<V, K extends string | number | symbol | object>(
   // ArrayLike / Object
   const keys = Object.keys(collection as object)
   const size = keys.length
+  if (size === 0 || startIndex >= size) return
   for (let i = startIndex; i < size; i++) {
     const k = keys[i]
-    if (callback((collection as any)[k] as V, k as K, collection, i) === false) return
+    if (callback((collection as Record<string, V>)[k] as V, k as K, collection, i) === false) return
   }
 }
 

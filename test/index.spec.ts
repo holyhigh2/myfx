@@ -11,6 +11,9 @@ import CasesMath from './cases.math'
 import CasesNumber from './cases.number'
 import CasesObject from './cases.object'
 import CasesFunction from './cases.function'
+import CasesUtils from './cases.utils'
+import CasesTree from './cases.tree'
+import CasesTemplate from './cases.template'
 
 
 const Cases = merge(
@@ -22,7 +25,10 @@ const Cases = merge(
   CasesMath,
   CasesNumber,
   CasesObject,
-  CasesFunction
+  CasesFunction,
+  CasesUtils,
+  CasesTree,
+  CasesTemplate
 )
 
 for (let fnName in Cases) {

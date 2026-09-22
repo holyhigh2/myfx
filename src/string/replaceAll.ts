@@ -22,6 +22,16 @@ import toString from "./toString"
  * @returns 替换后的新字符串
  * @since 1.0.0
  */
+const regCache = new Map<string, RegExp>()
+function getGlobalRegExp(source: string): RegExp {
+  let re = regCache.get(source)
+  if (!re) {
+    re = new RegExp(source, 'g')
+    regCache.set(source, re)
+  }
+  return re
+}
+
 function replaceAll(
   str: any,
   searchValue: RegExp | string,
@@ -38,18 +48,23 @@ function replaceAll(
   if (isRegExp(searchValue)) {
     searchExp = searchValue
     if (!searchValue.global) {
-      searchExp = new RegExp(searchValue, searchValue.flags + 'g')
+      const key = searchValue.source + '\0' + searchValue.flags + 'g'
+      searchExp = regCache.get(key) as RegExp
+      if (!searchExp) {
+        searchExp = new RegExp(searchValue, searchValue.flags + 'g')
+        regCache.set(key, searchExp)
+      }
     }
     return strRs.replace(searchExp, replaceValue as any)
   } else if (isString(searchValue)) {
-    searchExp = new RegExp(escapeRegExp(searchValue), 'g')
+    searchExp = getGlobalRegExp(escapeRegExp(searchValue))
     return strRs.replace(searchExp, replaceValue as any)
   } else if (isObject(searchValue)) {
     const ks = Object.keys(searchValue)
     for (let i = ks.length; i--;) {
       const k = ks[i]
       const v = searchValue[k]
-      searchExp = new RegExp(escapeRegExp(k), 'g')
+      searchExp = getGlobalRegExp(escapeRegExp(k))
       strRs = strRs.replace(searchExp, v)
     }
     return strRs

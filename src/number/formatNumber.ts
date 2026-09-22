@@ -49,19 +49,25 @@ function formatNumber(v: string | number, pattern = '#,##0.00'): string {
 
   let posPattern = pattern
   let negPattern = ''
-  let subPatterns = pattern.match(SUB_PATTERN_EXP)
-  if (subPatterns && subPatterns.groups) {
-    posPattern = subPatterns.groups.pos
-    negPattern = subPatterns.groups.neg
+  const split = splitCache[pattern]
+  if (split) {
+    posPattern = split.pos
+    negPattern = split.neg
+  } else {
+    let subPatterns = pattern.match(SUB_PATTERN_EXP)
+    if (subPatterns && subPatterns.groups) {
+      posPattern = subPatterns.groups.pos
+      negPattern = subPatterns.groups.neg
+    }
+    splitCache[pattern] = { pos: posPattern, neg: negPattern }
   }
 
-  let formatter: Function = num < 0 && negPattern ? cache[negPattern] : cache[posPattern]
+  const useNeg = num < 0 && !!negPattern
+  const key = useNeg ? negPattern : posPattern
+  let formatter: Function = cache[key]
   if (!formatter) {
-    if (num < 0 && negPattern) {
-      formatter = makeFormatter(negPattern, v, true) as Function
-    } else {
-      formatter = makeFormatter(posPattern, v) as Function
-    }
+    formatter = makeFormatter(key, v, useNeg) as Function
+    cache[key] = formatter
   }
   return formatter(v)
 }
@@ -91,9 +97,11 @@ function makeFormatter(pattern: string, v: string | number, isNeg = false) {
 
   const groupMatch = integerPtn.match(/,[#0]+$/)
   let groupLen = -1
+  let groupReg: RegExp | null = null
   if (groupMatch) {
     groupLen = groupMatch[0].substring(1).length
     integerPtn = integerPtn.replace(/^.*,(?=[^,])/, '')
+    groupReg = new RegExp('\\B(?=(\\d{' + groupLen + '})+$)', 'g')
   }
 
   let zeroizeLen = integerPtn.indexOf('0')
@@ -169,9 +177,9 @@ function makeFormatter(pattern: string, v: string | number, isNeg = false) {
       sym = iStr[0]
       iStr = iStr.substring(1)
     }
-    if (groupLen > -1 && iStr.length > groupLen) {
-      const reg = new RegExp('\\B(?=(\\d{' + groupLen + '})+$)', 'g')
-      iStr = iStr.replace(reg, ',')
+    if (groupReg && iStr.length > groupLen) {
+      groupReg.lastIndex = 0
+      iStr = iStr.replace(groupReg, ',')
     } else if (iStr.length < integerPtn.length) {
       const integerPtnLen = integerPtn.length
       const iStrLen = iStr.length
@@ -191,5 +199,6 @@ function makeFormatter(pattern: string, v: string | number, isNeg = false) {
   }
 }
 const cache: Record<string, Function> = {}
+const splitCache: Record<string, { pos: string; neg: string }> = {}
 
 export default formatNumber

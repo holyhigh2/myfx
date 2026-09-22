@@ -37,9 +37,8 @@ _.reduce([1, 2, 3], (acc, item) => acc + item, 0)
 // Object operations
 _.map({ a: 1, b: 2 }, (v, k) => v * 2)
 
-// Import specific modules
-import { each, map } from 'myfx/collection'
-import { debounce, throttle } from 'myfx/function'
+// Named module imports (subpath exports removed in v2.0.0)
+import { each, map, debounce, throttle } from 'myfx'
 ```
 
 ## Quick Reference

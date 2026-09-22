@@ -9,6 +9,9 @@ import type { NonFuncItee } from "./types"
 import matcher from "./utils/matcher"
 import toPath from "./utils/toPath"
 
+const iterateeCache = new WeakMap<object, Function>()
+const primitiveCache = new Map<string, Function>()
+
 /**
  * 创建一个函数，函数类型根据参数值类型而定。创建的函数常用于迭代回调，在Func.js内部被大量使用
  *
@@ -41,18 +44,40 @@ import toPath from "./utils/toPath"
  * @returns 不同类型的返回函数
  * @since 0.17.0
  */
-function iteratee(value: Function | NonFuncItee): Function {
+function iteratee(value?: Function | NonFuncItee): Function {
   if (isUndefined(value)) {
     return _identity
-  } else if (isFunction(value)) {
-    return value
-  } else if (isString(value)) {
-    return prop(value)
-  } else if (isArray<string | number>(value)) {
-    return prop(toPath(value))
-  } else if (isObject(value)) {
-    return matcher(value)
   }
+  
+  if (isFunction(value)) {
+    return value
+  }
+  
+  if (isString(value)) {
+    const cached = primitiveCache.get(value)
+    if (cached) return cached
+    const fn = prop(value)
+    primitiveCache.set(value, fn)
+    return fn
+  }
+  
+  if (isArray<string | number>(value)) {
+    const key = value.join('\0')
+    const cached = primitiveCache.get(key)
+    if (cached) return cached
+    const fn = prop(toPath(value))
+    primitiveCache.set(key, fn)
+    return fn
+  }
+  
+  if (isObject(value)) {
+    const cached = iterateeCache.get(value)
+    if (cached) return cached
+    const fn = matcher(value)
+    iterateeCache.set(value, fn)
+    return fn
+  }
+  
   return () => false
 }
 export default iteratee

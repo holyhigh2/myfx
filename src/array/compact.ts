@@ -10,6 +10,7 @@ import toArray from "../collection/toArray";
  * @returns 转换后的新数组对象
  */
 function compact<T>(array: T[] | Set<T>): T[] {
+  if (Array.isArray(array)) return array.filter<T>(_identity as any)
   return toArray(array).filter<T>(_identity as any)
 }
 

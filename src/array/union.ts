@@ -1,5 +1,4 @@
 import map from "../collection/map"
-import toArray from "../collection/toArray"
 import isArray from "../is/isArray"
 import isArrayLike from "../is/isArrayLike"
 import isFunction from "../is/isFunction"
@@ -47,7 +46,7 @@ function union<T>(...params: any): T[] {
     })
     rs = map(kvMap, (v: any) => v)
   } else {
-    rs = toArray(new Set(flat(list)))
+    rs = Array.from(new Set(flat(list)))
   }
   return rs
 }

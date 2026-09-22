@@ -52,16 +52,20 @@ export default functionName;
 - 优先复用已有函数（如 `toArray`、`isEqual`、`isNil`），不重复实现
 - 保持零外部依赖
 
-### 2. 注册模块导出
+### 2. 注册导出
 
-编辑 `src/_modules/{module}.ts`，在顶部添加 import，在底部 export 中添加导出：
+编辑 `src/index.ts`，共三处添加 `functionName`：
+
+1. 顶部 import 区按模块顺序添加：
 
 ```typescript
-import functionName from '../{module}/functionName'
-// ...其他已有 import
-
-export {..., functionName}
+import functionName from "./{module}/functionName";
 ```
+
+2. `export { ... }` 列表中对应模块行添加 `functionName`
+3. `const api = { ... }` 中对应模块行添加 `functionName`
+
+函数链方法无需手动维护 —— `npm run build` 时 `config/build.chainfx.mjs` 会扫描模块目录自动生成 `src/chain.ts` 中的 ChainFx 方法。
 
 ### 3. 添加测试用例
 
@@ -93,7 +97,7 @@ npm run build
 
 - [ ] 源文件 JSDoc 包含中文描述、`@example`、`@param`、`@returns`
 - [ ] 依赖路径使用相对路径（如 `../is/isArray`）
-- [ ] `_modules/{module}.ts` 已添加 import 和 export
+- [ ] `src/index.ts` 已添加 import、export 列表和 api 条目
 - [ ] `test/cases.{module}.ts` 包含至少 1 组测试用例
 - [ ] `npm run jest` 全部通过
 - [ ] `npm run build` 无报错

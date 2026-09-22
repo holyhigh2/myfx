@@ -16,7 +16,7 @@ import toNumber from "../number/toNumber";
  * @returns 被删除的值或null
  */
 function pop<T>(array: unknown[], index: number = -1): T | null {
-  index = index || -1
+  index = index ?? -1
   let rs = null
   if (Array.isArray(array)) {
     const i = toNumber(index)
@@ -27,7 +27,7 @@ function pop<T>(array: unknown[], index: number = -1): T | null {
         rs = rs[0]
       }
     } else {
-      rs = array.pop()
+      rs = array.pop() ?? null
     }
   }
   return rs as T | null

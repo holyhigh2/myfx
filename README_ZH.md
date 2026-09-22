@@ -42,12 +42,12 @@ import _ from 'myfx'
 //or
 import {each} from 'myfx'
 //or
-import {each,map} from 'myfx/collection'
-//or
 import _ from 'https://cdn.skypack.dev/myfx'
 ```
 
+> 自 v2.0.0 起，子路径导出（`myfx/collection` 等）已移除，请改用 `myfx` 的命名导入。
+
 ## 开发
-1. 使用 `test` 执行jest测试 
-2. 使用 `build` 进行打包
+1. 使用 `jest` 执行测试
+2. 使用 `build` 进行打包（Vite：ESM + UMD + d.ts）
 3. 使用 `doc` 生成tsdoc

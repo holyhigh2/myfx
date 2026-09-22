@@ -26,7 +26,7 @@ function sampleSize<T>(collection: Collection<T>, count: number = 1): T[] {
   while (seeds.length > 0) {
     if (count-- < 1) break
     const i = pop<number>(seeds, randi(seeds.length))
-    if (i) ks.push(i)
+    if (i !== null) ks.push(i)
   }
   const rs = map<number, UnknownMapKey, T>(ks, (v) => ary[v])
   return rs

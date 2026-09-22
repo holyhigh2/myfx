@@ -38,9 +38,11 @@ function includes(collection: Collection<any>, value: any, fromIndex: number = 0
   if (isString(collection)) {
     return collection.includes(value, fromIndex)
   }
-  collection = isArrayLike(collection)
-    ? slice(toArray(collection), fromIndex)
-    : collection
+  if (isArrayLike(collection) && fromIndex > 0) {
+    collection = Array.isArray(collection)
+      ? (collection as any[]).slice(fromIndex)
+      : slice(toArray(collection), fromIndex)
+  }
   each(collection, (v) => {
     if (_eq(v, value)) {
       rs = true

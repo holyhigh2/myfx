@@ -13,7 +13,7 @@ import isSet from '../is/isSet'
  * console.log(_.sum([1,'2',3,4]))
  * //10
  * console.log(_.sum([1,'2',3,4,null,undefined]))
- * //9
+ * //NaN
  * console.log(_.sum([NaN,'2',3,4]))
  * //Infinity
  * console.log(_.sum([Infinity,'2',3,4]))
@@ -29,11 +29,14 @@ function sum(
 ): number {
   if (!isArray(values) && !isSet(values)) return NaN
   let total = 0
-  values.forEach(v => {
+  const items: Array<string | number> = isArray(values) ? values : Array.from(values)
+  for (let i = 0; i < items.length; i++) {
+    const v = items[i]
+    if (Number.isNaN(v)) return NaN
     if (isNumeric(v)) {
       total += Number(v)
     }
-  });
+  }
   return total
 }
 

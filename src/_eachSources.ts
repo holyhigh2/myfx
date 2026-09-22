@@ -14,16 +14,19 @@ function eachSources(
     t: Record<UnknownMapKey, any>
   ) => void
 ) {
-  sources.forEach((src) => {
-    if (!isObject(src)) return
-    Object.keys(src).forEach((k) => {
+  for (let s = 0; s < sources.length; s++) {
+    const src = sources[s]
+    if (!isObject(src)) continue
+    const ks = Object.keys(src)
+    for (let i = 0; i < ks.length; i++) {
+      const k = ks[i]
       let v = src[k]
       if (handler) {
         v = handler(src[k], target[k], k, src, target)
       }
       afterHandler(v, src[k], target[k], k, src, target)
-    })
-  })
+    }
+  }
 }
 
 export default eachSources

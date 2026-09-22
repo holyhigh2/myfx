@@ -15,8 +15,8 @@
  * @returns 第一个参数
  * @since 0.17.0
  */
-function identity(v: any): any {
-  return v
+function identity(...args: any[]): any {
+  return args[0]
 }
 
 export default identity

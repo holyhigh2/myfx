@@ -1,4 +1,5 @@
 import isNil from "../is/isNil"
+
 /**
  * 转换任何对象为字符串。如果对象本身为string类型的值/对象，则返回该对象的字符串形式。否则返回对象的toString()方法的返回值
  *
@@ -20,8 +21,14 @@ import isNil from "../is/isNil"
  * @returns 对于null/undefined会返回空字符串
  */
 function toString(v: any): string {
-  if (isNil(v)) return ''
+  if (v == null) return ''
   if (v === 0 && 1 / v < 0) return '-0'
+  
+  const type = typeof v
+  if (type === 'string') return v
+  if (type === 'number' || type === 'boolean') return String(v)
+  if (type === 'symbol') return v.toString()
+  
   return v.toString ? v.toString() : Object.prototype.toString.call(v)
 }
 

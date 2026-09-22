@@ -6,7 +6,7 @@ import isDate from "../is/isDate";
 import isNil from "../is/isNil";
 import isNumber from "../is/isNumber";
 import toString from "../string/toString";
-import type { Collection, NonFuncItee, UnknownMapKey } from "../types";
+import type { Collection, NonFuncItee } from "../types";
 import map from "./map";
 import size from "./size";
 
@@ -53,7 +53,7 @@ function sortBy<V, K extends string | number | symbol>(
   if (size(collection) < 1) return []
   const cb = _iteratee(iteratee || _identity)
   let i = 0
-  const list = map<V, UnknownMapKey, { src: any; index: number; value: any }>(
+  const list = map<V, any, { src: any; index: number; value: any }>(
     collection,
     (v, k) => {
       return {
@@ -64,12 +64,14 @@ function sortBy<V, K extends string | number | symbol>(
     }
   )
   const comparator = getComparator(list[0].value)
-  return map<{ src: any; index: number; value: any }, UnknownMapKey, V>(
-    list.sort((a, b) =>
-      !_eq(a.value, b.value) ? comparator(a.value, b.value) : a.index - b.index
-    ),
-    (item) => item.src
+  list.sort((a, b) =>
+    !_eq(a.value, b.value) ? comparator(a.value, b.value) : a.index - b.index
   )
+  const rs: V[] = new Array(list.length)
+  for (let j = 0; j < list.length; j++) {
+    rs[j] = list[j].src
+  }
+  return rs
 }
 
 // comparators

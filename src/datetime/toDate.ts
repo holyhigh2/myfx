@@ -8,8 +8,8 @@ import padEnd from "../string/padEnd";
  * ```js
  * _.toDate(1320940800); //timestamp unix style
  * _.toDate(1320940800123); //timestamp javascript style
- * _.toDate([year,month,day]); //注意，month的索引从1开始
- * _.toDate([year,month,day,hour,min,sec]); //注意，month的索引从1开始
+ * _.toDate([year,monthIndex,day]); //注意，monthIndex为0-based（0代表一月）
+ * _.toDate([year,monthIndex,day,hour,min,sec]); //注意，monthIndex为0-based（0代表一月）
  * _.toDate(datetimeStr);
  * ```
  *
@@ -41,7 +41,7 @@ function toDate(value: number | [year: number, monthIndex: number, date?: number
     }
     rs = new Date(value)
   } else if (isArray(value)) {
-    rs = new Date(value[0], value[1] - 1, value[2] || 1, value[3] || 0, value[4] || 0, value[5] || 0, value[6] || 0)
+    rs = new Date(value[0], value[1], value[2] || 1, value[3] || 0, value[4] || 0, value[5] || 0, value[6] || 0)
   } else {
     rs = new Date(value)
   }

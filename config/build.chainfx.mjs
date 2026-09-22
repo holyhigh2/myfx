@@ -13,14 +13,21 @@ function buildChainFx(dir) {
     var fullpath = path.join(dir, item)
     const stat = fs.statSync(fullpath)
     if (stat.isDirectory()) {
-      if (item === '_modules') return
       if (item === 'template') return
 
       const sourceFiles = project.getSourceFiles(`src/${item}/*.ts`);
 
       let txt = ''
       sourceFiles.forEach(file => {
-        const fn = file.getFunctions()[0]
+        const base = path.basename(file.getFilePath()).replace(/\.ts$/, '')
+        const candidates = file.getFunctions().filter(f => f.getName() === base)
+        const fn =
+          candidates.find(f => !f.isOverload()) ||
+          candidates[0] ||
+          file.getFunctions().find(f => {
+            const name = f.getName() || ''
+            return !name.endsWith('Internal') && !name.startsWith('_')
+          })
         if (!fn) {
           return
         }
@@ -46,7 +53,7 @@ function buildChainFx(dir) {
     }
   })
 
-  let chainfx = fs.readFileSync('./src/_modules/func.ts').toString()
-  fs.writeFileSync('./src/_modules/func.ts', chainfx.replace(/export class ChainFx \{.*\}\/\/#cfx/s, 'export class ChainFx {\n' + funcAry.join('\n') + '\n}//#cfx'))
+  let chainfx = fs.readFileSync('./src/chain.ts').toString()
+  fs.writeFileSync('./src/chain.ts', chainfx.replace(/export class ChainFx \{.*\}\/\/#cfx/s, 'export class ChainFx {\n' + funcAry.join('\n') + '\n}//#cfx'))
 }
 buildChainFx('./src')

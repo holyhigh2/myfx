@@ -16,11 +16,9 @@ function chunk<T>(array: T[] | Set<T>, size: number = 1): T[][] {
   if (!Array.isArray(array)) return rs
 
   const sizeNum = (size || 1) >> 0
-  array.forEach((v, i) => {
-    if (i % sizeNum == 0) {
-      rs.push(array.slice(i, i + sizeNum))
-    }
-  })
+  for (let i = 0; i < array.length; i += sizeNum) {
+    rs.push(array.slice(i, i + sizeNum))
+  }
   return rs
 }
 

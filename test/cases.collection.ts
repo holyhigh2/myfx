@@ -37,6 +37,7 @@ const Datas: Record<string, any[]> = {
       ],
     ],
     [{ a: 1, b: '2', c: 3 }, Number.isInteger, [[1, 3], ['2']]],
+    [[], (v: any) => true, [[], []]],
   ],
   find: [
     [['a', 'b', 'c', 1, 3, 6], Number.isInteger, 1],
@@ -45,6 +46,7 @@ const Datas: Record<string, any[]> = {
       (v: any) => typeof v == 'string',
       'holyhigh',
     ],
+    [[1, 2], (v: any) => v === 99, undefined],
   ],
   findLast: [
     [['a', 'b', 'c', 1, 3, 6], Number.isInteger, 6],
@@ -53,6 +55,7 @@ const Datas: Record<string, any[]> = {
       (v: any) => typeof v == 'string',
       'func.js',
     ],
+    [[1, 2], (v: any) => v === 99, undefined],
   ],
   map: [
     [new Set([1, 2, 3]), (v: any) => v * 2, [2, 4, 6]],
@@ -75,6 +78,8 @@ const Datas: Record<string, any[]> = {
       [[1, 2], [[3]]],
       [1, 2, 3],
     ],
+    [[[1]], (v: any) => v, [1]],
+    [[], []],
   ],
   includes: [
     [{ a: 1, b: 2 }, 2, true],
@@ -103,6 +108,8 @@ const Datas: Record<string, any[]> = {
   ],
   sortBy: [
     [[{ a: 2 }, { a: 1 }, { a: 3 }], 'a', [{ a: 1 }, { a: 2 }, { a: 3 }]],
+    [[3, 1, 2], undefined, [1, 2, 3]],
+    [['b', 'a'], undefined, ['a', 'b']],
   ],
   countBy: [
     [
@@ -110,6 +117,8 @@ const Datas: Record<string, any[]> = {
       Number.isInteger,
       { true: 5, false: 4 },
     ],
+    [[1, 2, 3], (v: number) => (v > 2 ? 'hi' : 'lo'), { lo: 2, hi: 1 }],
+    [[], Number.isInteger, {}],
   ],
   groupBy: [
     [
@@ -117,6 +126,8 @@ const Datas: Record<string, any[]> = {
       Number.isInteger,
       { true: [1, 3, 5, 7, 9], false: ['a', 'b', 'c', 'd'] },
     ],
+    [[1, 2], (v: number) => (v % 2 === 0 ? 'e' : 'o'), { o: [1], e: [2] }],
+    [[], Number.isInteger, {}],
   ],
   keyBy: [
     [
@@ -124,6 +135,8 @@ const Datas: Record<string, any[]> = {
       Number.isInteger,
       { true: 9, false: 'd' },
     ],
+    [[{ id: 'x' }, { id: 'y' }], (v: any) => v.id, { x: { id: 'x' }, y: { id: 'y' } }],
+    [[], Number.isInteger, {}],
   ],
 }
 

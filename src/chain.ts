@@ -6,14 +6,29 @@
  * @author holyhigh
  */
 
-import type { Collection, NonFuncItee, UnknownMapKey } from '../types'
-import { range, reverse, slice } from './array'
-import { each, eachRight, filter, first, last, map, size, tail, take, toArray } from './collection'
-import { tap } from './function'
-import { isArrayLike, isDefined, isFunction, isUndefined } from './is'
-import { get } from './object'
-import { split } from './string'
-import { identity, iteratee } from './utils'
+import type { Collection, NonFuncItee, UnknownMapKey } from './types'
+import range from './array/range'
+import reverse from './array/reverse'
+import slice from './array/slice'
+import each from './collection/each'
+import eachRight from './collection/eachRight'
+import filter from './collection/filter'
+import first from './collection/first'
+import last from './collection/last'
+import map from './collection/map'
+import size from './collection/size'
+import tail from './collection/tail'
+import take from './collection/take'
+import toArray from './collection/toArray'
+import tap from './function/tap'
+import isArrayLike from './is/isArrayLike'
+import isDefined from './is/isDefined'
+import isFunction from './is/isFunction'
+import isUndefined from './is/isUndefined'
+import get from './object/get'
+import split from './string/split'
+import identity from './utils/identity'
+import iteratee from './utils/iteratee'
 
 /**
  * chain 函数集
@@ -244,7 +259,6 @@ findTreeNodes<V extends Record<string | number | symbol, any>,U extends Record<s
 alphaId():FuncChain<any>{return get<Function>(FuncChain.prototype,'_alphaId').call(this,...arguments)}
 defaultTo<T,V>(defaultValue: V):FuncChain<any>{return get<Function>(FuncChain.prototype,'_defaultTo').call(this,...arguments)}
 matcher<T extends Object>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_matcher').call(this,...arguments)}
-noConflict():FuncChain<any>{return get<Function>(FuncChain.prototype,'_noConflict').call(this,...arguments)}
 snowflakeId(epoch: number = 1580486400000):FuncChain<any>{return get<Function>(FuncChain.prototype,'_snowflakeId').call(this,...arguments)}
 times<V>(iteratee: (n: number) => V):FuncChain<any>{return get<Function>(FuncChain.prototype,'_times').call(this,...arguments)}
 uniqueId():FuncChain<any>{return get<Function>(FuncChain.prototype,'_uniqueId').call(this,...arguments)}

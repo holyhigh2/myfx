@@ -5,7 +5,7 @@
 export type DebouncedFunction<T extends (...args: any[]) => any> = T & {
   /**
    * 丢弃尚未执行的排队调用。队列为空时为安全空操作。
-   * 不会重置 `immediate` 的「首次立即执行」状态。
+   * immediate 模式下会重置冷却状态，使下次调用可再次立即执行。
    */
   cancel: () => void
 }
@@ -36,7 +36,6 @@ export type DebouncedFunction<T extends (...args: any[]) => any> = T & {
  */
 function debounce<T extends (...args: any[]) => any>(fn: T, wait: number, immediate: boolean = false): DebouncedFunction<T> {
   let timer: any = null
-  let firstCalled = false
   //最后一次调用的 this/args。原实现靠每次调用的闭包捕获，但 clearTimeout 只会留下
   //最后一次的闭包；改为显式暂存后语义等价，且 cancel 时能一并释放。
   let lastThis: any = null
@@ -55,14 +54,23 @@ function debounce<T extends (...args: any[]) => any>(fn: T, wait: number, immedi
   const debounced = function (this: any, ...args: any[]) {
     lastThis = this
     lastArgs = args
-    //immediate 仅在首次调用时立即执行一次，后续调用一律走防抖
-    if (immediate && !firstCalled) {
-      invoke()
-      firstCalled = true
-      return
-    }
+    //immediate：首次（或冷却结束后）调用同步执行；冷却期内的调用只重置计时，不触发 trailing
+    const callNow = immediate && timer === null
     clearTimeout(timer)
-    timer = setTimeout(invoke, wait)
+    timer = setTimeout(function () {
+      timer = null
+      if (immediate) {
+        lastThis = lastArgs = null
+      } else {
+        invoke()
+      }
+    }, wait)
+    if (callNow) {
+      const a = lastArgs
+      const s = lastThis
+      lastThis = lastArgs = null
+      fn.apply(s, a)
+    }
   } as unknown as DebouncedFunction<T>
 
   debounced.cancel = function () {

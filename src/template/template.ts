@@ -24,6 +24,7 @@ import replace from "../string/replace";
 import substring from "../string/substring";
 import trim from "../string/trim";
 import type { INode, IOptions, UnknownMapKey } from "../types";
+import myfx from "../index";
 
 /**
  * 使用MTL(Myfx Template Language)编译字符串模板，并返回编译后的render函数
@@ -83,25 +84,46 @@ function template(string: string, options?: IOptions) {
   const mixins = options.mixins;
   const stripWhite = options.stripWhite || false;
 
-  const comment = delimiters[0] + template.settings.comment + delimiters[1];
-  const interpolate =
-    delimiters[0] + template.settings.interpolate + delimiters[1];
-  const evaluate = delimiters[0] + template.settings.evaluate + delimiters[1];
-  const mixin = delimiters[0] + template.settings.mixin + delimiters[1];
-
-  const splitExp = new RegExp(
-    `(?:${comment})|(?:${mixin})|(?:${interpolate})|(?:${evaluate})`,
-    "mg"
-  );
+  const splitExp = getSplitExp(delimiters)
 
   // ///////////////////////////////----拆分表达式与文本
   // 1. 对指令及插值进行分段
+  splitExp.lastIndex = 0
   const tokens = parse(string, splitExp, mixins, stripWhite, delimiters);
   // 2. 编译render函数
   const render = compile(tokens, options);
   return render;
 }
 const ESCAPES = ["[", "]", "{", "}", "$"];
+const splitCache = new Map<string, RegExp>();
+const modRegCache = new Map<string, RegExp>();
+
+function getSplitExp(delimiters: Array<string>): RegExp {
+  const key = delimiters.join("\0");
+  let re = splitCache.get(key);
+  if (!re) {
+    const comment = delimiters[0] + template.settings.comment + delimiters[1];
+    const interpolate =
+      delimiters[0] + template.settings.interpolate + delimiters[1];
+    const evaluate = delimiters[0] + template.settings.evaluate + delimiters[1];
+    const mixin = delimiters[0] + template.settings.mixin + delimiters[1];
+    re = new RegExp(
+      `(?:${comment})|(?:${mixin})|(?:${interpolate})|(?:${evaluate})`,
+      "mg"
+    );
+    splitCache.set(key, re);
+  }
+  return re;
+}
+
+function getModReg(delimiter: string): RegExp {
+  let re = modRegCache.get(delimiter);
+  if (!re) {
+    re = new RegExp(delimiter);
+    modRegCache.set(delimiter, re);
+  }
+  return re;
+}
 
 /**
  * 模板设置对象
@@ -171,15 +193,22 @@ function parse(
           " "
         );
 
-        console.error("...", tipInfo + "\n" + tipIndicator + "\n", error);
-        return fullStack;
+        const reason = error instanceof Error ? error.message : String(error);
+        throw new SyntaxError(
+          "Invalid template syntax near: " +
+            tipInfo +
+            "\n" +
+            tipIndicator +
+            "\n" +
+            reason
+        );
       }
 
       lastSegLength = rs[0].length;
     }
   }
 
-  let lastText = trim(str.substring(indicator + lastSegLength));
+  const lastText = str.substring(indicator + lastSegLength);
   if (lastText) {
     const node = getText(lastText);
     fullStack.push(node);
@@ -201,7 +230,7 @@ function parseNode(
 ): INode {
   const parts = compact(rs);
   const src = parts[0];
-  const modifier = src.replace(new RegExp(delimiters[0]), "")[0];
+  const modifier = src.replace(getModReg(delimiters[0]), "")[0];
   switch (modifier) {
     case "-":
       return {
@@ -280,9 +309,9 @@ function compile(tokens: INode[], options: IOptions): Function {
       globalKeys = paramAry[0];
       globalValues = paramAry[1];
     }
-    if (!globalKeys.includes("_") && (globalThis as any).myfx) {
+    if (!globalKeys.includes("_")) {
       globalKeys.push("_");
-      globalValues.push((globalThis as any).myfx);
+      globalValues.push(myfx);
     }
 
     const getRender = new Function(

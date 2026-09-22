@@ -1,4 +1,3 @@
-import toArray from "../collection/toArray";
 import isSet from "../is/isSet";
 
 const MAX_DEPTH = 100;
@@ -21,36 +20,45 @@ const MAX_DEPTH = 100;
  * @returns 扁平化后的新数组
  */
 function flat<T>(array: any[] | Set<any>, depth: number = 1): T[] {
-  if (depth < 1) return toArray<T>(array)
+  if (array == null) return []
+  if (depth < 1) return Array.from(array)
   const safeDepth = Math.min(depth, MAX_DEPTH)
-  const inputArr = toArray<T>(array)
   const result: T[] = []
-  
-  // 反向压栈以保持原始顺序（LIFO）
-  const stack: { arr: any[]; depth: number }[] = []
+
+  const stack: { val: any; depth: number }[] = []
+
+  // Convert to array to preserve insertion order and allow reverse iteration
+  const inputArr = Array.from(array)
+
+  // Reverse iteration to maintain original order (LIFO stack)
   for (let i = inputArr.length - 1; i >= 0; i--) {
-    stack.push({ arr: [inputArr[i]], depth: safeDepth })
+    stack.push({ val: inputArr[i], depth: safeDepth })
   }
-  
+
   while (stack.length > 0) {
-    const { arr, depth: currentDepth } = stack.pop()!
-    for (let i = 0; i < arr.length; i++) {
-      const val = arr[i]
-      if (Array.isArray(val) || isSet(val)) {
-        if (currentDepth > 0) {
-          const childArr = toArray(val)
-          for (let j = childArr.length - 1; j >= 0; j--) {
-            stack.push({ arr: [childArr[j]], depth: currentDepth - 1 })
-          }
-        } else {
-          result.push(val as T)
+    const { val, depth: currentDepth } = stack.pop()!
+    if (Array.isArray(val)) {
+      if (currentDepth > 0) {
+        for (let i = val.length - 1; i >= 0; i--) {
+          stack.push({ val: val[i], depth: currentDepth - 1 })
         }
       } else {
-        result.push(val)
+        result.push(val as T)
       }
+    } else if (isSet(val)) {
+      if (currentDepth > 0) {
+        const childArr = Array.from(val)
+        for (let i = childArr.length - 1; i >= 0; i--) {
+          stack.push({ val: childArr[i], depth: currentDepth - 1 })
+        }
+      } else {
+        result.push(val as T)
+      }
+    } else {
+      result.push(val)
     }
   }
-  
+
   return result
 }
 

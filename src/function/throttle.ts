@@ -72,9 +72,12 @@ function throttle<T extends (...args: any[]) => any>(fn: T, wait: number, option
       }
       if (options?.leading) {
         proxy.apply(this, args);
+        lastExec = now;
+      } else if (options?.trailing) {
+        timer = setTimeout(timeout, wait);
+      } else {
+        lastExec = now;
       }
-
-      lastExec = now;
     } else if (!timer) {
       timer = setTimeout(timeout, remaining);
     }

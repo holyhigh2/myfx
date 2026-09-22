@@ -4,14 +4,14 @@
 const Datas: Record<string, any[]> = {
   sum: [
     [[1, 2, '3', 4], 10],
-    [[1, '2', 3, null,undefined], 6],
-    [[NaN, '2', 3, 4],NaN],
-    [[Infinity, '2', 3, 4],Infinity]
+    [[1, '2', 3, null, undefined], 6],
+    [[NaN, '2', 3, 4], NaN],
+    [[Infinity, '2', 3, 4], Infinity]
   ],
   mean: [
     [[1, 2, '3', 4], 2.5],
     [[1, '2', 3, 'a', 4], NaN],
-    [[1, '2', 3, null, 4],2]
+    [[1, '2', 3, null, 4], 2]
   ],
   max: [
     [[2, 3, 1, NaN, 7, 4, null], 7],
@@ -21,7 +21,7 @@ const Datas: Record<string, any[]> = {
   min: [
     [[2, 3, 1, 7, '-1'], -1],
     [[4, 3, 6, 0, 'x', 'y'], 0],
-    [[-Infinity,-9999,0,null],-Infinity]
+    [[-Infinity, -9999, 0, null], -Infinity]
   ],
   add: [
     [1, 2, 3],
@@ -31,7 +31,7 @@ const Datas: Record<string, any[]> = {
   subtract: [
     [1, 2, -1],
     [1, null, 1],
-    [1,NaN, NaN]
+    [1, NaN, NaN]
   ],
   divide: [
     [1, 2, 0.5],
@@ -42,6 +42,16 @@ const Datas: Record<string, any[]> = {
     [1, 2, 2],
     [1, null, 0],
     [1, NaN, NaN]
+  ],
+  median: [
+    [[1, 2, '3', 4], 2.5],
+    [[1, '2', 3], 2],
+    [[1, '2', -3], 1]
+  ],
+  minmax: [
+    [1, 10, 0, 1],
+    [4, 8, 6, 6],
+    [4, 8, 10, 8]
   ],
 }
 

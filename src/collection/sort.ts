@@ -40,7 +40,7 @@ function sort<T>(
   if (isFunction(comparator)) {
     return ary.sort(comparator)
   } else {
-    return sortBy(collection)
+    return sortBy(ary)
   }
 }
 

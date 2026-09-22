@@ -1,4 +1,3 @@
-import isNumber from '../is/isNumber'
 import isUndefined from "../is/isUndefined"
 
 function range(end: number): number[]
@@ -30,29 +29,26 @@ function range(start: number, end: number, step: number): number[]
  */
 function range(start: number = 0, end?: number, step: number = 1): number[] {
   let startNum = 0
-  let endNum = 0
+  let endNum: number
   let stepNum = 1
 
-  if (isNumber(start) && isUndefined(end)) {
-    endNum = start >> 0
-  } else if (isNumber(start) && isNumber(end)) {
-    startNum = start >> 0
-    endNum = end >> 0
-  } else if (isNumber(start) && isNumber(end) && isNumber(step)) {
-    startNum = start >> 0
-    endNum = end >> 0
-    stepNum = step || 1
+  if (isUndefined(end)) {
+    endNum = start
+  } else {
+    startNum = start
+    endNum = end
+    stepNum = Math.abs(step) || 1
   }
 
-  const rs = Array(Math.round(Math.abs(endNum - startNum) / stepNum))
-  let rsIndex = 0
+  const maxCount = Math.ceil(Math.abs(endNum - startNum) / stepNum)
+  const rs: number[] = []
   if (endNum > startNum) {
-    for (let i = startNum; i < endNum; i += stepNum) {
-      rs[rsIndex++] = i
+    for (let i = startNum; rs.length < maxCount && i < endNum; i += stepNum) {
+      rs.push(i)
     }
   } else if (endNum < startNum) {
-    for (let i = startNum; i > endNum; i -= stepNum) {
-      rs[rsIndex++] = i
+    for (let i = startNum; rs.length < maxCount && i > endNum; i -= stepNum) {
+      rs.push(i)
     }
   }
 

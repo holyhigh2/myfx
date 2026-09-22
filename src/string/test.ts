@@ -1,4 +1,7 @@
 import isRegExp from "../is/isRegExp"
+
+const testCache = new Map<string, RegExp>()
+
 /**
  * 检测字符串是否与指定的正则匹配
  *
@@ -17,11 +20,18 @@ import isRegExp from "../is/isRegExp"
  * @since 0.19.0
  */
 function test(str: any, pattern: RegExp | string, flags?: string): boolean {
-  let regExp: RegExp | undefined
-  if (!isRegExp(pattern)) {
-    regExp = new RegExp(pattern.replace(/([+/\\()\[\].{}])/mg, '\\$1'), flags)
+  if (isRegExp(pattern)) {
+    pattern.lastIndex = 0
+    return pattern.test(str)
   }
-  return (regExp ?? pattern as RegExp).test(str)
+  const key = (flags || '') + '\0' + pattern
+  let regExp = testCache.get(key)
+  if (!regExp) {
+    regExp = new RegExp(pattern.replace(/([+/\\()\[\].{}])/mg, '\\$1'), flags)
+    testCache.set(key, regExp)
+  }
+  regExp.lastIndex = 0
+  return regExp.test(str)
 }
 
 export default test

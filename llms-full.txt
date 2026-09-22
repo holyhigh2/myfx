@@ -16,13 +16,8 @@ npm install myfx
 // Default import (full library)
 import _ from 'myfx'
 
-// Named imports
-import { each, map, filter } from 'myfx'
-
-// Module-specific imports
-import { each, map } from 'myfx/collection'
-import { debounce, throttle } from 'myfx/function'
-import { format } from 'myfx/number'
+// Named imports (subpath exports like myfx/collection removed in v2.0.0)
+import { each, map, filter, debounce, throttle } from 'myfx'
 
 // CDN
 import _ from 'https://cdn.skypack.dev/myfx'

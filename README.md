@@ -41,12 +41,12 @@ import _ from 'myfx'
 //or
 import {each} from 'myfx'
 //or
-import {each,map} from 'myfx/collection'
-//or
 import _ from 'https://cdn.skypack.dev/myfx'
 ```
 
+> Since v2.0.0, subpath exports (`myfx/collection` etc.) have been removed. Use named imports from `myfx`.
+
 ## Development
-1. use `test` to do jest 
-2. use `build` to rollup myfx
+1. use `jest` to run tests
+2. use `build` to build myfx with Vite (ESM + UMD + d.ts)
 3. use `doc` to gen tsdoc

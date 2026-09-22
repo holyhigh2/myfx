@@ -13,7 +13,7 @@ import type { Collection } from "../types"
  * @since 0.19.0
  */
 function initial<T>(array: Collection<T>): T[] {
-  let ary = toArray(array)
+  let ary = Array.isArray(array) ? array : toArray(array)
   return ary.slice(0, ary.length - 1) as T[]
 }
 

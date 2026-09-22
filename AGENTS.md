@@ -7,7 +7,7 @@ Myfx is a modular utility library with 200+ pure functions for collections, form
 ## Development Commands
 
 ```bash
-# Build (runs all build tasks in parallel)
+# Build (codegen + Vite ESM + Vite UMD)
 npm run build
 
 # Run tests
@@ -16,7 +16,7 @@ npm run jest
 # Generate documentation
 npm run doc
 
-# Development with watch mode
+# Development with watch mode (outputs to dev/)
 npm run dev
 ```
 
@@ -26,7 +26,7 @@ npm run dev
 src/
 ├── index.ts          # Main entry point
 ├── types.ts          # Shared type definitions
-├── _modules/         # Module registry
+├── chain.ts          # FuncChain/ChainFx (function chain)
 ├── array/            # Array utilities
 ├── collection/       # Collection operations (each, map, filter, reduce, etc.)
 ├── datetime/         # Date/time formatting and parsing
@@ -63,13 +63,14 @@ Each module (array/, collection/, etc.) should:
 ## Testing
 
 - Test file location: `test/cases.{module}.ts`
-- Framework: Jest
-- Each function must have at least one test case
+- Framework: Jest (ts-jest, no bundler step)
+- Each exported function must have at least 3 test cases
 - Run `npm run jest` before committing
 
 ## Build Output
 
-- UMD: `dist/index.umd.js`
+- Bundler: Vite 8 + vite-plugin-dts (single package, no subpath exports)
+- UMD: `dist/index.umd.js` (global name `myfx`)
 - ESM: `dist/index.esm.mjs`
 - Types: `dist/index.d.ts`
 - Never commit dist/ files

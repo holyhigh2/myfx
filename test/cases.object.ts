@@ -2,7 +2,11 @@
  * 测试用例
  */
 const Datas: Record<string, any[]> = {
-  assign: [[{ x: 1 }, { y: 3 }, { x: 1, y: 3 }]],
+  assign: [
+    [{ x: 1 }, { y: 3 }, { x: 1, y: 3 }],
+    [{}, { a: 1 }, { a: 1 }],
+    [{ a: 1 }, { a: 2 }, { a: 2 }],
+  ],
   assignWith: [
     [
       { x: 1 },
@@ -10,8 +14,14 @@ const Datas: Record<string, any[]> = {
       (sv: any, tv: any, k: any) => (k == 'z' ? null : sv + k),
       { x: 1, y: '3y', z: null },
     ],
+    [{}, { a: 1 }, (sv: any) => sv, { a: 1 }],
+    [{ a: 1 }, { a: 2 }, (sv: any) => sv, { a: 2 }],
   ],
-  clone: [[null, null]],
+  clone: [
+    [null, null],
+    [{ a: 1 }, { a: 1 }],
+    [1, 1],
+  ],
   cloneWith: [
     [
       { x: 1, y: 2, z: 3 },
@@ -19,6 +29,7 @@ const Datas: Record<string, any[]> = {
       { x: 1, y: 2, z: null },
     ],
     [null, null],
+    [{ a: 1 }, (v: any) => v, { a: 1 }],
   ],
   toObject: [
     ['a', 1, 'b', 2, { a: 1, b: 2 }],
