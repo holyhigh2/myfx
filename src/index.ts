@@ -228,23 +228,12 @@ import uuid from "./utils/uuid";
 import { FuncChain } from "./chain";
 
 export {
-  append,chunk,compact,concat,except,fill,findIndex,findLastIndex,flat,flatDeep,insert,intersect,join,pop,pull,range,remove,reverse,slice,sortedIndex,sortedIndexBy,union,uniq,uniqBy,unzip,without,zip,zipObject,zipWith,
-  countBy,each,eachRight,every,filter,find,findLast,first,flatMap,flatMapDeep,groupBy,includes,initial,keyBy,last,map,partition,reduce,reject,sample,sampleSize,shuffle,size,some,sort,sortBy,tail,take,takeRight,toArray,
-  addTime,compareDate,formatDate,getDayOfYear,getWeekOfMonth,getWeekOfYear,isLeapYear,isSameDay,now,toDate,
-  after,alt,bind,bindAll,call,compose,debounce,delay,fval,once,partial,tap,throttle,
-  isAlnum,isAlpha,isArray,isArrayLike,isBlank,isBoolean,isCustomElement,isDate,isDefined,isElement,isEmpty,isEqual,isEqualWith,isError,isFinite,isFunction,isInteger,isIterator,isLowerCaseChar,isMap,isMatch,isMatchWith,isNaN,isNative,isNil,isNode,isNull,isNumber,isNumeric,isObject,isPlainObject,isPrimitive,isRegExp,isSafeInteger,isSet,isString,isSymbol,isUndefined,isUpperCaseChar,isWeakMap,isWeakSet,
-  add,divide,max,mean,median,min,minmax,multiply,randf,randi,subtract,sum,
-  formatNumber,gt,gte,inRange,lt,lte,toInteger,toNumber,
-  assign,assignWith,clone,cloneDeep,cloneDeepWith,cloneWith,defaults,defaultsDeep,eq,findKey,fromPairs,functions,get,has,keys,keysIn,merge,mergeWith,omit,omitBy,parseJSON,pick,pickBy,prop,set,toObject,toPairs,unset,values,valuesIn,
-  camelCase,capitalize,endsWith,escapeRegExp,indexOf,kebabCase,lastIndexOf,lowerCase,lowerFirst,padEnd,padStart,padZ,pascalCase,repeat,replace,replaceAll,snakeCase,split,startsWith,substring,test,toFixed,toString,trim,trimEnd,trimStart,truncate,upperCase,upperFirst,
-  template,
-  arrayToTree,closest,filterTree,findTreeNode,findTreeNodes,sortTree,walkTree,
-  alphaId,defaultTo,identity,iteratee,matcher,mixin,noop,snowflakeId,times,toPath,uniqueId,uuid
+  add, addTime, after, alphaId, alt, append, arrayToTree, assign, assignWith, bind, bindAll, call, camelCase, capitalize, chunk, clone, cloneDeep, cloneDeepWith, cloneWith, closest, compact, compareDate, compose, concat, countBy, debounce, defaults, defaultsDeep, defaultTo, delay, divide, each, eachRight, endsWith, eq, escapeRegExp, every, except, fill, filter, filterTree, find, findIndex, findKey, findLast, findLastIndex, findTreeNode, findTreeNodes, first, flat, flatDeep, flatMap, flatMapDeep, formatDate, formatNumber, fromPairs, functions, fval, get, getDayOfYear, getWeekOfMonth, getWeekOfYear, groupBy, gt, gte, has, identity, includes, indexOf, initial, inRange, insert, intersect, isAlnum, isAlpha, isArray, isArrayLike, isBlank, isBoolean, isCustomElement, isDate, isDefined, isElement, isEmpty, isEqual, isEqualWith, isError, isFinite, isFunction, isInteger, isIterator, isLeapYear, isLowerCaseChar, isMap, isMatch, isMatchWith, isNaN, isNative, isNil, isNode, isNull, isNumber, isNumeric, isObject, isPlainObject, isPrimitive, isRegExp, isSafeInteger, isSameDay, isSet, isString, isSymbol, isUndefined, isUpperCaseChar, isWeakMap, isWeakSet, iteratee, join, kebabCase, keyBy, keys, keysIn, last, lastIndexOf, lowerCase, lowerFirst, lt, lte, map, matcher, max, mean, median, merge, mergeWith, min, minmax, mixin, multiply, noop, now, omit, omitBy, once, padEnd, padStart, padZ, parseJSON, partial, partition, pascalCase, pick, pickBy, pop, prop, pull, randf, randi, range, reduce, reject, remove, repeat, replace, replaceAll, reverse, sample, sampleSize, set, shuffle, size, slice, snakeCase, snowflakeId, some, sort, sortBy, sortedIndex, sortedIndexBy, sortTree, split, startsWith, substring, subtract, sum, tail, take, takeRight, tap, template, test, throttle, times, toArray, toDate, toFixed, toInteger, toNumber, toObject, toPairs, toPath, toString, trim, trimEnd, trimStart, truncate, union, uniq, uniqBy, uniqueId, unset, unzip, upperCase, upperFirst, uuid, values, valuesIn, walkTree, without, zip, zipObject, zipWith
 };
 
-export type { ArrayLike, Collection, INode, IList, IOptions, NonFuncItee, UnknownMapKey } from "./types";
-export type { DebouncedFunction } from "./function/debounce";
 export type { FuncChain } from "./chain";
+export type { DebouncedFunction } from "./function/debounce";
+export type { ArrayLike, Collection, IList, INode, IOptions, NonFuncItee, UnknownMapKey } from "./types";
 
 export const VERSION = "#ver#"; //#ver
 
@@ -303,30 +292,47 @@ console.log(targets, x, '次');//大约0.5ms左右，循环 18 次
 * @returns Myfx对象
 */
 export function chain<T>(v: T): FuncChain<T> {
+  ensureChainMixin();
   return (v instanceof FuncChain ? v : new FuncChain(v)) as FuncChain<T>;
 }
 
 const api = {
-  append,chunk,compact,concat,except,fill,findIndex,findLastIndex,flat,flatDeep,insert,intersect,join,pop,pull,range,remove,reverse,slice,sortedIndex,sortedIndexBy,union,uniq,uniqBy,unzip,without,zip,zipObject,zipWith,
-  countBy,each,eachRight,every,filter,find,findLast,first,flatMap,flatMapDeep,groupBy,includes,initial,keyBy,last,map,partition,reduce,reject,sample,sampleSize,shuffle,size,some,sort,sortBy,tail,take,takeRight,toArray,
-  addTime,compareDate,formatDate,getDayOfYear,getWeekOfMonth,getWeekOfYear,isLeapYear,isSameDay,now,toDate,
-  after,alt,bind,bindAll,call,compose,debounce,delay,fval,once,partial,tap,throttle,
-  isAlnum,isAlpha,isArray,isArrayLike,isBlank,isBoolean,isCustomElement,isDate,isDefined,isElement,isEmpty,isEqual,isEqualWith,isError,isFinite,isFunction,isInteger,isIterator,isLowerCaseChar,isMap,isMatch,isMatchWith,isNaN,isNative,isNil,isNode,isNull,isNumber,isNumeric,isObject,isPlainObject,isPrimitive,isRegExp,isSafeInteger,isSet,isString,isSymbol,isUndefined,isUpperCaseChar,isWeakMap,isWeakSet,
-  add,divide,max,mean,median,min,minmax,multiply,randf,randi,subtract,sum,
-  formatNumber,gt,gte,inRange,lt,lte,toInteger,toNumber,
-  assign,assignWith,clone,cloneDeep,cloneDeepWith,cloneWith,defaults,defaultsDeep,eq,findKey,fromPairs,functions,get,has,keys,keysIn,merge,mergeWith,omit,omitBy,parseJSON,pick,pickBy,prop,set,toObject,toPairs,unset,values,valuesIn,
-  camelCase,capitalize,endsWith,escapeRegExp,indexOf,kebabCase,lastIndexOf,lowerCase,lowerFirst,padEnd,padStart,padZ,pascalCase,repeat,replace,replaceAll,snakeCase,split,startsWith,substring,test,toFixed,toString,trim,trimEnd,trimStart,truncate,upperCase,upperFirst,
+  append, chunk, compact, concat, except, fill, findIndex, findLastIndex, flat, flatDeep, insert, intersect, join, pop, pull, range, remove, reverse, slice, sortedIndex, sortedIndexBy, union, uniq, uniqBy, unzip, without, zip, zipObject, zipWith,
+  countBy, each, eachRight, every, filter, find, findLast, first, flatMap, flatMapDeep, groupBy, includes, initial, keyBy, last, map, partition, reduce, reject, sample, sampleSize, shuffle, size, some, sort, sortBy, tail, take, takeRight, toArray,
+  addTime, compareDate, formatDate, getDayOfYear, getWeekOfMonth, getWeekOfYear, isLeapYear, isSameDay, now, toDate,
+  after, alt, bind, bindAll, call, compose, debounce, delay, fval, once, partial, tap, throttle,
+  isAlnum, isAlpha, isArray, isArrayLike, isBlank, isBoolean, isCustomElement, isDate, isDefined, isElement, isEmpty, isEqual, isEqualWith, isError, isFinite, isFunction, isInteger, isIterator, isLowerCaseChar, isMap, isMatch, isMatchWith, isNaN, isNative, isNil, isNode, isNull, isNumber, isNumeric, isObject, isPlainObject, isPrimitive, isRegExp, isSafeInteger, isSet, isString, isSymbol, isUndefined, isUpperCaseChar, isWeakMap, isWeakSet,
+  add, divide, max, mean, median, min, minmax, multiply, randf, randi, subtract, sum,
+  formatNumber, gt, gte, inRange, lt, lte, toInteger, toNumber,
+  assign, assignWith, clone, cloneDeep, cloneDeepWith, cloneWith, defaults, defaultsDeep, eq, findKey, fromPairs, functions, get, has, keys, keysIn, merge, mergeWith, omit, omitBy, parseJSON, pick, pickBy, prop, set, toObject, toPairs, unset, values, valuesIn,
+  camelCase, capitalize, endsWith, escapeRegExp, indexOf, kebabCase, lastIndexOf, lowerCase, lowerFirst, padEnd, padStart, padZ, pascalCase, repeat, replace, replaceAll, snakeCase, split, startsWith, substring, test, toFixed, toString, trim, trimEnd, trimStart, truncate, upperCase, upperFirst,
   template,
-  arrayToTree,closest,filterTree,findTreeNode,findTreeNodes,sortTree,walkTree,
-  alphaId,defaultTo,identity,iteratee,matcher,mixin,noop,snowflakeId,times,toPath,uniqueId,uuid
+  arrayToTree, closest, filterTree, findTreeNode, findTreeNodes, sortTree, walkTree,
+  alphaId, defaultTo, identity, iteratee, matcher, mixin, noop, snowflakeId, times, toPath, uniqueId, uuid
 };
 
-mixin(FuncChain, { ...api });
+let chainMixinReady = false;
 
-const myfx = {
-  VERSION: VERSION,
-  chain,
-  ...api,
-};
+/**
+ * 惰性把 api 中的全部函数挂载到 FuncChain 原型上（函数链能力）
+ */
+function ensureChainMixin(): void {
+  if (chainMixinReady) return;
+  chainMixinReady = true;
+  mixin(FuncChain, { ...api });
+}
+
+/**
+ * 构造默认导出的完整 API 对象
+ */
+const myfx = /* @__PURE__ */ createMyfxApi();
+
+function createMyfxApi() {
+  return {
+    VERSION: VERSION,
+    chain,
+    ...api,
+  };
+}
 
 export default myfx

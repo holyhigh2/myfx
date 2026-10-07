@@ -49,27 +49,14 @@ function formatNumber(v: string | number, pattern = '#,##0.00'): string {
 
   let posPattern = pattern
   let negPattern = ''
-  const split = splitCache[pattern]
-  if (split) {
-    posPattern = split.pos
-    negPattern = split.neg
-  } else {
-    let subPatterns = pattern.match(SUB_PATTERN_EXP)
-    if (subPatterns && subPatterns.groups) {
-      posPattern = subPatterns.groups.pos
-      negPattern = subPatterns.groups.neg
-    }
-    splitCache[pattern] = { pos: posPattern, neg: negPattern }
+  const subPatterns = pattern.match(SUB_PATTERN_EXP)
+  if (subPatterns && subPatterns.groups) {
+    posPattern = subPatterns.groups.pos
+    negPattern = subPatterns.groups.neg
   }
-
   const useNeg = num < 0 && !!negPattern
   const key = useNeg ? negPattern : posPattern
-  let formatter: Function = cache[key]
-  if (!formatter) {
-    formatter = makeFormatter(key, v, useNeg) as Function
-    cache[key] = formatter
-  }
-  return formatter(v)
+  return makeFormatter(key, v, useNeg)(v)
 }
 
 function makeFormatter(pattern: string, v: string | number, isNeg = false) {
@@ -198,7 +185,5 @@ function makeFormatter(pattern: string, v: string | number, isNeg = false) {
     return (endsPart[0] || '') + rs + (endsPart[1] || '')
   }
 }
-const cache: Record<string, Function> = {}
-const splitCache: Record<string, { pos: string; neg: string }> = {}
 
 export default formatNumber

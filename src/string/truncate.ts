@@ -2,8 +2,6 @@ import { default as isObject, default as isRegExp } from '../is/isObject';
 import escapeRegExp from './escapeRegExp';
 import toString from "./toString";
 
-const sepCache = new Map<string, RegExp>()
-const regCache = new Map<string, RegExp>()
 /**
  * 对超过指定长度的字符串进行截取并在末尾追加代替字符
  *
@@ -46,21 +44,9 @@ function truncate(
     let separator: RegExp
     const rawSeparator = options.separator
     if (!isRegExp(rawSeparator)) {
-      const src = escapeRegExp(rawSeparator as string)
-      let cached = sepCache.get(src)
-      if (!cached) {
-        cached = new RegExp(src, 'g')
-        sepCache.set(src, cached)
-      }
-      separator = cached
+      separator = new RegExp(escapeRegExp(rawSeparator as string), 'g')
     } else if (!rawSeparator.global) {
-      const key = rawSeparator.source + '\0' + rawSeparator.flags + 'g'
-      let cached = regCache.get(key)
-      if (!cached) {
-        cached = new RegExp(rawSeparator.source, rawSeparator.flags + 'g')
-        regCache.set(key, cached)
-      }
-      separator = cached
+      separator = new RegExp(rawSeparator.source, rawSeparator.flags + 'g')
     } else {
       separator = rawSeparator
     }

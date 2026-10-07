@@ -1,6 +1,5 @@
 import isRegExp from "../is/isRegExp"
 
-const testCache = new Map<string, RegExp>()
 
 /**
  * 检测字符串是否与指定的正则匹配
@@ -24,13 +23,7 @@ function test(str: any, pattern: RegExp | string, flags?: string): boolean {
     pattern.lastIndex = 0
     return pattern.test(str)
   }
-  const key = (flags || '') + '\0' + pattern
-  let regExp = testCache.get(key)
-  if (!regExp) {
-    regExp = new RegExp(pattern.replace(/([+/\\()\[\].{}])/mg, '\\$1'), flags)
-    testCache.set(key, regExp)
-  }
-  regExp.lastIndex = 0
+  const regExp = new RegExp(pattern.replace(/([+/\\()\[\].{}])/mg, '\\$1'), flags)
   return regExp.test(str)
 }
 

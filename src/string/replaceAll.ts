@@ -22,14 +22,8 @@ import toString from "./toString"
  * @returns 替换后的新字符串
  * @since 1.0.0
  */
-const regCache = new Map<string, RegExp>()
 function getGlobalRegExp(source: string): RegExp {
-  let re = regCache.get(source)
-  if (!re) {
-    re = new RegExp(source, 'g')
-    regCache.set(source, re)
-  }
-  return re
+  return new RegExp(source, 'g')
 }
 
 function replaceAll(
@@ -46,15 +40,7 @@ function replaceAll(
   let searchExp: RegExp
   let strRs = toString(str)
   if (isRegExp(searchValue)) {
-    searchExp = searchValue
-    if (!searchValue.global) {
-      const key = searchValue.source + '\0' + searchValue.flags + 'g'
-      searchExp = regCache.get(key) as RegExp
-      if (!searchExp) {
-        searchExp = new RegExp(searchValue, searchValue.flags + 'g')
-        regCache.set(key, searchExp)
-      }
-    }
+    searchExp = searchValue.global ? searchValue : new RegExp(searchValue, searchValue.flags + 'g')
     return strRs.replace(searchExp, replaceValue as any)
   } else if (isString(searchValue)) {
     searchExp = getGlobalRegExp(escapeRegExp(searchValue))

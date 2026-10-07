@@ -325,7 +325,7 @@ export class FuncChain<T> extends ChainFx {
         }
         return acc
       }
-      if (CAN_COMPREHENSIONS.includes(v.fn.name)) {
+      if (isComprehensionRoot(v.fn.name)) {
         comprehension = createComprehension()
         return v.fn(...[acc, ...v.params])
       }
@@ -334,7 +334,9 @@ export class FuncChain<T> extends ChainFx {
   }
 }
 
-const CAN_COMPREHENSIONS = [split.name, toArray.name, range.name]
+function isComprehensionRoot(name: string): boolean {
+  return name === split.name || name === toArray.name || name === range.name
+}
 
 function createComprehension(fn?: Function, params?: []) {
   const comprehension = {

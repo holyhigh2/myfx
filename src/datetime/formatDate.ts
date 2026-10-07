@@ -214,21 +214,15 @@ function buildTokenFn(tag: string): (date: Date, locale: any) => string {
 function formatDate(val: string | Date | number, pattern: string = 'yyyy-MM-dd HH:mm:ss'): string {
   pattern = pattern || 'yyyy-MM-dd HH:mm:ss'
   
-  let compiled = compiledCache[pattern]
-  if (!compiled) {
-    const tokens = compilePattern(pattern)
-    const parts: (string | ((date: Date, locale: any) => string))[] = []
-    
-    for (const token of tokens) {
-      if (token.type === 'literal') {
-        parts.push(token.value)
-      } else {
-        parts.push(buildTokenFn(token.value))
-      }
+  const tokens = compilePattern(pattern)
+  const parts: (string | ((date: Date, locale: any) => string))[] = []
+
+  for (const token of tokens) {
+    if (token.type === 'literal') {
+      parts.push(token.value)
+    } else {
+      parts.push(buildTokenFn(token.value))
     }
-    
-    compiled = { parts }
-    compiledCache[pattern] = compiled
   }
   
   if (!val) return INVALID_DATE
@@ -243,7 +237,6 @@ function formatDate(val: string | Date | number, pattern: string = 'yyyy-MM-dd H
   if (date.toString().indexOf('Invalid') > -1) return INVALID_DATE
   
   const locale = Locale[Lang]
-  const { parts } = compiled
   let result = ''
   
   for (const part of parts) {
@@ -257,18 +250,15 @@ function formatDate(val: string | Date | number, pattern: string = 'yyyy-MM-dd H
   return result
 }
 
-interface CompiledPattern {
-  parts: (string | ((date: Date, locale: any) => string))[]
-}
 
-let compiledCache: Record<string, CompiledPattern> = {}
+
 const Locale: Record<
   string,
   { quarters: string[]; months: string[]; weeks: string[]; days: string[]; meridiems: string[] }
 > = {
   'zh-CN': {
     quarters: ['一季度', '二季度', '三季度', '四季度'],
-    months: [
+    months: /* @__PURE__ */ [
       '一',
       '二',
       '三',
@@ -282,12 +272,16 @@ const Locale: Record<
       '十一',
       '十二',
     ].map((v) => v + '月'),
-    weeks: ['一', '二', '三', '四', '五', '六'].map((v) => '第' + v + '周'),
-    days: ['一', '二', '三', '四', '五', '六', '日'].map((v) => '星期' + v),
+    weeks: /* @__PURE__ */ ['一', '二', '三', '四', '五', '六'].map((v) => '第' + v + '周'),
+    days: /* @__PURE__ */ ['一', '二', '三', '四', '五', '六', '日'].map((v) => '星期' + v),
     meridiems: ['AM', 'PM']
   },
 }
-let Lang = globalThis.navigator?.language || 'zh-CN'
+let Lang = /* @__PURE__ */ getDefaultLang()
+
+function getDefaultLang(): string {
+  return globalThis.navigator?.language || 'zh-CN'
+}
 
 /**
  * 设置不同locale的配置
@@ -299,7 +293,7 @@ let Lang = globalThis.navigator?.language || 'zh-CN'
  * @param options.days 星期描述，默认"星期一 - 日"
  * @param options.meridiems 上午/下午描述，默认"AM/PM"
  */
-formatDate.locale = function (
+function locale(
   lang: string,
   options: {
     quarters: string[]
@@ -330,16 +324,19 @@ formatDate.locale = function (
     locale.meridiems = options?.meridiems
   }
   
-  compiledCache = {}
 }
 
 /**
  * 可以设置当前格式化使用的语言
  * @param lang 语言标记，默认跟随系统
  */
-formatDate.lang = function (lang: string) {
+function lang(lang: string) {
   Lang = lang
-  compiledCache = {}
 }
 
-export default formatDate
+const formatDateApi = /* @__PURE__ */ Object.assign(formatDate, {
+  locale,
+  lang,
+})
+
+export default formatDateApi

@@ -1,5 +1,5 @@
 const ALPHABET =
-  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_'.split('')
+  /* @__PURE__ */ 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_'.split('')
 /**
  * 生成一个指定长度的alphaId并返回。id内容由随机字母表字符组成
  * @example

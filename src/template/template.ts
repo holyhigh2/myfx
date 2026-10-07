@@ -64,7 +64,7 @@ import myfx from "../index";
  */
 function template(string: string, options?: IOptions) {
   let delimiters = map<string>(
-    options?.delimiters || template.settings.delimiters,
+    options?.delimiters || templateSettings.delimiters,
     (d) => {
       const letters = replace(d, /\//gim, "");
       return map(letters, (l) => {
@@ -95,40 +95,26 @@ function template(string: string, options?: IOptions) {
   return render;
 }
 const ESCAPES = ["[", "]", "{", "}", "$"];
-const splitCache = new Map<string, RegExp>();
-const modRegCache = new Map<string, RegExp>();
 
 function getSplitExp(delimiters: Array<string>): RegExp {
-  const key = delimiters.join("\0");
-  let re = splitCache.get(key);
-  if (!re) {
-    const comment = delimiters[0] + template.settings.comment + delimiters[1];
-    const interpolate =
-      delimiters[0] + template.settings.interpolate + delimiters[1];
-    const evaluate = delimiters[0] + template.settings.evaluate + delimiters[1];
-    const mixin = delimiters[0] + template.settings.mixin + delimiters[1];
-    re = new RegExp(
-      `(?:${comment})|(?:${mixin})|(?:${interpolate})|(?:${evaluate})`,
-      "mg"
-    );
-    splitCache.set(key, re);
-  }
-  return re;
+  const comment = delimiters[0] + templateSettings.comment + delimiters[1];
+  const interpolate = delimiters[0] + templateSettings.interpolate + delimiters[1];
+  const evaluate = delimiters[0] + templateSettings.evaluate + delimiters[1];
+  const mixin = delimiters[0] + templateSettings.mixin + delimiters[1];
+  return new RegExp(
+    `(?:${comment})|(?:${mixin})|(?:${interpolate})|(?:${evaluate})`,
+    "mg"
+  );
 }
 
 function getModReg(delimiter: string): RegExp {
-  let re = modRegCache.get(delimiter);
-  if (!re) {
-    re = new RegExp(delimiter);
-    modRegCache.set(delimiter, re);
-  }
-  return re;
+  return new RegExp(delimiter);
 }
 
 /**
  * 模板设置对象
  */
-template.settings = {
+const templateSettings = {
   /**
    * @defaultValue ['[%', '%]']
    */
@@ -330,4 +316,8 @@ function compile(tokens: INode[], options: IOptions): Function {
   };
 }
 
-export default template;
+const templateApi = /* @__PURE__ */ Object.assign(template, {
+  settings: templateSettings,
+})
+
+export default templateApi;
