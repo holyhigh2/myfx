@@ -28,6 +28,12 @@ const Datas: Record<string, any[]> = {
     ['a', ['a']],
     [[1, 2], ['1', '2']],
   ],
+  toPlain: [
+    [{ a: 1, b: [1, 2], c: undefined }, { a: 1, b: [1, 2] }],
+    [new Date('2020-01-01'), '2020-01-01T00:00:00.000Z'],
+    [undefined, null],
+    [5, 5],
+  ],
 }
 
 export default Datas

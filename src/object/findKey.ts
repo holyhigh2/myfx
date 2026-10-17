@@ -33,8 +33,17 @@ function findKey<V>(
 ): string | number | symbol | undefined {
   const callback = _iteratee(predicate)
   let rs
-  for (let k in object) {
-    let v = object[k]
+  if (object == null) return undefined
+  if (object instanceof Map) {
+    for (const [k, v] of object) {
+      if (callback(v, k, object)) return k
+    }
+    return undefined
+  }
+  const ks = Object.keys(object)
+  for (let i = 0; i < ks.length; i++) {
+    const k = ks[i]
+    const v = object[k]
     const r = callback(v, k, object)
     if (r) {
       rs = k

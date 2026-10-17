@@ -1,10 +1,8 @@
 import _eq from "../_eq";
-import slice from "../array/slice";
 import isArrayLike from "../is/isArrayLike";
 import isString from "../is/isString";
 import type { Collection } from "../types";
 import each from "./each";
-import toArray from "./toArray";
 
 /**
  * 判断集合中是否包含给定的值。使用<code>eq</code>函数进行等值判断。
@@ -38,17 +36,24 @@ function includes(collection: Collection<any>, value: any, fromIndex: number = 0
   if (isString(collection)) {
     return collection.includes(value, fromIndex)
   }
+  let startIndex = 0
   if (isArrayLike(collection) && fromIndex > 0) {
-    collection = Array.isArray(collection)
-      ? (collection as any[]).slice(fromIndex)
-      : slice(toArray(collection), fromIndex)
+    if (Array.isArray(collection)) {
+      startIndex = fromIndex
+    } else {
+      const len = (collection as ArrayLike<any>).length
+      for (let i = fromIndex; i < len; i++) {
+        if (_eq((collection as any)[i], value)) return true
+      }
+      return false
+    }
   }
   each(collection, (v) => {
     if (_eq(v, value)) {
       rs = true
       return false
     }
-  })
+  }, startIndex)
   return rs
 }
 

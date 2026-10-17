@@ -1,6 +1,6 @@
 {
   "name": "myfx",
-  "version": "2.0.0-beta.2",
+  "version": "2.0.0-beta.3",
   "description": "A modular utility library with more utils, higher performance and simpler declarations ...",
   "main": "dist/index.umd.js",
   "module": "dist/index.esm.mjs",
@@ -38,7 +38,7 @@
     "prepack": "npm run build",
     "build": "node ./config/build.chainfx.mjs && vite build && vite build --mode umd",
     "jest": "jest --no-cache --verbose",
-    "dev": "vite build --watch --mode dev",
+    "dev": "vite --mode dev",
     "doc": "node extract-docs.js",
     "pack-test": "npm pack --dry-run"
   },

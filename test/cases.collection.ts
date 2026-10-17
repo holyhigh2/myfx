@@ -138,6 +138,29 @@ const Datas: Record<string, any[]> = {
     [[{ id: 'x' }, { id: 'y' }], (v: any) => v.id, { x: { id: 'x' }, y: { id: 'y' } }],
     [[], Number.isInteger, {}],
   ],
+  groupAggregate: [
+    [
+      [{ city: 'bj', amount: 1 }, { city: 'sh', amount: 2 }, { city: 'bj', amount: 3 }],
+      (r: any) => r.city,
+      (r: any) => r.amount,
+      'sum',
+      [{ key: 'bj', value: 4 }, { key: 'sh', value: 2 }],
+    ],
+    [
+      [{ city: 'bj', amount: 1 }, { city: 'sh', amount: 2 }, { city: 'bj', amount: 3 }],
+      'city',
+      undefined,
+      'count',
+      [{ key: 'bj', value: 2 }, { key: 'sh', value: 1 }],
+    ],
+    [
+      [{ city: 'bj', amount: 1 }, { city: 'bj', amount: 3 }],
+      (r: any) => r.city,
+      (r: any) => r.amount,
+      'mean',
+      [{ key: 'bj', value: 2 }],
+    ],
+  ],
 }
 
 export default Datas

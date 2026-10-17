@@ -96,6 +96,10 @@ function template(string: string, options?: IOptions) {
 }
 const ESCAPES = ["[", "]", "{", "}", "$"];
 
+const STRIP_START_EXP = /\n\s*$/;
+const STRIP_END_EXP = /^\s*\n/;
+const MIXIN_PARAMS_EXP = /\{(?:,?[a-zA-Z_$][a-zA-Z0-9_$]*(?::.*?)?)+\}/gm;
+
 function getSplitExp(delimiters: Array<string>): RegExp {
   const comment = delimiters[0] + templateSettings.comment + delimiters[1];
   const interpolate = delimiters[0] + templateSettings.interpolate + delimiters[1];
@@ -136,6 +140,7 @@ function parse(
   let lastSegLength = 0;
   const fullStack = [];
   let prevText = null;
+  const modExp = getModReg(delimiters[0]);
   while (true) {
     const rs = splitExp.exec(str);
     if (rs == null) {
@@ -145,8 +150,8 @@ function parse(
       if (prevText) {
         // check strip white
         if (stripWhite) {
-          const stripStart = prevText.replace(/\n\s*$/, "\n");
-          const stripEnd = text.replace(/^\s*\n/, "");
+          const stripStart = prevText.replace(STRIP_START_EXP, "\n");
+          const stripEnd = text.replace(STRIP_END_EXP, "");
           if (
             stripStart.length !== prevText.length &&
             stripEnd.length !== text.length
@@ -163,7 +168,7 @@ function parse(
       }
 
       try {
-        const node2 = parseNode(rs, mixins, delimiters);
+        const node2 = parseNode(rs, mixins, modExp);
         fullStack.push(node2);
       } catch (error) {
         // 获取最近信息
@@ -212,11 +217,11 @@ function getText(str: string) {
 function parseNode(
   rs: RegExpExecArray,
   mixins: Record<UnknownMapKey, any> | undefined,
-  delimiters: Array<string>
+  modExp: RegExp
 ): INode {
   const parts = compact(rs);
   const src = parts[0];
-  const modifier = src.replace(getModReg(delimiters[0]), "")[0];
+  const modifier = src.replace(modExp, "")[0];
   switch (modifier) {
     case "-":
       return {
@@ -238,9 +243,7 @@ function parseNode(
       }
       let paramters = trim(parts[2]);
       if (paramters) {
-        const matcher = paramters.match(
-          /\{(?:,?[a-zA-Z_$][a-zA-Z0-9_$]*(?::.*?)?)+\}/gm
-        );
+        const matcher = paramters.match(MIXIN_PARAMS_EXP);
         if (!matcher) {
           throw new SyntaxError(
             `Invalid mixin paramters '${parts[2]}', must be JSON form`
@@ -283,21 +286,22 @@ function compile(tokens: INode[], options: IOptions): Function {
     }
   });
 
+  let globalKeys: any[] = [];
+  let globalValues: any[] = [];
+  const paramAry = unzip(toPairs(options.globals!));
+  if (size(paramAry) > 0) {
+    globalKeys = paramAry[0];
+    globalValues = paramAry[1];
+  }
+  if (!globalKeys.includes("_")) {
+    globalKeys.push("_");
+    globalValues.push(myfx);
+  }
+
   return (obj: Record<UnknownMapKey, any>) => {
     let declarations = keys(obj).join(",");
     if (declarations) {
       declarations = "{" + declarations + "}";
-    }
-    let globalKeys = [];
-    let globalValues = [];
-    const paramAry = unzip(toPairs(options.globals!));
-    if (size(paramAry) > 0) {
-      globalKeys = paramAry[0];
-      globalValues = paramAry[1];
-    }
-    if (!globalKeys.includes("_")) {
-      globalKeys.push("_");
-      globalValues.push(myfx);
     }
 
     const getRender = new Function(

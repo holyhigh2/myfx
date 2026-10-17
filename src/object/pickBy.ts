@@ -20,6 +20,7 @@ function pickBy<V, K extends UnknownMapKey>(
   const ks = Object.keys(obj)
   for (let i = 0; i < ks.length; i++) {
     const k = ks[i]
+    if (k === "__proto__") continue
     const v = obj[k]
     if ((predicate || _identity)(v, k as K)) {
       rs[k] = v

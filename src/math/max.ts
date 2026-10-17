@@ -20,10 +20,8 @@ function max(
   values: Set<string | number> | Array<string | number>
 ): number {
   if (!isArray(values) && !isSet(values)) return NaN
-  const items: Array<string | number> = isArray(values) ? values : Array.from(values)
   let rs: number | undefined
-  for (let i = 0; i < items.length; i++) {
-    const v = items[i]
+  for (const v of values) {
     if (!isNumeric(v)) continue
     const n = Number(v)
     if (rs === undefined || n > rs) {

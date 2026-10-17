@@ -33,7 +33,7 @@ function findIndex<T>(
     const v = array[i];
     const r = itee(v, i, array)
     if (r) {
-      rs = i + fromIndexNum
+      rs = i
       break
     }
   }

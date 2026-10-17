@@ -15,7 +15,7 @@ import toArray from "./toArray";
  * @since 0.16.0
  */
 function sample<T>(collection: Collection<T>): T {
-  const ary = toArray<T>(collection)
+  const ary = Array.isArray(collection) ? collection : toArray<T>(collection)
   return ary[randi(ary.length)]
 }
 

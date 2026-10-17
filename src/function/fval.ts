@@ -1,6 +1,3 @@
-import keys from "../object/keys"
-import values from "../object/values"
-
 /**
  * 类似eval，对表达式进行求值并返回结果。不同于eval，fval()执行在严格模式下
  * 
@@ -20,8 +17,16 @@ import values from "../object/values"
  * @returns 表达式计算结果
  */
 function fval<T>(expression: string, args?: Record<string, any>, context?: any): T {
-  const ks = args ? keys(args) : []
-  const val = args ? values(args) : []
+  const ks: string[] = []
+  const val: any[] = []
+  if (args) {
+    for (const k in args) {
+      if (Object.prototype.hasOwnProperty.call(args, k)) {
+        ks.push(k)
+        val.push(args[k])
+      }
+    }
+  }
   return Function(...ks, '"use strict";return ' + expression).call(context, ...val)
 }
 

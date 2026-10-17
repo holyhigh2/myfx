@@ -25,7 +25,7 @@ import isArray from "../is/isArray";
  */
 function append<T>(array: T[] | Set<T>, ...values: any[]): T[] {
   const rs = isArray(array) ? array : toArray<T>(array)
-  rs.push(...values)
+  for (let i = 0; i < values.length; i++) rs.push(values[i])
   return rs
 }
 

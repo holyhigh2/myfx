@@ -1,6 +1,6 @@
 import isNil from "../is/isNil";
 import randi from "../math/randi";
-import padEnd from "../string/padEnd";
+import padStart from "../string/padStart";
 import padZ from "../string/padZ";
 /**
  * 生成一个64bit整数的雪花id并返回，具体格式如下：
@@ -42,7 +42,7 @@ function snowflakeId(nodeId: number, epoch: number = 1580486400000): string {
   // 41bits for time
   const timeOffset = (nowTime - epoch).toString(2)
   // 10bits for nodeId
-  const nodeBits = padEnd((nodeId % 0x3ff).toString(2) + '', 10, '0')
+  const nodeBits = padStart((nodeId & 0x3ff).toString(2) + '', 10, '0')
   // 12bits for seq
   const seq = padZ(sequence.toString(2) + '', 12)
 

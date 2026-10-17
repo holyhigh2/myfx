@@ -1,5 +1,4 @@
 import _iteratee from '../_iteratee'
-import includes from '../collection/includes'
 import map from '../collection/map'
 import cloneWith from '../object/cloneWith'
 import type { NonFuncItee } from '../types'
@@ -60,16 +59,19 @@ function filterTree<V extends Record<string | number | symbol, any>>(
   const callback = _iteratee(predicate)
   const childrenKey = options.childrenKey || 'children'
   let nodes: V[] = []
+  const seen = new Set<V>()
   walkTree(
     treeNodes,
     (n, p, c, l) => {
       const rs = callback(n, p, c, l)
       if (rs) {
         c.forEach((node: V) => {
-          if (!includes(nodes, node)) {
+          if (!seen.has(node)) {
+            seen.add(node)
             nodes.push(node)
           }
         })
+        seen.add(n)
         nodes.push(n)
       }
     },

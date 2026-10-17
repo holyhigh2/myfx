@@ -26,7 +26,9 @@ import isNumber from "../is/isNumber";
 function insert<T>(array: T[], index: number, ...values: any[]): T[] {
   const rs = isArray(array) ? array : toArray<T>(array)
   if (!isNumber(index) || index < 0) index = 0
-  rs.splice(index, 0, ...values)
+  const tail = rs.splice(index)
+  for (let i = 0; i < values.length; i++) rs.push(values[i])
+  for (let i = 0; i < tail.length; i++) rs.push(tail[i])
   return rs
 }
 

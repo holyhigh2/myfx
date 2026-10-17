@@ -1,4 +1,3 @@
-import includes from "../collection/includes";
 import remove from "./remove";
 /**
  * 与without相同，但会修改原数组
@@ -15,7 +14,8 @@ import remove from "./remove";
  * @since 0.19.0
  */
 function pull<T>(array: T[], ...values: T[]): T[] {
-  remove(array, (item) => includes(values, item))
+  const set = new Set<T>(values)
+  remove(array, (item) => set.has(item))
   return array
 }
 

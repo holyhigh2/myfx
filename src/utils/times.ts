@@ -1,4 +1,3 @@
-import range from '../array/range'
 /**
  * 调用iteratee函数n次，并将历次调用的返回值数组作为结果返回
  * @example
@@ -13,7 +12,12 @@ import range from '../array/range'
  * @since 0.17.0
  */
 function times<V>(n: number, iteratee: (n: number) => V): V[] {
-  return range(n).map(iteratee)
+  const count = Number.isFinite(n) ? Math.max(0, Math.ceil(n)) : 0
+  const rs: V[] = new Array(count)
+  for (let i = 0; i < count; i++) {
+    rs[i] = iteratee(i)
+  }
+  return rs
 }
 
 export default times

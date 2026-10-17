@@ -71,9 +71,10 @@ function arrayToTree<V extends Record<string | number | symbol, any>>(
   const sortKey = options.sortKey
   const hasSortKey = !!sortKey
   const roots: V[] = []
-  const nodeMap: { [key: string | number]: any } = {}
-  const sortMap: { [key: string | number]: any } = {}
-  const initParentMap: { [key: string | number]: boolean } = {}
+  const nodeMap: { [key: string | number]: any } = Object.create(null)
+  const sortMap: { [key: string | number]: any } = Object.create(null)
+  const initParentMap: { [key: string | number]: boolean } = Object.create(null)
+  const prependMap: { [key: string | number]: any[] } = Object.create(null)
 
   array.forEach((record) => {
     const nodeId = record[idKey || 'id']
@@ -108,7 +109,8 @@ function arrayToTree<V extends Record<string | number | symbol, any>>(
 
         const sortNo = record[sortKey]
         if (sortNo <= min) {
-          children.unshift(record)
+          const buf = prependMap[parentId] || (prependMap[parentId] = [])
+          buf.push(record)
           sortMap[parentId][0] = sortNo
         } else if (sortNo >= max) {
           children.push(record)
@@ -122,6 +124,17 @@ function arrayToTree<V extends Record<string | number | symbol, any>>(
       }
     }
   })
+
+  if (hasSortKey) {
+    const pids = Object.keys(prependMap)
+    for (let i = 0; i < pids.length; i++) {
+      const pnode = nodeMap[pids[i]]
+      if (!pnode) continue
+      const buf = prependMap[pids[i]]
+      buf.reverse()
+      pnode[childrenKey] = buf.concat(pnode[childrenKey] || [])
+    }
+  }
 
   return hasSortKey ? sortBy(roots, sortKey) : roots
 }

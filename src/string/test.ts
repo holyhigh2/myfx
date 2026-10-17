@@ -1,5 +1,6 @@
 import isRegExp from "../is/isRegExp"
 
+const ESCAPE_EXP = /([+/\\()\[\].{}])/mg
 
 /**
  * 检测字符串是否与指定的正则匹配
@@ -20,10 +21,12 @@ import isRegExp from "../is/isRegExp"
  */
 function test(str: any, pattern: RegExp | string, flags?: string): boolean {
   if (isRegExp(pattern)) {
-    pattern.lastIndex = 0
-    return pattern.test(str)
+    const re = pattern.global
+      ? new RegExp(pattern.source, pattern.flags.replace('g', ''))
+      : pattern
+    return re.test(str)
   }
-  const regExp = new RegExp(pattern.replace(/([+/\\()\[\].{}])/mg, '\\$1'), flags)
+  const regExp = new RegExp(pattern.replace(ESCAPE_EXP, '\\$1'), flags)
   return regExp.test(str)
 }
 

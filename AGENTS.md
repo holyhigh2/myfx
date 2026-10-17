@@ -16,8 +16,11 @@ npm run jest
 # Generate documentation
 npm run doc
 
-# Development with watch mode (outputs to dev/)
+# Start Vite dev server (serves index.html playground, HMR)
 npm run dev
+
+# Watch-build UMD bundle to dev/
+npm run dev:build
 ```
 
 ## Project Structure

@@ -18,9 +18,12 @@
 function randi(max: number): number
 function randi(min: number, max?: number): number
 function randi(min: number, max?: number): number {
-  let maxNum = max || min
+  let maxNum: number
   if (max === undefined) {
+    maxNum = min
     min = 0
+  } else {
+    maxNum = max
   }
   maxNum >>= 0
   min >>= 0

@@ -67,13 +67,10 @@ function eachRight<V, K extends string | number | symbol | object>(
   } else if (isMap(collection)) {
     let size = collection.size
 
-    keys = collection.keys()
-    values = collection.values()
-
-    keys = Array.from(keys)
-    values = Array.from(values)
+    const entries = Array.from(collection)
     while (size--) {
-      const r = callback(values[size] as V, keys[size] as K, collection as Collection<V>, size)
+      const entry = entries[size]
+      const r = callback(entry[1] as V, entry[0] as K, collection as Collection<V>, size)
       if (r === false) return
     }
   } else if (isObject(collection)) {

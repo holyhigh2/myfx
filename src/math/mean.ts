@@ -20,9 +20,7 @@ function mean(values: Set<string | number> | Array<string | number>): number {
   if (!isArray(values) && !isSet(values)) return NaN
   let total = 0
   let len = 0
-  const items: Array<string | number> = isArray(values) ? values : Array.from(values)
-  for (let i = 0; i < items.length; i++) {
-    const v = items[i]
+  for (const v of values) {
     len++
     if (isNil(v)) continue
     if (isNumeric(v)) {

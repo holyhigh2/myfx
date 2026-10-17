@@ -46,7 +46,7 @@ function toDate(value: number | [year: number, monthIndex: number, date?: number
     rs = new Date(value)
   }
 
-  if (rs.toDateString() === 'Invalid Date') {
+  if (Number.isNaN(rs.getTime())) {
     rs = new Date(0)
   }
 

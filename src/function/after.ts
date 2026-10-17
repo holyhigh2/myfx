@@ -13,7 +13,7 @@
  */
 function after<T extends (...args: any[]) => any>(fn: T, count: number = 0): T {
   const proxy = fn
-  let i = count || 0
+  let i = Number.isFinite(count) ? Math.max(0, Math.trunc(count)) : 0
   let rtn: any
   return ((...args: any[]) => {
     if (i === 0) {

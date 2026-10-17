@@ -20,11 +20,11 @@ function eachSources(
     const ks = Object.keys(src)
     for (let i = 0; i < ks.length; i++) {
       const k = ks[i]
-      let v = src[k]
-      if (handler) {
-        v = handler(src[k], target[k], k, src, target)
-      }
-      afterHandler(v, src[k], target[k], k, src, target)
+      if (k === "__proto__") continue
+      const sv = src[k]
+      const tv = target[k]
+      const v = handler ? handler(sv, tv, k, src, target) : sv
+      afterHandler(v, sv, tv, k, src, target)
     }
   }
 }

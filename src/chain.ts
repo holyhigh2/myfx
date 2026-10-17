@@ -71,6 +71,7 @@ findLast<V,K extends string | number | symbol | object>(predicate: ((value: V, i
 first<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_first').call(this,...arguments)}
 flatMap<V,K extends string | number | symbol | object,U>(itee: ((value: V, index: K, collection: Collection<V>) => U | Promise<any>) | NonFuncItee = identity,depth: number = 1):FuncChain<any>{return get<Function>(FuncChain.prototype,'_flatMap').call(this,...arguments)}
 flatMapDeep<V,K extends string | number | symbol | object,U>(iteratee: ((value: V, index: K, collection: Collection<V>) => U) | NonFuncItee = identity):FuncChain<any>{return get<Function>(FuncChain.prototype,'_flatMapDeep').call(this,...arguments)}
+groupAggregate<V,K extends UnknownMapKey>(groupIteratee: ((value: V) => K) | NonFuncItee,valueIteratee?: ((value: V) => unknown) | NonFuncItee,op: "sum" | "mean" | "count" | "max" | "min" | "median" = "sum"):FuncChain<any>{return get<Function>(FuncChain.prototype,'_groupAggregate').call(this,...arguments)}
 groupBy<V,K extends string>(iteratee: ((value: V) => UnknownMapKey) | NonFuncItee = identity):FuncChain<any>{return get<Function>(FuncChain.prototype,'_groupBy').call(this,...arguments)}
 includes(value: any,fromIndex: number = 0):FuncChain<any>{return get<Function>(FuncChain.prototype,'_includes').call(this,...arguments)}
 initial<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_initial').call(this,...arguments)}
@@ -91,6 +92,13 @@ tail<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_tail').call(
 take<T>(length?: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_take').call(this,...arguments)}
 takeRight<T>(length?: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_takeRight').call(this,...arguments)}
 toArray<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_toArray').call(this,...arguments)}
+hexToRgb():FuncChain<any>{return get<Function>(FuncChain.prototype,'_hexToRgb').call(this,...arguments)}
+hslToRgb(s: number,l: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_hslToRgb').call(this,...arguments)}
+lerpColor(b: string,t: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_lerpColor').call(this,...arguments)}
+normalizeHex():FuncChain<any>{return get<Function>(FuncChain.prototype,'_normalizeHex').call(this,...arguments)}
+parseColor():FuncChain<any>{return get<Function>(FuncChain.prototype,'_parseColor').call(this,...arguments)}
+rgbToHex(g: number,b: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_rgbToHex').call(this,...arguments)}
+rgbToHsl(g: number,b: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_rgbToHsl').call(this,...arguments)}
 addTime(amount: number,type: string = 's'):FuncChain<any>{return get<Function>(FuncChain.prototype,'_addTime').call(this,...arguments)}
 compareDate(date2: Date | string | number,type: string = 'd'):FuncChain<any>{return get<Function>(FuncChain.prototype,'_compareDate').call(this,...arguments)}
 formatDate(pattern: string = 'yyyy-MM-dd HH:mm:ss'):FuncChain<any>{return get<Function>(FuncChain.prototype,'_formatDate').call(this,...arguments)}
@@ -182,7 +190,7 @@ assign<T extends Record<UnknownMapKey, any>>(...sources: any[]):FuncChain<any>{r
 assignWith<T extends Record<UnknownMapKey, any>>(...sources: any[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_assignWith').call(this,...arguments)}
 clone<T extends Record<string | number | symbol, any>,U>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_clone').call(this,...arguments)}
 cloneDeep<T extends Record<string | number | symbol, any>>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_cloneDeep').call(this,...arguments)}
-cloneDeepWith<T extends Record<string | number | symbol, any>,U>(handler?: (v: any, k: UnknownMapKey, obj: T) => any,skip: (v: any, k: string | number | symbol) => boolean = (value?, key?) => false):FuncChain<any>{return get<Function>(FuncChain.prototype,'_cloneDeepWith').call(this,...arguments)}
+cloneDeepWith<T extends Record<string | number | symbol, any>,U>(handler?: (v: any, k: UnknownMapKey, obj: T) => any,skip: (v: any, k: string | number | symbol) => boolean = (value?, key?) => false,_visited?: WeakMap<object, any>):FuncChain<any>{return get<Function>(FuncChain.prototype,'_cloneDeepWith').call(this,...arguments)}
 cloneWith<T extends Record<string | number | symbol, any>>(handler: (v: any, k?: string | number | symbol) => any,skip: (v: any, k: string | number | symbol) => boolean = (value?, key?) => false):FuncChain<any>{return get<Function>(FuncChain.prototype,'_cloneWith').call(this,...arguments)}
 defaults<T extends Record<UnknownMapKey, any>>(...sources: any[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_defaults').call(this,...arguments)}
 defaultsDeep<T extends Record<UnknownMapKey, any>>(...sources: any[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_defaultsDeep').call(this,...arguments)}
@@ -261,6 +269,7 @@ defaultTo<T,V>(defaultValue: V):FuncChain<any>{return get<Function>(FuncChain.pr
 matcher<T extends Object>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_matcher').call(this,...arguments)}
 snowflakeId(epoch: number = 1580486400000):FuncChain<any>{return get<Function>(FuncChain.prototype,'_snowflakeId').call(this,...arguments)}
 times<V>(iteratee: (n: number) => V):FuncChain<any>{return get<Function>(FuncChain.prototype,'_times').call(this,...arguments)}
+toPlain<T>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_toPlain').call(this,...arguments)}
 uniqueId():FuncChain<any>{return get<Function>(FuncChain.prototype,'_uniqueId').call(this,...arguments)}
 uuid():FuncChain<any>{return get<Function>(FuncChain.prototype,'_uuid').call(this,...arguments)}
 }//#cfx
@@ -447,12 +456,9 @@ function execComprehension(
     if (hasRange && targetIndex > range[1]) return false
     if (targets.length === count) return false
 
-    if (isReverse) {
-      targets.unshift(t)
-    } else {
-      targets.push(t)
-    }
+    targets.push(t)
   })
+  if (isReverse) targets.reverse()
   if (targets.length === 1 && comprehension.returnEl) {
     return targets[0]
   }

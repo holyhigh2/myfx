@@ -20,9 +20,9 @@ function omit(
   obj: Record<UnknownMapKey, any>,
   ...props: (string | string[])[]
 ): Record<UnknownMapKey, any> {
-  const keys: string[] = flatDeep(props)
+  const keys = new Set<string>(flatDeep(props))
   return omitBy<any, string>(obj, (v, k) => {
-    return keys.includes(k)
+    return keys.has(k as string)
   })
 }
 

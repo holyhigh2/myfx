@@ -11,7 +11,7 @@ import type { Collection } from "../types";
  * @returns 新数组
  */
 function tail<T>(array: Collection<T>): T[] {
-  const rs = toArray<T>(array)
+  const rs = Array.isArray(array) ? array : toArray<T>(array)
   return rs.slice(1)
 }
 

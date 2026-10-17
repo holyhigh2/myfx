@@ -1,4 +1,6 @@
 import toString from "./toString"
+
+const TRAILING_WS = /\s*$/
 /**
  * 从字符串末尾删除空白字符。
  *
@@ -12,7 +14,7 @@ import toString from "./toString"
 function trimEnd(str: any): string {
   str = toString(str)
   if (str.trimEnd) return str.trimEnd()
-  return str.replace(/\s*$/, '')
+  return str.replace(TRAILING_WS, '')
 }
 
 export default trimEnd

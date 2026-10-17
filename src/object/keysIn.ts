@@ -22,7 +22,7 @@ function keysIn<K extends keyof any>(obj: Record<K, any> | object | Map<K, any>)
   const rs: K[] = []
   // eslint-disable-next-line guard-for-in
   for (const k in obj) {
-    if (k) rs.push(k as K)
+    rs.push(k as K)
   }
 
   return rs

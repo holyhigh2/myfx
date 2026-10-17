@@ -1,7 +1,6 @@
 import _checkTarget from "../_checkTarget";
 import _eachSources from "../_eachSources";
 import _noop from "../_noop";
-import concat from "../array/concat";
 import isFunction from "../is/isFunction";
 import isObject from "../is/isObject";
 import type { UnknownMapKey } from "../types";
@@ -47,15 +46,16 @@ function walkSources(
   handler: Function,
   stack: any[]
 ) {
+  const isNoop = handler === _noop
   _eachSources(target, src, null, (v, sv, tv, k, s, t) => {
-    const path = concat(stack, k)
-    v = handler(sv, tv, k, s, t, path)
+    const path = isNoop ? stack : stack.concat(k)
+    v = isNoop ? undefined : handler(sv, tv, k, s, t, path)
     if (v !== undefined) {
       t[k] = v
     } else {
       if (isObject(tv) && !isFunction(tv)) {
         walkSources(tv, [sv], handler, path)
-      } else {
+      } else if (sv !== undefined) {
         t[k] = sv
       }
     }

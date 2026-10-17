@@ -29,10 +29,8 @@ function sum(
 ): number {
   if (!isArray(values) && !isSet(values)) return NaN
   let total = 0
-  const items: Array<string | number> = isArray(values) ? values : Array.from(values)
-  for (let i = 0; i < items.length; i++) {
-    const v = items[i]
-    if (Number.isNaN(v)) return NaN
+  for (const v of values) {
+    if (Number.isNaN(v as any)) return NaN
     if (isNumeric(v)) {
       total += Number(v)
     }

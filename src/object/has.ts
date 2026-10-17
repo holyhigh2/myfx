@@ -11,7 +11,7 @@ import type { UnknownMapKey } from "../types"
  * @returns 如果key存在返回true
  */
 function has(obj: Record<UnknownMapKey, any>, key: UnknownMapKey): boolean {
-  return obj && obj.hasOwnProperty && obj.hasOwnProperty(key)
+  return obj != null && Object.prototype.hasOwnProperty.call(Object(obj), key)
 }
 
 export default has

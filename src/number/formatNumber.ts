@@ -1,5 +1,21 @@
-const SUB_PATTERN_EXP = /^(?<pos>.+)((?<!\\=);)(?<neg>.+)$/
-const PATTERN_EXP = /(?<integer>[0,#]+)(?:\.(?<fraction>[0#]+))?(?<suffix>[%\u2030E])?/
+const PATTERN_EXP = /([0,#]+)(?:\.([0#]+))?([%\u2030E])?/
+const GROUP_TAIL_EXP = /,[#0]+$/
+const LEADING_GROUP_EXP = /^.*,(?=[^,])/
+const LEADING_ZERO_EXP = /^0+/
+const DIGIT_TAG_EXP = /[0#]/g
+
+// 查找“正/负数子模式”分隔符 `;`（最右侧、且未被 `\=` 转义、两侧均非空）。
+// 用等价的手工扫描替代原正则中的后顾断言 (?<!\\)，以兼容不支持 lookbehind 的引擎。
+function splitSubPattern(pattern: string): { pos: string; neg: string } | null {
+  for (let i = pattern.length - 2; i > 0; i--) {
+    if (pattern[i] !== ';') continue
+    if (pattern.slice(Math.max(0, i - 2), i) === '\\=') continue
+    const pos = pattern.slice(0, i)
+    const neg = pattern.slice(i + 1)
+    if (pos && neg) return { pos, neg }
+  }
+  return null
+}
 /**
  * 通过表达式格式化数字
  * 
@@ -49,10 +65,10 @@ function formatNumber(v: string | number, pattern = '#,##0.00'): string {
 
   let posPattern = pattern
   let negPattern = ''
-  const subPatterns = pattern.match(SUB_PATTERN_EXP)
-  if (subPatterns && subPatterns.groups) {
-    posPattern = subPatterns.groups.pos
-    negPattern = subPatterns.groups.neg
+  const subPatterns = splitSubPattern(pattern)
+  if (subPatterns) {
+    posPattern = subPatterns.pos
+    negPattern = subPatterns.neg
   }
   const useNeg = num < 0 && !!negPattern
   const key = useNeg ? negPattern : posPattern
@@ -64,9 +80,9 @@ function makeFormatter(pattern: string, v: string | number, isNeg = false) {
   if (match == null) {
     return (v: string | number) => v + ''
   }
-  let integerPtn = match.groups?.integer || ''
-  const fractionPtn = match.groups?.fraction || ''
-  let suffix = match.groups?.suffix || ''
+  let integerPtn = match[1] || ''
+  const fractionPtn = match[2] || ''
+  let suffix = match[3] || ''
   if (
     !integerPtn ||
     integerPtn.indexOf('0#') > -1 ||
@@ -82,12 +98,12 @@ function makeFormatter(pattern: string, v: string | number, isNeg = false) {
   const isPermillage = suffix === '\u2030'
   const isScientific = suffix === 'E'
 
-  const groupMatch = integerPtn.match(/,[#0]+$/)
+  const groupMatch = integerPtn.match(GROUP_TAIL_EXP)
   let groupLen = -1
   let groupReg: RegExp | null = null
   if (groupMatch) {
     groupLen = groupMatch[0].substring(1).length
-    integerPtn = integerPtn.replace(/^.*,(?=[^,])/, '')
+    integerPtn = integerPtn.replace(LEADING_GROUP_EXP, '')
     groupReg = new RegExp('\\B(?=(\\d{' + groupLen + '})+$)', 'g')
   }
 
@@ -119,7 +135,7 @@ function makeFormatter(pattern: string, v: string | number, isNeg = false) {
         exponent = pair[0].length - 1
       } else if (number < 1) {
         const fraStr = pair[1]
-        exponent = fraStr.replace(/^0+/, '').length - fraStr.length - 1
+        exponent = fraStr.replace(LEADING_ZERO_EXP, '').length - fraStr.length - 1
       }
       number = number / 10 ** exponent
     }
@@ -141,7 +157,7 @@ function makeFormatter(pattern: string, v: string | number, isNeg = false) {
       } else {
         dStr =
           '.' +
-          fractionPtn.replace(/[0#]/g, (tag, i) => {
+          fractionPtn.replace(DIGIT_TAG_EXP, (tag, i) => {
             const l = fraction[i]
             return l == undefined ? (tag === '0' ? '0' : '') : l
           })
@@ -170,7 +186,7 @@ function makeFormatter(pattern: string, v: string | number, isNeg = false) {
     } else if (iStr.length < integerPtn.length) {
       const integerPtnLen = integerPtn.length
       const iStrLen = iStr.length
-      iStr = integerPtn.replace(/[0#]/g, (tag, i) => {
+      iStr = integerPtn.replace(DIGIT_TAG_EXP, (tag, i) => {
         if (integerPtnLen - i > iStrLen) return tag === '0' ? '0' : ''
         const l = iStr[iStrLen - (integerPtnLen - i)]
         return l == undefined ? (tag === '0' ? '0' : '') : l

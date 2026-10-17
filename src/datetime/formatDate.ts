@@ -19,8 +19,9 @@ function compilePattern(pattern: string): FormatToken[] {
   const tokens: FormatToken[] = []
   let lastIndex = 0
   let match: RegExpExecArray | null
-  
-  while ((match = SearchExp.exec(pattern)) !== null) {
+  const exp = new RegExp(SearchExp.source, SearchExp.flags)
+
+  while ((match = exp.exec(pattern)) !== null) {
     if (match.index > lastIndex) {
       tokens.push({ type: 'literal', value: pattern.slice(lastIndex, match.index) })
     }
@@ -234,9 +235,9 @@ function formatDate(val: string | Date | number, pattern: string = 'yyyy-MM-dd H
     date = val
   }
   
-  if (date.toString().indexOf('Invalid') > -1) return INVALID_DATE
+  if (Number.isNaN(date.getTime())) return INVALID_DATE
   
-  const locale = Locale[Lang]
+  const locale = Locale[Lang] || Locale['zh-CN']
   let result = ''
   
   for (const part of parts) {

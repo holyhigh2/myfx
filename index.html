@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>myfx playground</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+    }
+
+    body {
+      font: 14px/1.6 ui-monospace, SFMono-Regular, Consolas, monospace;
+      margin: 0;
+      padding: 24px;
+      max-width: 960px;
+    }
+
+    h1 {
+      font-size: 18px;
+      margin: 0 0 4px;
+    }
+
+    .ver {
+      opacity: 0.6;
+      margin-bottom: 20px;
+    }
+
+    .case {
+      border: 1px solid #8884;
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+
+    .case h2 {
+      font-size: 13px;
+      margin: 0 0 8px;
+    }
+
+    pre {
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>myfx playground</h1>
+  <div class="ver">edit <code>index.html</code> or any file under <code>src/</code> — hot reload is on.</div>
+  <div id="app"></div>
+
+  <script type="module">
+    import _ from '/src/index.ts'
+    import { VERSION, map, filter, groupBy, chunk, uniq, camelCase } from '/src/index.ts'
+
+    const out = (title, value) => {
+      const el = document.createElement('div')
+      el.className = 'case'
+      el.innerHTML = `<h2>${title}</h2><pre>${escapeHtml(format(value))}</pre>`
+      document.getElementById('app').appendChild(el)
+    }
+
+    const format = (v) => (typeof v === 'string' ? `"${v}"` : JSON.stringify(v, null, 2))
+    const escapeHtml = (s) => s.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]))
+
+    const people = [
+      { name: 'Ada', age: 36, team: 'core' },
+      { name: 'Linus', age: 54, team: 'core' },
+      { name: 'Grace', age: 45, team: 'compiler' },
+    ]
+
+    out('VERSION', VERSION)
+    out('map([1,2,3], x => x * 2)', map([1, 2, 3], (x) => x * 2))
+    out('filter([1,2,3,4], x => x % 2 === 0)', filter([1, 2, 3, 4], (x) => x % 2 === 0))
+    out('groupBy(people, "team")', groupBy(people, 'team'))
+    out('chunk([1..5], 2)', chunk([1, 2, 3, 4, 5], 2))
+    out('uniq([1,1,2,3,3])', uniq([1, 1, 2, 3, 3]))
+    out('camelCase("hello-world_foo")', camelCase('hello-world_foo'))
+
+    // default namespace export + function chain
+    out('_.chain([1,2,3]).map(x => x + 1).value()', _.chain([1, 2, 3]).map((x) => x + 1).value())
+    window._ = _
+    console.log('myfx playground ready', { VERSION, api: Object.keys(_).length })
+  </script>
+</body>
+
+</html>

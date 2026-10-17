@@ -52,21 +52,17 @@ function sortBy<V, K extends string | number | symbol>(
 ): V[] {
   if (size(collection) < 1) return []
   const cb = _iteratee(iteratee || _identity)
-  let i = 0
-  const list = map<V, any, { src: any; index: number; value: any }>(
+  const list = map<V, any, { src: any; value: any }>(
     collection,
     (v, k) => {
       return {
         src: v,
-        index: i++,
         value: cb(v, k),
       }
     }
   )
   const comparator = getComparator(list[0].value)
-  list.sort((a, b) =>
-    !_eq(a.value, b.value) ? comparator(a.value, b.value) : a.index - b.index
-  )
+  list.sort((a, b) => (_eq(a.value, b.value) ? 0 : comparator(a.value, b.value)))
   const rs: V[] = new Array(list.length)
   for (let j = 0; j < list.length; j++) {
     rs[j] = list[j].src

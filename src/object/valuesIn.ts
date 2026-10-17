@@ -17,7 +17,12 @@ function valuesIn<V>(obj: Map<any, V> | Record<string | number | symbol, V> | ob
   if (isMap(obj)) {
     return Array.from((obj as Map<any, V>).values())
   }
-  return keysIn(obj).map<V>((k) => (obj as any)[k])
+  const ks = keysIn(obj) as Array<string | number | symbol>
+  const rs: V[] = []
+  for (let i = 0; i < ks.length; i++) {
+    rs.push((obj as any)[ks[i]])
+  }
+  return rs
 }
 
 export default valuesIn

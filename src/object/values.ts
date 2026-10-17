@@ -20,7 +20,12 @@ function values<V>(obj: Map<any, V> | Record<string | number | symbol, V> | obje
   if (isMap(obj)) {
     return Array.from((obj as Map<any, V>).values())
   }
-  return keys(obj).map<V>((k) => (obj as any)[k])
+  const ks = keys(obj) as Array<string | number | symbol>
+  const rs: V[] = []
+  for (let i = 0; i < ks.length; i++) {
+    rs.push((obj as any)[ks[i]])
+  }
+  return rs
 }
 
 export default values

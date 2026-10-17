@@ -21,22 +21,21 @@ function throttle<T extends (...args: any[]) => any>(fn: T, wait: number, option
   let timer: any = null
   let timeoutArgs: any
   let timeoutContext: any
-  options = options || { leading: true, trailing: true }
-  options.leading = options.leading === undefined ? true : options.leading;
-  options.trailing = options.trailing === undefined ? true : options.trailing;
+  const leading = options?.leading === undefined ? true : options.leading
+  const trailing = options?.trailing === undefined ? true : options.trailing
 
   function timeout() {
-    if (options?.trailing) {
-      for (const arg of timeoutArgs) {
+    if (trailing) {
+      for (const arg of timeoutArgs || []) {
         if (EventTargetMap.has(arg)) {
           let targets = EventTargetMap.get(arg)
           let ks = Object.keys(targets)
           for (const k of ks) {
             Object.defineProperty(arg, k, {
               value: targets[k],
-              writable: false,
+              writable: true,
               enumerable: true,
-              configurable: false
+              configurable: true
             });
           }
           EventTargetMap.delete(arg)
@@ -51,7 +50,7 @@ function throttle<T extends (...args: any[]) => any>(fn: T, wait: number, option
 
   return (function (this: any, ...args: any[]) {
     timeoutArgs = args.map(arg => {
-      if (arg instanceof globalThis.Event) {
+      if (typeof globalThis.Event === 'function' && arg instanceof globalThis.Event) {
         EventTargetMap.set(arg, {
           currentTarget: arg.currentTarget,
           fromElement: Reflect.get(arg, 'fromElement'),
@@ -70,10 +69,10 @@ function throttle<T extends (...args: any[]) => any>(fn: T, wait: number, option
         clearTimeout(timer)
         timeoutArgs = timer = null
       }
-      if (options?.leading) {
+      if (leading) {
         proxy.apply(this, args);
         lastExec = now;
-      } else if (options?.trailing) {
+      } else if (trailing) {
         timer = setTimeout(timeout, wait);
       } else {
         lastExec = now;

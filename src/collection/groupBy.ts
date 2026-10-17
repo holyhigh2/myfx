@@ -37,7 +37,7 @@ function groupBy<V, K extends string>(
   iteratee: ((value: V) => UnknownMapKey) | NonFuncItee = identity
 ): Record<K, V[]> {
   const stat: Record<UnknownMapKey, V[]> = {} as any
-  const cb = _iteratee(iteratee || _identity)
+  const cb = _iteratee(iteratee == null ? _identity : iteratee)
   each(collection, (el) => {
     const key = cb(el)
     if (stat[key] === undefined) stat[key] = []

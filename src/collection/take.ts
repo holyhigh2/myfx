@@ -14,7 +14,7 @@ import type { Collection } from "../types";
  * @returns 新数组
  */
 function take<T>(array: Collection<T>, length?: number): T[] {
-  const rs = toArray<T>(array)
+  const rs = Array.isArray(array) ? array : toArray<T>(array)
   return rs.slice(0, length)
 }
 

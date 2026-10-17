@@ -11,8 +11,9 @@ import type { UnknownMapKey } from "../types";
  */
 function fromPairs(pairs: any[][]): Record<UnknownMapKey, any> {
   const rs: Record<UnknownMapKey, any> = {}
-  for (let k in pairs) {
-    let pair = pairs[k]
+  for (let i = 0; i < pairs.length; i++) {
+    const pair = pairs[i]
+    if (pair[0] === "__proto__") continue
     rs[pair[0]] = pair[1]
   }
   return rs

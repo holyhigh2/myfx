@@ -1,4 +1,5 @@
-import { default as isObject, default as isRegExp } from '../is/isObject';
+import isObject from '../is/isObject';
+import isRegExp from '../is/isRegExp';
 import escapeRegExp from './escapeRegExp';
 import toString from "./toString";
 
@@ -37,7 +38,7 @@ function truncate(
     options = { omission: '...' }
   }
 
-  options.omission = options.omission || '...'
+  const omission = options.omission || '...'
 
   str = str.substring(0, len)
   if (options.separator) {
@@ -45,10 +46,9 @@ function truncate(
     const rawSeparator = options.separator
     if (!isRegExp(rawSeparator)) {
       separator = new RegExp(escapeRegExp(rawSeparator as string), 'g')
-    } else if (!rawSeparator.global) {
-      separator = new RegExp(rawSeparator.source, rawSeparator.flags + 'g')
     } else {
-      separator = rawSeparator
+      const flags = rawSeparator.flags.includes('g') ? rawSeparator.flags : rawSeparator.flags + 'g'
+      separator = new RegExp(rawSeparator.source, flags)
     }
     separator.lastIndex = 0
     let rs
@@ -61,7 +61,7 @@ function truncate(
     }
   }
 
-  return str + options.omission
+  return str + omission
 }
 
 export default truncate

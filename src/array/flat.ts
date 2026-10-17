@@ -25,31 +25,36 @@ function flat<T>(array: any[] | Set<any>, depth: number = 1): T[] {
   const safeDepth = Math.min(depth, MAX_DEPTH)
   const result: T[] = []
 
-  const stack: { val: any; depth: number }[] = []
+  const stack: any[] = []
+  const depths: number[] = []
 
   // Convert to array to preserve insertion order and allow reverse iteration
-  const inputArr = Array.from(array)
+  const inputArr = Array.isArray(array) ? array : Array.from(array as Iterable<any>)
 
   // Reverse iteration to maintain original order (LIFO stack)
   for (let i = inputArr.length - 1; i >= 0; i--) {
-    stack.push({ val: inputArr[i], depth: safeDepth })
+    stack.push(inputArr[i])
+    depths.push(safeDepth)
   }
 
   while (stack.length > 0) {
-    const { val, depth: currentDepth } = stack.pop()!
+    const val = stack.pop()
+    const currentDepth = depths.pop()!
     if (Array.isArray(val)) {
       if (currentDepth > 0) {
         for (let i = val.length - 1; i >= 0; i--) {
-          stack.push({ val: val[i], depth: currentDepth - 1 })
+          stack.push(val[i])
+          depths.push(currentDepth - 1)
         }
       } else {
         result.push(val as T)
       }
     } else if (isSet(val)) {
       if (currentDepth > 0) {
-        const childArr = Array.from(val)
+        const childArr = Array.from(val as Set<any>)
         for (let i = childArr.length - 1; i >= 0; i--) {
-          stack.push({ val: childArr[i], depth: currentDepth - 1 })
+          stack.push(childArr[i])
+          depths.push(currentDepth - 1)
         }
       } else {
         result.push(val as T)

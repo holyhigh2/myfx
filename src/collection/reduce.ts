@@ -1,8 +1,6 @@
 import isNil from "../is/isNil";
-import keys from "../object/keys";
 import type { Collection } from "../types";
 import each from "./each";
-import first from "./first";
 
 function reduce<V, U>(
   collection: Set<V> | ArrayLike<V>,
@@ -86,18 +84,20 @@ function reduce<V, K extends string | number | symbol | object, U>(
   ) => U,
   initialValue?: U
 ): U {
-  let rs: U
-  if (isNil(initialValue)) {
-    rs = first(collection as any)
-  } else {
-    rs = callback(initialValue, first(collection as any), first(keys(collection as any)), collection)
-  }
+  let rs!: U
+  let hasAcc = !isNil(initialValue)
+  if (hasAcc) rs = initialValue as U
 
   each<V, K>(collection, (v, k, c) => {
+    if (!hasAcc) {
+      rs = v as any
+      hasAcc = true
+      return
+    }
     rs = callback(rs, v, k, c as any)
-  }, 1)
+  })
 
-  return rs
+  return rs as U
 }
 
 export default reduce

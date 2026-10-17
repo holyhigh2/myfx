@@ -9,11 +9,10 @@ import type { NonFuncItee } from "./types"
 import matcher from "./utils/matcher"
 import toPath from "./utils/toPath"
 
-const iterateeCache = new WeakMap<object, Function>()
-const primitiveCache = new Map<string, Function>()
+const FALSE_ITEE = () => false
 
 /**
- * 创建一个函数，函数类型根据参数值类型而定。创建的函数常用于迭代回调，在Func.js内部被大量使用
+ * 创建一个函数，函数类型根据参数值类型而定。创建的函数常用于迭代回调，在myfx内部被大量使用
  *
  * @example
  * const libs = [
@@ -54,30 +53,17 @@ function iteratee(value?: Function | NonFuncItee): Function {
   }
   
   if (isString(value)) {
-    const cached = primitiveCache.get(value)
-    if (cached) return cached
-    const fn = prop(value)
-    primitiveCache.set(value, fn)
-    return fn
+    return prop(value as string)
   }
   
   if (isArray<string | number>(value)) {
-    const key = value.join('\0')
-    const cached = primitiveCache.get(key)
-    if (cached) return cached
-    const fn = prop(toPath(value))
-    primitiveCache.set(key, fn)
-    return fn
+    return prop(toPath(value))
   }
   
   if (isObject(value)) {
-    const cached = iterateeCache.get(value)
-    if (cached) return cached
-    const fn = matcher(value)
-    iterateeCache.set(value, fn)
-    return fn
+    return matcher(value)
   }
   
-  return () => false
+  return FALSE_ITEE
 }
 export default iteratee

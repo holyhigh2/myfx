@@ -1,6 +1,5 @@
 import type { Collection } from "../types";
 import sampleSize from "./sampleSize";
-import size from "./size";
 
 /**
  * 返回指定数组的一个随机乱序副本
@@ -17,7 +16,7 @@ import size from "./size";
  * @since 0.16.0
  */
 function shuffle<T>(collection: Collection<T>): T[] {
-  return sampleSize(collection, size(collection))
+  return sampleSize(collection, Infinity)
 }
 
 export default shuffle

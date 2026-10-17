@@ -48,6 +48,7 @@ function cloneWith<T extends Record<string | number | symbol, any>>(
   copy = new (obj as any).constructor()
   const propNames = Object.keys(obj)
   propNames.forEach((p) => {
+    if (p === "__proto__") return
     let skipTag = skip(obj[p], p)
     if (skipTag) return;
     let newProp = (handler || _identity)(obj[p], p)

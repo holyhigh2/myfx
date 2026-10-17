@@ -1,5 +1,4 @@
 import flatDeep from "../array/flatDeep"
-import includes from "../collection/includes"
 import type { UnknownMapKey } from "../types"
 import pickBy from "./pickBy"
 /**
@@ -21,9 +20,9 @@ function pick<T extends Record<UnknownMapKey, any>>(
   obj: T,
   ...props: (string | string[])[]
 ): T {
-  const keys = flatDeep(props)
+  const keys = new Set<string>(flatDeep(props))
   return pickBy(obj, (v, k) => {
-    return includes(keys, k)
+    return keys.has(k as string)
   })
 }
 

@@ -8,7 +8,7 @@ import toDate from "./toDate"
 function isLeapYear(date: Date): boolean {
   date = toDate(date)
   const year = date.getFullYear()
-  return year % 400 === 0 || year % 4 === 0
+  return year % 400 === 0 || (year % 4 === 0 && year % 100 !== 0)
 }
 
 export default isLeapYear

@@ -13,7 +13,15 @@ const ALPHABET =
  * @since 1.0.0
  */
 function alphaId(len: number = 16): string {
-  const bytes = globalThis.crypto.getRandomValues(new Uint8Array(len || 16))
+  const n = len || 16
+  const cryptoObj = (globalThis as any).crypto
+  let bytes: Uint8Array
+  if (cryptoObj && typeof cryptoObj.getRandomValues === 'function') {
+    bytes = cryptoObj.getRandomValues(new Uint8Array(n))
+  } else {
+    bytes = new Uint8Array(n)
+    for (let i = 0; i < n; i++) bytes[i] = (Math.random() * 256) | 0
+  }
   let rs = ''
   for (let i = 0; i < bytes.length; i++) {
     rs += ALPHABET[bytes[i] % ALPHABET.length]

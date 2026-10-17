@@ -17,7 +17,9 @@
  */
 function toInteger(v: any): number {
   if (v === null || v === undefined) return 0
-  return parseInt(v)
+  if (typeof v === 'symbol') return 0
+  const n = Number(v)
+  return Number.isNaN(n) ? 0 : Math.trunc(n)
 }
 
 export default toInteger

@@ -1,4 +1,3 @@
-import clone from "./clone";
 import cloneDeepWith from "./cloneDeepWith";
 
 function cloneDeep<T extends Record<string | number | symbol, any>>(
@@ -24,7 +23,7 @@ function cloneDeep<T extends Record<string | number | symbol, any>, U>(
 function cloneDeep<T extends Record<string | number | symbol, any>>(
   obj: T
 ): T {
-  return cloneDeepWith<T>(obj, clone)
+  return cloneDeepWith<T>(obj)
 }
 
 export default cloneDeep

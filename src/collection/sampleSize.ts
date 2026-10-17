@@ -1,9 +1,7 @@
-import pop from "../array/pop";
-import range from "../array/range";
-import map from "../collection/map";
-import toArray from "../collection/toArray";
+import isArray from "../is/isArray";
 import randi from "../math/randi";
-import type { Collection, UnknownMapKey } from "../types";
+import type { Collection } from "../types";
+import toArray from "./toArray";
 
 /**
  * 返回对指定列表的指定数量随机采样结果
@@ -19,16 +17,18 @@ import type { Collection, UnknownMapKey } from "../types";
  * @since 0.16.0
  */
 function sampleSize<T>(collection: Collection<T>, count: number = 1): T[] {
-  count = count ?? 1
-  const ary = toArray<T>(collection)
-  const seeds = range(0, ary.length)
-  const ks: number[] = []
-  while (seeds.length > 0) {
-    if (count-- < 1) break
-    const i = pop<number>(seeds, randi(seeds.length))
-    if (i !== null) ks.push(i)
+  const n0 = count == null ? 1 : count
+  const ary = isArray<T>(collection) ? (collection as T[]).slice() : toArray<T>(collection)
+  const len = ary.length
+  const k = Math.min(len, Math.max(0, Math.trunc(n0) || 0))
+  const rs: T[] = []
+  for (let i = 0; i < k; i++) {
+    const j = randi(i, len)
+    const tmp = ary[i]
+    ary[i] = ary[j]
+    ary[j] = tmp
+    rs.push(ary[i])
   }
-  const rs = map<number, UnknownMapKey, T>(ks, (v) => ary[v])
   return rs
 }
 

@@ -36,6 +36,7 @@ function toObject<V extends Record<UnknownMapKey, any>>(...vals: any[]): V {
       assign(rs, tmp)
     } else if (isMap(v)) {
       v.forEach((val, k: any) => {
+        if (k === "__proto__") return
         rs[k] = val
       })
     } else if (isObject(v)) {
@@ -59,6 +60,7 @@ function toObject<V extends Record<UnknownMapKey, any>>(...vals: any[]): V {
   }
   if (pairs.length > 0) {
     for (let i = 0; i < pairs.length; i += 2) {
+      if (pairs[i] === "__proto__") continue
       rs[pairs[i]] = pairs[i + 1]
     }
   }

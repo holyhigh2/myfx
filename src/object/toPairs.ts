@@ -11,9 +11,11 @@ import type { UnknownMapKey } from "../types";
  */
 function toPairs(obj: Record<UnknownMapKey, any>): any[][] {
   const rs: any[] = []
-  for (let k in obj) {
-    let v = obj[k]
-    rs.push([k, v])
+  if (obj == null) return rs
+  const ks = Object.keys(obj)
+  for (let i = 0; i < ks.length; i++) {
+    const k = ks[i]
+    rs.push([k, obj[k]])
   }
   return rs
 }

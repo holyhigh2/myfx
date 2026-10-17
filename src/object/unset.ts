@@ -17,6 +17,9 @@ function unset(
   let target = obj
   for (let i = 0; i < chain.length; i++) {
     const seg = chain[i]
+    if (seg === "__proto__" || seg === "constructor" || seg === "prototype") {
+      return false
+    }
     const nextSeg = chain[i + 1]
     let tmp = target[seg]
     if (nextSeg) {

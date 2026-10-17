@@ -32,7 +32,7 @@ function closest<U extends Record<string | number | symbol, any>>(
   let k = true
   let i = 0
   while (k && p) {
-    if (composed && p instanceof ShadowRoot) {
+    if (composed && typeof globalThis.ShadowRoot === 'function' && p instanceof globalThis.ShadowRoot) {
       p = p.host
     }
     if (predicate(p, i++, () => { k = false })) {

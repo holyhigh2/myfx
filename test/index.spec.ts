@@ -6,6 +6,7 @@ import CasesIs from './cases.is'
 import CasesString from './cases.string'
 import CasesArray from './cases.array'
 import CasesColl from './cases.collection'
+import CasesColor from './cases.color'
 import CasesDatetime from './cases.datetime'
 import CasesMath from './cases.math'
 import CasesNumber from './cases.number'
@@ -20,6 +21,7 @@ const Cases = merge(
   CasesIs,
   CasesString,
   CasesArray,
+  CasesColor,
   CasesDatetime,
   CasesColl,
   CasesMath,

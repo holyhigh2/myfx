@@ -41,6 +41,7 @@ import findLast from "./collection/findLast";
 import first from "./collection/first";
 import flatMap from "./collection/flatMap";
 import flatMapDeep from "./collection/flatMapDeep";
+import groupAggregate from "./collection/groupAggregate";
 import groupBy from "./collection/groupBy";
 import includes from "./collection/includes";
 import initial from "./collection/initial";
@@ -61,6 +62,13 @@ import tail from "./collection/tail";
 import take from "./collection/take";
 import takeRight from "./collection/takeRight";
 import toArray from "./collection/toArray";
+import hexToRgb from "./color/hexToRgb";
+import hslToRgb from "./color/hslToRgb";
+import lerpColor from "./color/lerpColor";
+import normalizeHex from "./color/normalizeHex";
+import parseColor from "./color/parseColor";
+import rgbToHex from "./color/rgbToHex";
+import rgbToHsl from "./color/rgbToHsl";
 import addTime from "./datetime/addTime";
 import compareDate from "./datetime/compareDate";
 import formatDate from "./datetime/formatDate";
@@ -222,13 +230,14 @@ import noop from "./utils/noop";
 import snowflakeId from "./utils/snowflakeId";
 import times from "./utils/times";
 import toPath from "./utils/toPath";
+import toPlain from "./utils/toPlain";
 import uniqueId from "./utils/uniqueId";
 import uuid from "./utils/uuid";
 
 import { FuncChain } from "./chain";
 
 export {
-  add, addTime, after, alphaId, alt, append, arrayToTree, assign, assignWith, bind, bindAll, call, camelCase, capitalize, chunk, clone, cloneDeep, cloneDeepWith, cloneWith, closest, compact, compareDate, compose, concat, countBy, debounce, defaults, defaultsDeep, defaultTo, delay, divide, each, eachRight, endsWith, eq, escapeRegExp, every, except, fill, filter, filterTree, find, findIndex, findKey, findLast, findLastIndex, findTreeNode, findTreeNodes, first, flat, flatDeep, flatMap, flatMapDeep, formatDate, formatNumber, fromPairs, functions, fval, get, getDayOfYear, getWeekOfMonth, getWeekOfYear, groupBy, gt, gte, has, identity, includes, indexOf, initial, inRange, insert, intersect, isAlnum, isAlpha, isArray, isArrayLike, isBlank, isBoolean, isCustomElement, isDate, isDefined, isElement, isEmpty, isEqual, isEqualWith, isError, isFinite, isFunction, isInteger, isIterator, isLeapYear, isLowerCaseChar, isMap, isMatch, isMatchWith, isNaN, isNative, isNil, isNode, isNull, isNumber, isNumeric, isObject, isPlainObject, isPrimitive, isRegExp, isSafeInteger, isSameDay, isSet, isString, isSymbol, isUndefined, isUpperCaseChar, isWeakMap, isWeakSet, iteratee, join, kebabCase, keyBy, keys, keysIn, last, lastIndexOf, lowerCase, lowerFirst, lt, lte, map, matcher, max, mean, median, merge, mergeWith, min, minmax, mixin, multiply, noop, now, omit, omitBy, once, padEnd, padStart, padZ, parseJSON, partial, partition, pascalCase, pick, pickBy, pop, prop, pull, randf, randi, range, reduce, reject, remove, repeat, replace, replaceAll, reverse, sample, sampleSize, set, shuffle, size, slice, snakeCase, snowflakeId, some, sort, sortBy, sortedIndex, sortedIndexBy, sortTree, split, startsWith, substring, subtract, sum, tail, take, takeRight, tap, template, test, throttle, times, toArray, toDate, toFixed, toInteger, toNumber, toObject, toPairs, toPath, toString, trim, trimEnd, trimStart, truncate, union, uniq, uniqBy, uniqueId, unset, unzip, upperCase, upperFirst, uuid, values, valuesIn, walkTree, without, zip, zipObject, zipWith
+  add, addTime, after, alphaId, alt, append, arrayToTree, assign, assignWith, bind, bindAll, call, camelCase, capitalize, chunk, clone, cloneDeep, cloneDeepWith, cloneWith, closest, compact, compareDate, compose, concat, countBy, hexToRgb, hslToRgb, lerpColor, parseColor, rgbToHex, rgbToHsl, debounce, defaults, defaultsDeep, defaultTo, delay, divide, each, eachRight, endsWith, eq, escapeRegExp, every, except, fill, filter, filterTree, find, findIndex, findKey, findLast, findLastIndex, findTreeNode, findTreeNodes, first, flat, flatDeep, flatMap, flatMapDeep, formatDate, formatNumber, fromPairs, functions, fval, get, getDayOfYear, getWeekOfMonth, getWeekOfYear, groupBy, gt, gte, has, identity, includes, indexOf, initial, inRange, insert, intersect, isAlnum, isAlpha, isArray, isArrayLike, isBlank, isBoolean, isCustomElement, isDate, isDefined, isElement, isEmpty, isEqual, isEqualWith, isError, isFinite, isFunction, isInteger, isIterator, isLeapYear, isLowerCaseChar, isMap, isMatch, isMatchWith, isNaN, isNative, isNil, isNode, isNull, isNumber, isNumeric, isObject, isPlainObject, isPrimitive, isRegExp, isSafeInteger, isSameDay, isSet, isString, isSymbol, isUndefined, isUpperCaseChar, isWeakMap, isWeakSet, iteratee, join, kebabCase, keyBy, keys, keysIn, last, lastIndexOf, lowerCase, lowerFirst, lt, lte, map, matcher, max, mean, median, merge, mergeWith, min, minmax, mixin, multiply, noop, now, omit, omitBy, once, padEnd, padStart, padZ, parseJSON, partial, partition, pascalCase, pick, pickBy, pop, prop, pull, randf, randi, range, reduce, reject, remove, repeat, replace, replaceAll, reverse, sample, sampleSize, set, shuffle, size, slice, snakeCase, snowflakeId, some, sort, sortBy, sortedIndex, sortedIndexBy, sortTree, split, startsWith, substring, subtract, sum, tail, take, takeRight, tap, template, test, throttle, times, toArray, toDate, toFixed, toInteger, toNumber, toObject, toPairs, toPath, toString, trim, trimEnd, trimStart, truncate, union, uniq, uniqBy, uniqueId, unset, unzip, upperCase, upperFirst, uuid, values, valuesIn, walkTree, without, zip, zipObject, zipWith, groupAggregate, normalizeHex, toPlain
 };
 
 export type { FuncChain } from "./chain";
@@ -298,7 +307,8 @@ export function chain<T>(v: T): FuncChain<T> {
 
 const api = {
   append, chunk, compact, concat, except, fill, findIndex, findLastIndex, flat, flatDeep, insert, intersect, join, pop, pull, range, remove, reverse, slice, sortedIndex, sortedIndexBy, union, uniq, uniqBy, unzip, without, zip, zipObject, zipWith,
-  countBy, each, eachRight, every, filter, find, findLast, first, flatMap, flatMapDeep, groupBy, includes, initial, keyBy, last, map, partition, reduce, reject, sample, sampleSize, shuffle, size, some, sort, sortBy, tail, take, takeRight, toArray,
+  countBy, each, eachRight, every, filter, find, findLast, first, flatMap, flatMapDeep, groupAggregate, groupBy, includes, initial, keyBy, last, map, partition, reduce, reject, sample, sampleSize, shuffle, size, some, sort, sortBy, tail, take, takeRight, toArray,
+  hexToRgb, hslToRgb, lerpColor, normalizeHex, parseColor, rgbToHex, rgbToHsl,
   addTime, compareDate, formatDate, getDayOfYear, getWeekOfMonth, getWeekOfYear, isLeapYear, isSameDay, now, toDate,
   after, alt, bind, bindAll, call, compose, debounce, delay, fval, once, partial, tap, throttle,
   isAlnum, isAlpha, isArray, isArrayLike, isBlank, isBoolean, isCustomElement, isDate, isDefined, isElement, isEmpty, isEqual, isEqualWith, isError, isFinite, isFunction, isInteger, isIterator, isLowerCaseChar, isMap, isMatch, isMatchWith, isNaN, isNative, isNil, isNode, isNull, isNumber, isNumeric, isObject, isPlainObject, isPrimitive, isRegExp, isSafeInteger, isSet, isString, isSymbol, isUndefined, isUpperCaseChar, isWeakMap, isWeakSet,
@@ -308,7 +318,7 @@ const api = {
   camelCase, capitalize, endsWith, escapeRegExp, indexOf, kebabCase, lastIndexOf, lowerCase, lowerFirst, padEnd, padStart, padZ, pascalCase, repeat, replace, replaceAll, snakeCase, split, startsWith, substring, test, toFixed, toString, trim, trimEnd, trimStart, truncate, upperCase, upperFirst,
   template,
   arrayToTree, closest, filterTree, findTreeNode, findTreeNodes, sortTree, walkTree,
-  alphaId, defaultTo, identity, iteratee, matcher, mixin, noop, snowflakeId, times, toPath, uniqueId, uuid
+  alphaId, defaultTo, identity, iteratee, matcher, mixin, noop, snowflakeId, times, toPath, toPlain, uniqueId, uuid
 };
 
 let chainMixinReady = false;

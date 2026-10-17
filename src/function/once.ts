@@ -10,13 +10,13 @@
  * @returns 包装后的函数
  */
 function once<T extends (...args: any[]) => any>(fn: T): T {
-  let proxy = fn
-  return ((...args: any[]) => {
+  let proxy: T | null = fn
+  return (function (this: any, ...args: any[]) {
     let rtn
     if (proxy) {
-      let m = proxy;
-      (proxy as any) = null;
-      rtn = m(...args)
+      const m = proxy
+      proxy = null
+      rtn = m.apply(this, args)
     }
 
     return rtn

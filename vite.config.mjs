@@ -66,7 +66,13 @@ export default defineConfig(({ mode }) => {
   const isDev = mode === 'dev'
 
   return {
-    appType: 'custom',
+    appType: isDev ? 'spa' : 'custom',
+    server: isDev
+      ? {
+          open: true,
+          port: 5173,
+        }
+      : undefined,
     plugins: [isDev ? null : isUmd ? null : dts({
       include: ['src/**/*.ts'],
       exclude: ['src/**/*.spec.ts', 'test/**'],

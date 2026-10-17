@@ -1,5 +1,4 @@
 import filter from "../collection/filter"
-import includes from "../collection/includes"
 /**
  * 返回删除所有values后的新数组。使用<code>eq</code>函数进行等值判断
  *
@@ -13,7 +12,8 @@ import includes from "../collection/includes"
  * @since 0.19.0
  */
 function without<T>(array: T[], ...values: T[]): T[] {
-  return filter(array, (item) => !includes(values, item))
+  const set = new Set<T>(values)
+  return filter(array, (item) => !set.has(item))
 }
 
 export default without

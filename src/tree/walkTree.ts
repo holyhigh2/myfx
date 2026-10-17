@@ -67,24 +67,23 @@ function _walkTree(
     index: number
   ) => boolean | number | void,
   options?: Record<UnknownMapKey, any>,
-  ...rest: any[]
+  parentNode?: Record<UnknownMapKey, any>,
+  chain: Record<UnknownMapKey, any>[] = []
 ): boolean | void {
   if (!isObject(treeNodes)) return;
   options = options || {}
-  const parentNode = rest[0]
-  const chain = rest[1] || []
   const childrenKey = options.childrenKey || 'children'
   const data = isArrayLike(treeNodes) ? treeNodes : [treeNodes]
   for (let i = 0; i < data.length; i++) {
     const node = data[i]
-    const rs = callback(node, parentNode, chain, chain.length, i)
+    const rs = callback(node, parentNode as Record<UnknownMapKey, any>, chain, chain.length, i)
     if (rs === false) return false
     if (rs === -1) continue
 
     if (!isEmpty(node[childrenKey])) {
       // 限制最大递归深度
       if (chain.length >= MAX_DEPTH) continue
-      
+
       // 使用push/pop代替concat，避免创建新数组
       chain.push(node)
       const childRs = _walkTree(
@@ -95,7 +94,7 @@ function _walkTree(
         chain
       )
       chain.pop()
-      
+
       if (childRs === false) return
     }
   }

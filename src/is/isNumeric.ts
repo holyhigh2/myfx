@@ -1,6 +1,8 @@
 import isNil from "./isNil"
 import isNumber from "./isNumber"
 
+const NUMERIC_EXP = /^-?[0-9]*\.?[0-9]+$/
+
 /**
  * 判断参数是否为数字或数字字符串。不能判断BigInt
  *
@@ -16,12 +18,14 @@ import isNumber from "./isNumber"
  * @returns
  */
 function isNumeric(v: unknown): v is number | string {
-  if ((v + '').length < 1) return false
   if (isNil(v)) return false
+  if (typeof v === 'symbol') return false
+  const s = v + ''
+  if (s.length < 1) return false
   if (Number.isNaN(v)) return false
   if (isNumber(v)) return true
 
-  return /^-?[0-9]*\.?[0-9]+$/.test(v + '')
+  return NUMERIC_EXP.test(s)
 }
 
 export default isNumeric
