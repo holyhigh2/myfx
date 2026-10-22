@@ -18,8 +18,8 @@ export type DebouncedFunction<T extends (...args: any[]) => any> = T & {
  * 典型场景：宿主（组件/组件库）卸载时清除已排队的回调，避免回调迟到执行时访问已销毁的实例。
  *
  * @example
- * //2
- * let log = _.debounce(console.log);
+ * //undefined undefined（防抖函数本身无返回值）；100ms后输出最后一次调用的参数 2
+ * let log = _.debounce(console.log,100);
  * console.log(log(1),log(2))
  *
  * @example

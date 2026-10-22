@@ -29,25 +29,34 @@ import padEnd from "../string/padEnd";
  *
  * @param value 转换参数
  *
- * @returns 转换后的日期。无效日期统一返回1970/1/1
+ * @returns 转换后的日期。无效日期返回Invalid Date（即 new Date(NaN)）
  */
 function toDate(value: number | [year: number, monthIndex: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number] | string | Date): Date {
   let rs
-  if (isInteger(value)) {
-    if (value < TIMESTAMP_MIN) {
-      value = toNumber(padEnd(value + '', 13, '0'))
-    } else if (value > TIMESTAMP_MAX) {
-      value = 0
+  let v: any = value
+  // 纯数字字符串形式的**时间戳**（JSON 里时间戳常被序列化成字符串）。
+  // 只认 10 位以上：10 位是秒级时间戳的下限，短数字串（`'2020'`）必须留给
+  if (typeof v === 'string' && /^[+-]?\d{10,}$/.test(v.trim())) v = toNumber(v.trim())
+  if (isInteger(v)) {
+    const neg = v < 0
+    const abs = neg ? -v : v
+    if (abs < TIMESTAMP_MIN) {
+      // 位数不足13位，视为unix秒风格时间戳，按符号补位到13位毫秒
+      v = (neg ? -1 : 1) * toNumber(padEnd(abs + '', 13, '0'))
+    } else if (abs > TIMESTAMP_MAX) {
+      v = NaN
     }
-    rs = new Date(value)
-  } else if (isArray(value)) {
-    rs = new Date(value[0], value[1], value[2] || 1, value[3] || 0, value[4] || 0, value[5] || 0, value[6] || 0)
+    rs = new Date(v)
+  } else if (isArray(v)) {
+    const a = v as any[]
+    rs = new Date(a[0], a[1], a[2] || 1, a[3] || 0, a[4] || 0, a[5] || 0, a[6] || 0)
   } else {
-    rs = new Date(value)
+    rs = new Date(v)
   }
 
   if (Number.isNaN(rs.getTime())) {
-    rs = new Date(0)
+    // 无效日期返回Invalid Date，让下游（如formatDate）能够识别
+    rs = new Date(NaN)
   }
 
   return rs

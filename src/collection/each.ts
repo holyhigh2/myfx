@@ -75,6 +75,7 @@ function each<V, K extends string | number | symbol | object>(
     const size = collection.size
     if (size === 0 || startIndex >= size) return
     const values = collection.values()
+    for (let i = 0; i < startIndex; i++) values.next()
     for (let i = startIndex; i < size; i++) {
       if (callback(values.next().value as V, i as K, collection, i) === false) return
     }
@@ -87,6 +88,10 @@ function each<V, K extends string | number | symbol | object>(
     if (size === 0 || startIndex >= size) return
     const keys = collection.keys()
     const values = collection.values()
+    for (let i = 0; i < startIndex; i++) {
+      keys.next()
+      values.next()
+    }
     for (let i = startIndex; i < size; i++) {
       if (callback(
         values.next().value as V,

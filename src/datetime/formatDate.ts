@@ -171,14 +171,17 @@ function buildTokenFn(tag: string): (date: Date, locale: any) => string {
  *   - `ss` 2位秒(00-59)
  *   - `Q` 季度(1-4)
  *   - `QQ` 季度描述(春-冬)
- *   - `W` 一年中的周(1-53)
+ *   - `W` 一年中的周(1-53，ISO 8601：周一起始，含当年第一个周四的周为第1周)
  *   - `WW` 一年中的周(01-53)
- *   - `w` 一月中的周(1-6)
+ *   - `w` 一月中的周(1-6，周一起始，月首所在周为第1周)
  *   - `ww` 一月中的周描述(第一周 - 第六周)
  *   - `E` 星期(1-7)
  *   - `EE` 星期描述(星期一 - 星期日)
  *   - `S` 毫秒
  *   - `a` AM/PM
+  *
+  * **注意**：pattern没有字面量转义机制。非token字符会原样输出，
+  * 但字面量中出现的 `y/M/d/h/H/m/s/Q/E/W/w/S/a` 字符会被当作token解析，无法转义
   *
   * @example
   * //now time
@@ -226,7 +229,7 @@ function formatDate(val: string | Date | number, pattern: string = 'yyyy-MM-dd H
     }
   }
   
-  if (!val) return INVALID_DATE
+  if (val === null || val === undefined || (typeof val === 'number' && Number.isNaN(val))) return INVALID_DATE
   
   let date: Date
   if (typeof val === 'string' || typeof val === 'number') {

@@ -1,5 +1,8 @@
 
 
+// 最大上溯深度，对齐walkTree的MAX_DEPTH策略，防止parentKey环状引用导致死循环
+const MAX_DEPTH = 128
+
 function closest<V extends Record<string | number | symbol, any>, U extends Record<string | number | symbol, any>>(
   node: V,
   predicate: (node: V, times: number, cancel: () => void) => boolean,
@@ -31,7 +34,7 @@ function closest<U extends Record<string | number | symbol, any>>(
   let t: any = null
   let k = true
   let i = 0
-  while (k && p) {
+  while (k && p && i < MAX_DEPTH) {
     if (composed && typeof globalThis.ShadowRoot === 'function' && p instanceof globalThis.ShadowRoot) {
       p = p.host
     }

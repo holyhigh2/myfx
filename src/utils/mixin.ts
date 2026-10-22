@@ -3,22 +3,15 @@ import functions from "../object/functions"
  * 为 myfx 扩展额外函数，扩展后的函数同样具有函数链访问能力
  *
  * @example
- * //增加扩展
- * _.mixin({
+ * //向函数链注册扩展方法（链式代理按 _<fnName> 约定委托）
+ * _.mixin(_.FuncChain, {
  *  select:_.get,
- *  from:_.chain,
- *  where:_.filter,
  *  top:_.first
  * });
+ * //非链目标则直接挂为 _<fnName> 属性
+ * _.mixin({}, { double:(v)=>v*2 })
  *
- * const libs = [
- *  {name:'myfx',platform:['web','nodejs'],tags:{utils:true},js:true},
- *  {name:'juth2',platform:['web','java'],tags:{utils:false,middleware:true},js:false},
- *  {name:'soya2d',platform:['web'],tags:{utils:true},js:true}
- * ];
- * //查询utils是true的第一行数据的name值
- * console.log(_.from(libs).where({tags:{utils:true}}).top().select('name').value())
- *
+ * @param target 注册目标。传 FuncChain 时为函数链注册委托方法，其他对象挂 `_<name>` 属性
  * @param obj 扩展的函数声明
  */
 function mixin(target: Record<any, any>, obj: Record<string, Function>): void {

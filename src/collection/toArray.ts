@@ -22,7 +22,7 @@ import values from "../object/values";
  * console.log(_.toArray('abc'))
  * //[1,2,'b']
  * console.log(_.toArray({x:1,y:2,z:'b'}))
- * //[[1, 'a'], [3, 'b'], ['a', 5]]
+ * //['a', 'b', 5] Map转换为值列表（与each/values的约定一致）
  * console.log(_.toArray(new Map([[1,'a'],[3,'b'],['a',5]])))
  * //[1, 3, 'a']
  * console.log(_.toArray(new Map([[1,'a'],[3,'b'],['a',5]])).keys())

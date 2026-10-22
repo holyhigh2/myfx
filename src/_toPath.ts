@@ -1,5 +1,12 @@
 import isArray from "./is/isArray"
 
+// 数组路径解析的哨兵分隔符：BRACKET 标记 [..] 段，ELEMENT 标记数组元素边界
+const BRACKET = '\u0001'
+const ELEMENT = '\u0000'
+const SENTINEL_RE = /[\u0000\u0001]/
+// [key] / ["key"] / ['key'] → 段边界；数组分支替换为 BRACKET，字符串分支替换为 '.'
+const BRACKET_RE = /\[(['"])?([^\]'"]+)\1?\]/gm
+
 /**
  * 解析path并返回数组
  * @example
@@ -15,14 +22,19 @@ import isArray from "./is/isArray"
  * @since 0.16.0
  */
 function toPath(path: Array<string | number> | string | number): string[] {
-  let chain = path
-  if (isArray(chain)) {
-    chain = chain.join('.')
+  if (isArray(path)) {
+    let s = (path as Array<string | number>)
+      .map((el) => (el + '').replace(BRACKET_RE, BRACKET + '$2'))
+      .join(ELEMENT)
+    if (s[0] === BRACKET) {
+      s = s.substring(1)
+    }
+    return s.split(SENTINEL_RE)
   }
 
-  let rs = chain + ''
+  let rs = path + ''
   if (rs.includes('[')) {
-    rs = rs.replace(/\[(['"])?([^\]'"]+)\1?\]/gm, '.$2')
+    rs = rs.replace(BRACKET_RE, '.$2')
   }
   if (rs[0] === '.') {
     rs = rs.substring(1)

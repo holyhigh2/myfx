@@ -1,10 +1,10 @@
-import isLowerCaseChar from "../is/isLowerCaseChar";
-import isNumeric from "../is/isNumeric";
-import isUpperCaseChar from "../is/isUpperCaseChar";
-import toString from "./toString";
+import _caseScan from "../_caseScan";
 
 /**
  * 返回帕斯卡风格的字符串
+ *
+ * 非ASCII字符（如CJK、重音字母、代理对）不会被丢弃：无大小写形态的按「字母」原样保留参与分词，
+ * 有大小写形态的按其大小写归类
  *
  * @example
  * //'LoveLovesToLoveLove'
@@ -17,38 +17,14 @@ import toString from "./toString";
  * console.log(_.pascalCase('AB_CD_EF'))//snakeCase
  * //'ABcDEfGhXy'
  * console.log(_.pascalCase('aBc   D__EF_GH----XY_'))//mixCase
+ * //'CaféBar'
+ * console.log(_.pascalCase('caféBar'))//unicode
  *
  * @param str
  * @returns 返回新字符串
  */
 function pascalCase(str: string): string {
-  let rs = "";
-  str = toString(str)
-  let prevType = 0; //1小写字母；2大写字母；3分隔符
-  for (let i = 0; i < str.length; i++) {
-    let s = str[i];
-    if (isLowerCaseChar(s) || isNumeric(s)) {
-      if (prevType === 3 || prevType === 0) {
-        s = s.toUpperCase();
-      }
-      rs += s;
-      prevType = 1;
-      continue;
-    }
-    if (s === " " || s === "-" || s === "_") {
-      if (prevType === 3) continue;
-      prevType = 3;
-      continue;
-    }
-    if (isUpperCaseChar(s)) {
-      if (prevType === 2) {
-        s = (s as string).toLowerCase();
-      }
-      rs += s;
-      prevType = 2;
-    }
-  }
-  return rs;
+  return _caseScan(str, undefined, true)
 }
 
 export default pascalCase

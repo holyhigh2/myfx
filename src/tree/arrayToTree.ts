@@ -43,7 +43,7 @@ import get from '../object/get'
  * @param idKey id标识
  * @param pidKey 父id标识
  * @param options 自定义选项
- * @param options.rootParentValue 根节点的parentValue，用于识别根节点。默认null
+ * @param options.rootParentValue 根节点的parentValue，用于识别根节点。默认null。记录上parentValue为undefined时也视作根节点
  * @param options.childrenKey 包含子节点容器的key。默认'children'
  * @param options.attrMap 转换tree节点时的属性映射，如\{text:'name'\}表示把array中一条记录的name属性映射为tree节点的text属性
  * @param options.sortKey 如果指定排序字段，则会在转换tree时自动排序。字段值可以是数字或字符等可直接进行比较的类型。性能高于转换后再排序
@@ -84,7 +84,7 @@ function arrayToTree<V extends Record<string | number | symbol, any>>(
       sortMap[nodeId] = [sortNo, sortNo] // min,max
     }
 
-    if (record[pk] === rootParentValue) {
+    if (record[pk] === rootParentValue || record[pk] === undefined) {
       if (hasAttrMap) {
         each<any, string>(attrMap, (v, k) => ((record as any)[k] = record[v]))
       }

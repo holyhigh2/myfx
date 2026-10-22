@@ -1,10 +1,4 @@
-/** 把 0~255 的通道值取整并限制到合法范围 */
-function clampChannel(v: number): number {
-  const n = Math.round(v)
-  if (isNaN(n) || n < 0) return 0
-  if (n > 255) return 255
-  return n
-}
+import _clampChannel from "../_clampChannel";
 
 /**
  * 将 `r/g/b`（各自 0~255）拼装为小写十六进制颜色 `#rrggbb`。
@@ -22,7 +16,7 @@ function clampChannel(v: number): number {
  * @returns 形如 `#rrggbb` 的颜色字符串
  */
 function rgbToHex(r: number, g: number, b: number): string {
-  const to = (v: number) => clampChannel(v).toString(16).padStart(2, '0')
+  const to = (v: number) => _clampChannel(v).toString(16).padStart(2, '0')
   return '#' + to(r) + to(g) + to(b)
 }
 

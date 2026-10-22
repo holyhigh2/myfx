@@ -1,4 +1,5 @@
 import _cloneBuiltInObject from "../_cloneBuiltInObject";
+import _cloneShell from "../_cloneShell";
 import isElement from "../is/isElement";
 import isFunction from "../is/isFunction";
 import isMap from "../is/isMap";
@@ -91,7 +92,8 @@ function cloneDeepWith<T extends Record<string | number | symbol, any>, U>(
 
   if (visited.has(obj)) return visited.get(obj)
 
-  const copy = new (obj as any).constructor()
+  // 壳语义
+  const copy = _cloneShell(obj)
   visited.set(obj, copy)
   const propNames = Object.keys(obj)
   propNames.forEach((p) => {

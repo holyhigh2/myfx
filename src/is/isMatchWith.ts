@@ -2,6 +2,19 @@ import isFunction from "./isFunction";
 import isNil from "./isNil";
 import isNode from "./isNode";
 import isObject from "./isObject";
+
+const objToString = Object.prototype.toString;
+
+/**
+ * 判断是否为不应按普通对象递归的内建对象类型（Date/RegExp/Map/Set/Error/TypedArray/DataView/ArrayBuffer/包装原语等）。
+ * 这类值应交给comparator处理，否则空keys递归会导致isMatch恒true
+ */
+function isBuiltInObject(v: any): boolean {
+  if (ArrayBuffer.isView(v) || v instanceof ArrayBuffer) return true
+  const tag = objToString.call(v)
+  return tag !== '[object Object]' && tag !== '[object Array]' && tag !== '[object Arguments]'
+}
+
 /**
  * 检测props对象中的所有属性是否在object中存在并使用自定义比较器对属性值进行对比。可以用于对象的深度对比。
  * 当comparator参数是默认值时，与<code>isMath</code>函数相同
@@ -36,7 +49,7 @@ function isMatchWith<T extends Record<string | number | symbol, any>>(
     const k = ks[i]
     const v1 = target[k]
     const v2 = props[k]
-    if (isObject(v1) && isObject(v2) && !isNode(v1) && !isNode(v2) && !isFunction(v1) && !isFunction(v2)) {
+    if (isObject(v1) && isObject(v2) && !isNode(v1) && !isNode(v2) && !isFunction(v1) && !isFunction(v2) && !isBuiltInObject(v1) && !isBuiltInObject(v2)) {
       if (!isMatchWith<Record<string | number | symbol, any>>(v1, v2, comparator)) {
         rs = false
         break

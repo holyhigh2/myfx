@@ -1,6 +1,9 @@
 import isArray from '../is/isArray'
 import isEmpty from '../is/isEmpty'
 
+// 最大递归深度，对齐walkTree的MAX_DEPTH策略，防止环状引用导致栈溢出
+const MAX_DEPTH = 128
+
 /**
  * 对给定节点及所有子孙节点(同级)排序
  * @example
@@ -53,7 +56,17 @@ function sortTree<V extends Record<string | number | symbol, any>>(
   ) => number,
   options: { childrenKey?: string } = { childrenKey: 'children' }
 ): void {
-  const childrenKey = options.childrenKey || 'children'
+  _sortTree(treeNodes, comparator, options, 0)
+}
+
+function _sortTree<V extends Record<string | number | symbol, any>>(
+  treeNodes: V | V[],
+  comparator: (a: V, b: V) => number,
+  options: { childrenKey?: string },
+  depth: number
+): void {
+  if (depth >= MAX_DEPTH) return
+  const childrenKey = options?.childrenKey || 'children'
   const data: V[] = isArray<any>(treeNodes)
     ? treeNodes
     : [treeNodes]
@@ -61,7 +74,8 @@ function sortTree<V extends Record<string | number | symbol, any>>(
 
   data.forEach((node) => {
     if (!isEmpty(node[childrenKey])) {
-      sortTree(node[childrenKey], comparator)
+      // 递归透传options，自定义childrenKey在任意层级生效
+      _sortTree(node[childrenKey], comparator, options, depth + 1)
     }
   })
 }

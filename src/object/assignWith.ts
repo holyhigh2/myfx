@@ -1,6 +1,7 @@
 import _checkTarget from "../_checkTarget";
 import _eachSources from "../_eachSources";
 import _identity from "../_identity";
+import isFunction from "../is/isFunction";
 import type { UnknownMapKey } from "../types";
 /**
  * 与<code>assign</code>相同，但支持自定义处理器
@@ -25,7 +26,7 @@ function assignWith<T extends Record<UnknownMapKey, any>>(
   let src = sources
   const sl = sources.length
   let handler = src[sl - 1]
-  if (!handler || !handler.call) {
+  if (!isFunction(handler)) {
     handler = _identity
   } else {
     src = src.slice(0, sl - 1)

@@ -1,4 +1,3 @@
-import type { ArrayLike } from "../types";
 /**
  * 对数组进行切片，并返回切片后的新数组，原数组不变。新数组内容是对原数组内容的浅拷贝
  *
@@ -14,7 +13,7 @@ import type { ArrayLike } from "../types";
  * @param end 切片结束下标，<b>不包含</b>下标位置元素
  * @returns 切片元素组成的新数组
  */
-function slice<T>(array: Set<T> | ArrayLike, begin: number = 0, end?: number): T[] {
+function slice<T>(array: T[], begin: number = 0, end?: number): T[] {
   if (!Array.isArray(array)) return []
   return array.slice(begin || 0, end)
 }

@@ -1,4 +1,3 @@
-import isNil from "../is/isNil";
 import type { Collection } from "../types";
 import each from "./each";
 
@@ -85,7 +84,7 @@ function reduce<V, K extends string | number | symbol | object, U>(
   initialValue?: U
 ): U {
   let rs!: U
-  let hasAcc = !isNil(initialValue)
+  let hasAcc = arguments.length > 2
   if (hasAcc) rs = initialValue as U
 
   each<V, K>(collection, (v, k, c) => {

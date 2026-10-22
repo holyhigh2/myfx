@@ -18,6 +18,7 @@ function zipObject(
 ): Record<UnknownMapKey, any> {
   const rs: { [key: string | number | symbol]: any } = {}
   each<string | number | symbol, number>(keys, (k, i) => {
+    if (k === "__proto__") return
     rs[k] = get(values, i)
   })
 

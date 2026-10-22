@@ -37,11 +37,12 @@ function get<V>(
 
   const chain = _toPath(path)
   let target = obj as any
-  for (let i = 0; i < chain.length; i++) {
-    const seg = chain[i]
-    target = target[seg]
-    if (!target) break
+  let i = 0
+  while (i < chain.length) {
+    if (target === null || target === undefined) break
+    target = target[chain[i++]]
   }
+  if (i < chain.length) return defaultValue
   if (target === undefined) target = defaultValue
   return target as V
 }

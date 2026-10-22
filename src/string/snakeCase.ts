@@ -1,9 +1,10 @@
-import isLowerCaseChar from "../is/isLowerCaseChar";
-import isNumeric from "../is/isNumeric";
-import isUpperCaseChar from "../is/isUpperCaseChar";
-import toString from "./toString";
+import _caseScan from "../_caseScan";
+
 /**
  * 返回下划线风格的字符串
+ *
+ * 非ASCII字符（如CJK、重音字母、代理对）不会被丢弃：无大小写形态的按「字母」原样保留参与分词，
+ * 有大小写形态的按其大小写归类（大写视为分词边界并转为小写）
  *
  * @example
  * //'a_b_c'
@@ -14,37 +15,14 @@ import toString from "./toString";
  * console.log(_.snakeCase('a B-c'))//camelCase
  * //'get_my_url'
  * console.log(_.snakeCase('getMyURL'))//camelCase
+ * //'café_bar'
+ * console.log(_.snakeCase('caféBar'))//unicode
  *
  * @param str
  * @returns 返回新字符串
  */
 function snakeCase(str: string): string {
-  let rs = "";
-  str = toString(str)
-  let prevType = 0; //1小写字母；2大写字母；3分隔符
-  let lastPos = str.length - 1
-  for (let i = 0; i < str.length; i++) {
-    const s = str[i];
-    if (isLowerCaseChar(s) || isNumeric(s)) {
-      rs += s;
-      prevType = 1;
-      continue;
-    }
-    if (s === " " || s === "-" || s === "_") {
-      if (prevType === 3 || i === lastPos) continue;
-      rs += "_";
-      prevType = 3;
-      continue;
-    }
-    if (isUpperCaseChar(s)) {
-      if (prevType === 1) {
-        rs += "_";
-      }
-      rs += (s as string).toLowerCase();
-      prevType = 2;
-    }
-  }
-  return rs;
+  return _caseScan(str, "_")
 }
 
 export default snakeCase

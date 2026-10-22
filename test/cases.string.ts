@@ -104,6 +104,9 @@ const Datas: Record<string, any[]> = {
     ['func.js', 'Func', 'i', true],
     ['func.js', /FUNC/, false],
     ['func.js', /^func/, true],
+    // 字符串 pattern 按字面量匹配（全量转义，不注入正则语义）
+    ['a*b', '*', true],
+    ['ax', '^a', false],
   ],
   truncate: [
     ['func.js', 4, 'func...'],

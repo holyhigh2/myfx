@@ -17,7 +17,7 @@ import type { Collection } from "../types";
 function takeRight<T>(array: Collection<T>, length?: number): T[] {
   const rs = Array.isArray(array) ? array : toArray<T>(array)
   const maxLength = rs.length
-  return rs.slice(maxLength - (length || maxLength), maxLength)
+  return rs.slice(maxLength - (length ?? maxLength), maxLength)
 }
 
 export default takeRight

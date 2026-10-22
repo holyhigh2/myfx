@@ -36,7 +36,7 @@ function countBy<V, K extends string | number | symbol | object>(
   collection: Collection<V, K>,
   itee: ((value: V) => K) | NonFuncItee = identity
 ): Record<Exclude<K, object>, number> {
-  const stat: Record<UnknownMapKey, any> = {}
+  const stat: Record<UnknownMapKey, any> = Object.create(null)
   const cb = _iteratee(itee || _identity)
   each(collection, (el) => {
     const key = cb(el)

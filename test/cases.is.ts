@@ -63,11 +63,37 @@ const Datas: Record<string, any[]> = {
     [[new Date('2010-2-1'), /12/], [new Date(1264953600000), new RegExp('12')], true],
     [[new Date('2010-2-1'), 'abcd'], ['2010/2/1', 'Abcd'], false],
     [1, '1', false],
+    // 内建类型交叉比较：tag不同直接false
+    [new Date(0), {}, false],
+    [/a/, {}, false],
+    [[1, 2], { 0: 1, 1: 2 }, false],
+    [new Number(5), new Number(6), false],
+    [new Number(5), new Number(5), true],
+    [new Error('a'), new Error('b'), false],
+    [new Error('a'), new Error('a'), true],
+    // ArrayBuffer/TypedArray/DataView 逐字节比较
+    [new Uint8Array([1, 2]), new Uint8Array([1, 2]), true],
+    [new Uint8Array([1, 2]), new Uint8Array([1, 3]), false],
+    [new ArrayBuffer(1), new ArrayBuffer(2), false],
+    [new DataView(new ArrayBuffer(1)), new DataView(new ArrayBuffer(2)), false],
+    [new DataView(new Uint8Array([7]).buffer), new DataView(new Uint8Array([7]).buffer), true],
+    // Set/Map 对象成员深比较
+    [new Set([{ a: 1 }]), new Set([{ a: 1 }]), true],
+    [new Set([{ a: 1 }]), new Set([{ a: 2 }]), false],
+    [new Map([[{ k: 1 }, { a: 1 }]]), new Map([[{ k: 1 }, { a: 1 }]]), true],
+    [new Map([[{ k: 1 }, { a: 1 }]]), new Map([[{ k: 1 }, { a: 2 }]]), false],
+    // 循环引用
+    [(() => { const o: any = { x: 1 }; o.self = o; return o })(), (() => { const o: any = { x: 1 }; o.self = o; return o })(), true],
   ],
   isMatch: [
     [{ a: { x: 1, y: 2 }, b: 1 }, { b: 1 }, true],
     [{ a: { x: 1, y: 2 }, b: 1 }, { b: 2 }, false],
-    [[{ x: 1, y: 2 }, { b: 1 }], [{ x: 1 }], true]
+    [[{ x: 1, y: 2 }, { b: 1 }], [{ x: 1 }], true],
+    // 内建对象类型不按普通对象递归，交给comparator(默认eq)处理
+    [{ d: new Date(0) }, { d: {} }, false],
+    [{ r: /a/ }, { r: {} }, false],
+    [{ m: new Map() }, { m: new Map([[1, 2]]) }, false],
+    [{ s: new Set([1]) }, { s: new Set() }, false]
   ],
   isRegExp: [
     [new RegExp(''), true], [/1/, true], [{}, false]

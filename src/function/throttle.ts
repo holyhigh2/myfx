@@ -1,21 +1,45 @@
 /**
+ * 节流函数对象：在节流函数上附加 `cancel()` / `flush()`。
+ * @since 2.0.0
+ */
+export type ThrottledFunction<T extends (...args: any[]) => any> = T & {
+  /**
+   * 丢弃尚未执行的排队trailing调用，并释放内部滞留的参数引用（如DOM Event）。队列为空时为安全空操作。
+   * 典型场景：宿主（组件/组件库）卸载时调用，避免trailing回调迟到执行时访问已销毁的实例。
+   */
+  cancel: () => void
+  /**
+   * 如果存在排队的trailing调用则立即执行并清除计时器；队列为空时为安全空操作。
+   */
+  flush: () => void
+}
+
+/**
  * 创建一个包含指定函数逻辑的节流函数并返回。每当节流函数执行后都会等待`wait`间隔归零才可再次调用，等待期间调用函数无效。
  * 对于一些需要降低执行频率的场景非常有用，如onmousemove、onscroll等事件中
+ *
+ * 返回的节流函数额外带有 `cancel()` / `flush()`（语义镜像`debounce`的`cancel()`）：
+ * `cancel()`丢弃排队中的trailing调用并释放滞留的参数引用；`flush()`立即执行排队中的trailing调用。
  *
  * @example
  * //每隔1秒输出当前时间
  * let log = _.throttle(console.log,1000);
  * setInterval(()=>log(new Date().toTimeString()),100)
  *
+ * //宿主销毁时取消排队中的调用
+ * let onScroll = _.throttle(doLayout, 200)
+ * window.addEventListener('scroll', onScroll)
+ * //destroyed: onScroll.cancel() //trailing回调不会再触发
+ *
  * @param fn 需要调用的函数
  * @param wait 抖动间隔，ms
  * @param options 执行选项
  * @param options.leading 首次是否执行，默认true
  * @param options.trailing 最后一次是否执行，默认true
- * @returns 包装后的函数
+ * @returns 包装后的节流函数（含 `cancel()` / `flush()`）
  * @since 1.4.0
  */
-function throttle<T extends (...args: any[]) => any>(fn: T, wait: number, options?: { leading?: boolean, trailing?: boolean }): T {
+function throttle<T extends (...args: any[]) => any>(fn: T, wait: number, options?: { leading?: boolean, trailing?: boolean }): ThrottledFunction<T> {
   let proxy = fn
   let lastExec = 0
   let timer: any = null
@@ -45,10 +69,11 @@ function throttle<T extends (...args: any[]) => any>(fn: T, wait: number, option
     }
 
     lastExec = Date.now();
-    timeoutArgs = timer = null;
+    // 执行后释放滞留的参数/this引用（含DOM Event）
+    timeoutArgs = timeoutContext = timer = null;
   }
 
-  return (function (this: any, ...args: any[]) {
+  const throttled = function (this: any, ...args: any[]) {
     timeoutArgs = args.map(arg => {
       if (typeof globalThis.Event === 'function' && arg instanceof globalThis.Event) {
         EventTargetMap.set(arg, {
@@ -67,20 +92,41 @@ function throttle<T extends (...args: any[]) => any>(fn: T, wait: number, option
     if (remaining <= 0) {
       if (timer) {
         clearTimeout(timer)
-        timeoutArgs = timer = null
+        timer = null
       }
       if (leading) {
         proxy.apply(this, args);
         lastExec = now;
+        // leading执行后释放滞留的参数引用（含DOM Event），trailing由后续调用重新暂存
+        timeoutArgs = timeoutContext = null;
       } else if (trailing) {
         timer = setTimeout(timeout, wait);
       } else {
         lastExec = now;
+        timeoutArgs = timeoutContext = null;
       }
     } else if (!timer) {
       timer = setTimeout(timeout, remaining);
     }
-  }) as T
+  } as unknown as ThrottledFunction<T>
+
+  throttled.cancel = function () {
+    if (timer !== null) {
+      clearTimeout(timer)
+      timer = null
+    }
+    timeoutArgs = timeoutContext = null
+  }
+
+  throttled.flush = function () {
+    if (timer !== null) {
+      clearTimeout(timer)
+      timer = null
+      timeout()
+    }
+  }
+
+  return throttled
 }
 
 const EventTargetMap = new WeakMap

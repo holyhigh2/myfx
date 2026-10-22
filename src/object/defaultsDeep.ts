@@ -24,14 +24,35 @@ function defaultsDeep<T extends Record<UnknownMapKey, any>>(
   const rs = _checkTarget(target)
   if (rs) return rs
 
+  walkDefaults(target, sources, new WeakMap<object, WeakSet<object>>())
+  return target
+}
+
+function walkDefaults(
+  target: Record<UnknownMapKey, any>,
+  sources: any[],
+  seen: WeakMap<object, WeakSet<object>>
+) {
   _eachSources(target, sources, null, (v, sv, tv, k, s, t) => {
     if (tv === undefined) {
       t[k] = v
-    } else if (isObject(tv) && !isFunction(tv)) {
-      defaultsDeep(tv, sv)
+    } else if (isObject(tv) && !isFunction(tv) && Array.isArray(tv) === Array.isArray(sv)) {
+      // 容器类型不同（数组 vs 对象）不递归：defaults 语义是"只补 undefined"
+      const rs = _checkTarget(tv)
+      if (rs) return
+      // 循环引用防护：同一(target,source)对只递归一次，自引用结构不会栈溢出
+      if (isObject(sv)) {
+        let seenSet = seen.get(tv)
+        if (!seenSet) {
+          seenSet = new WeakSet<object>()
+          seen.set(tv, seenSet)
+        }
+        if (seenSet.has(sv)) return
+        seenSet.add(sv)
+      }
+      walkDefaults(tv, [sv], seen)
     }
   })
-  return target
 }
 
 export default defaultsDeep

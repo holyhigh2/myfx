@@ -28,7 +28,7 @@ const PLACEHOLDER = void 0
  * @returns 部分应用后的新函数
  */
 function partial<T extends (...args: any[]) => any>(fn: T, ...args: any[]): T {
-  return ((...params: any[]) => {
+  return (function (this: any, ...params: any[]) {
     let p = 0
     const applyArgs = args.map((v) => (v === PLACEHOLDER ? params[p++] : v))
     if (params.length > p) {
@@ -36,7 +36,7 @@ function partial<T extends (...args: any[]) => any>(fn: T, ...args: any[]): T {
         applyArgs.push(params[i])
       }
     }
-    return fn(...applyArgs)
+    return fn.apply(this, applyArgs)
   }) as T
 }
 

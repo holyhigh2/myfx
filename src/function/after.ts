@@ -15,9 +15,9 @@ function after<T extends (...args: any[]) => any>(fn: T, count: number = 0): T {
   const proxy = fn
   let i = Number.isFinite(count) ? Math.max(0, Math.trunc(count)) : 0
   let rtn: any
-  return ((...args: any[]) => {
+  return (function (this: any, ...args: any[]) {
     if (i === 0) {
-      rtn = proxy(...args)
+      rtn = proxy.apply(this, args)
     }
     if (i > 0) i--
     return rtn

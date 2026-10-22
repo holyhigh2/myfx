@@ -36,7 +36,7 @@ function mergeWith<T extends Record<UnknownMapKey, any>>(
     src = src.slice(0, sl - 1)
   }
 
-  walkSources(target, src, handler as Function, [])
+  walkSources(target, src, handler as Function, [], new WeakMap<object, WeakSet<object>>())
   return target
 }
 
@@ -44,7 +44,8 @@ function walkSources(
   target: Record<UnknownMapKey, any>,
   src: Record<any, any>[],
   handler: Function,
-  stack: any[]
+  stack: any[],
+  seen: WeakMap<object, WeakSet<object>>
 ) {
   const isNoop = handler === _noop
   _eachSources(target, src, null, (v, sv, tv, k, s, t) => {
@@ -53,8 +54,23 @@ function walkSources(
     if (v !== undefined) {
       t[k] = v
     } else {
-      if (isObject(tv) && !isFunction(tv)) {
-        walkSources(tv, [sv], handler, path)
+      if (
+        isObject(tv) &&
+        !isFunction(tv) &&
+        isObject(sv) &&
+        Array.isArray(tv) === Array.isArray(sv)
+      ) {
+        // 循环引用防护：同一(target,source)对只合并一次，自引用结构不会栈溢出
+        if (isObject(sv)) {
+          let seenSet = seen.get(tv)
+          if (!seenSet) {
+            seenSet = new WeakSet<object>()
+            seen.set(tv, seenSet)
+          }
+          if (seenSet.has(sv)) return
+          seenSet.add(sv)
+        }
+        walkSources(tv, [sv], handler, path, seen)
       } else if (sv !== undefined) {
         t[k] = sv
       }

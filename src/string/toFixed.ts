@@ -1,4 +1,5 @@
 import padEnd from "./padEnd"
+import _expandExponential from "../_expandExponential"
 /**
  * 截取数字小数位。用来修复原生toFixed函数的bug
  *
@@ -24,13 +25,7 @@ function toFixed(v: string | number, scale: number = 0): string {
   scale = scale || 0
   const num = parseFloat(v + '')
   if (isNaN(num)) return v as string
-  let numStr = num + ''
-  if (numStr.includes('e')) {
-    let [coefficient, power] = numStr.split('e')
-    let p = parseInt(power)
-    let cn = coefficient.replace('.', '')
-    numStr = p < 0 ? `0.${'0'.repeat(-p - 1)}${cn}` : `${cn}${'0'.repeat(p - cn.length + 1)}`
-  }
+  const numStr = _expandExponential(num)
   const isNeg = num < 0 ? -1 : 1
   const tmp = numStr.split('.')
   const frac = tmp[1] || ''

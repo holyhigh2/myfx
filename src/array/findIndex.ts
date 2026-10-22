@@ -15,7 +15,7 @@ import type { NonFuncItee } from "../types"
  * @param predicate (value[,index[,array]]);断言
  * <br>当断言是函数时回调参数见定义
  * <br>其他类型请参考 {@link utils!iteratee}
- * @param fromIndex 从0开始的起始索引，设置该参数可以减少实际遍历次数。默认0
+ * @param fromIndex 从0开始的起始索引，设置该参数可以减少实际遍历次数。默认0。负数表示从末尾起算（length+fromIndex，结果clamp到0）
  * @returns 第一个匹配断言的元素索引或-1
  */
 function findIndex<T>(
@@ -28,6 +28,7 @@ function findIndex<T>(
   if (!Array.isArray(array)) return -1
   let rs = -1
   let fromIndexNum = fromIndex || 0
+  if (fromIndexNum < 0) fromIndexNum = Math.max(array.length + fromIndexNum, 0)
   const itee = _iteratee(predicate)
   for (let i = fromIndexNum; i < array.length; i++) {
     const v = array[i];

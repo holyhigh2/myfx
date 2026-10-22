@@ -29,7 +29,7 @@ import toString from "./toString";
 function truncate(
   str: any,
   len: number,
-  options?: { omission?: '...', separator?: string | RegExp }
+  options?: { omission?: string, separator?: string | RegExp }
 ): string {
   str = toString(str)
   if (str.length <= len) return str
@@ -38,7 +38,8 @@ function truncate(
     options = { omission: '...' }
   }
 
-  const omission = options.omission || '...'
+  // `omission: ''` 是合法用法（只要截断不要省略号），不能被 `||` 当成缺省回落成 '...'
+  const omission = options.omission === undefined ? '...' : toString(options.omission)
 
   str = str.substring(0, len)
   if (options.separator) {
@@ -55,6 +56,7 @@ function truncate(
     let tmp
     while ((tmp = separator.exec(str)) !== null) {
       rs = tmp
+      if (tmp[0] === '') separator.lastIndex++
     }
     if (rs) {
       str = str.substring(0, rs.index)

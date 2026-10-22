@@ -16,7 +16,7 @@ import includes from "../collection/includes";
 import map from "../collection/map";
 import size from "../collection/size";
 import takeRight from "../collection/takeRight";
-import keys from "../object/keys";
+import myfx from "../index";
 import toPairs from "../object/toPairs";
 import lastIndexOf from "../string/lastIndexOf";
 import padStart from "../string/padStart";
@@ -24,7 +24,6 @@ import replace from "../string/replace";
 import substring from "../string/substring";
 import trim from "../string/trim";
 import type { INode, IOptions, UnknownMapKey } from "../types";
-import myfx from "../index";
 
 /**
  * 使用MTL(Myfx Template Language)编译字符串模板，并返回编译后的render函数
@@ -187,11 +186,11 @@ function parse(
         const reason = error instanceof Error ? error.message : String(error);
         throw new SyntaxError(
           "Invalid template syntax near: " +
-            tipInfo +
-            "\n" +
-            tipIndicator +
-            "\n" +
-            reason
+          tipInfo +
+          "\n" +
+          tipIndicator +
+          "\n" +
+          reason
         );
       }
 
@@ -266,6 +265,15 @@ function parseNode(
   }
 }
 
+// 文本token拼进反引号模板字符串前必须转义 `\`、反引号、`${`，
+// 否则字面量 `${...}` 会被求值、反引号导致SyntaxError、`\t` 等转义序列被吃掉
+function escapeTextToken(str: string): string {
+  return str
+    .replace(/\\/g, "\\\\")
+    .replace(/`/g, "\\`")
+    .replace(/\$\{/g, "\\${");
+}
+
 // 返回编译后的render函数
 // 函数中不能出现异步代码，否则会导致render失败
 // 默认全局变量 print() / _
@@ -275,7 +283,7 @@ function compile(tokens: INode[], options: IOptions): Function {
     if (token.comment) return;
 
     if (token.text) {
-      funcStr += "\nprint(`" + token.source + "`);";
+      funcStr += "\nprint(`" + escapeTextToken(token.source) + "`);";
     } else if (token.interpolate) {
       funcStr += `\nprint(${token.expression});`;
     } else if (token.evaluate) {
@@ -298,26 +306,22 @@ function compile(tokens: INode[], options: IOptions): Function {
     globalValues.push(myfx);
   }
 
-  return (obj: Record<UnknownMapKey, any>) => {
-    let declarations = keys(obj).join(",");
-    if (declarations) {
-      declarations = "{" + declarations + "}";
-    }
-
-    const getRender = new Function(
-      ...globalKeys,
-      "$options",
-      `return function(${declarations}){
+  const getRender = new Function(
+    ...globalKeys,
+    "$options",
+    `return function($data){
       const textQ=[];
       const print=(str)=>{
         textQ.push(str)
-      };` +
-      funcStr +
-      ';return textQ.join("")}'
-    )(...globalValues, options);
+      };
+      const $scope = Object.assign(Object.create(null), $data||{});
+      with($scope){` +
+    funcStr +
+    `}
+      return textQ.join("")}`
+  )(...globalValues, options);
 
-    return getRender(obj);
-  };
+  return (obj?: Record<UnknownMapKey, any>) => getRender(obj);
 }
 
 const templateApi = /* @__PURE__ */ Object.assign(template, {

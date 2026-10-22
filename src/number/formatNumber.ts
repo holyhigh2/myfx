@@ -1,3 +1,6 @@
+import _expandExponential from '../_expandExponential'
+import toFixed from '../string/toFixed'
+
 const PATTERN_EXP = /([0,#]+)(?:\.([0#]+))?([%\u2030E])?/
 const GROUP_TAIL_EXP = /,[#0]+$/
 const LEADING_GROUP_EXP = /^.*,(?=[^,])/
@@ -120,27 +123,37 @@ function makeFormatter(pattern: string, v: string | number, isNeg = false) {
   }
   return (val: string | number): string => {
     const num = parseFloat(val + '')
+    // 统一按绝对值格式化，最后再补符号，保证负数四舍五入进位方向正确
+    const isNegNum = num < 0
 
-    let number = num
+    let number = isNegNum ? -num : num
     let exponent = 0
 
     if (isPercentage) {
       number = number * 100
     } else if (isPermillage) {
       number = number * 1000
-    } else if (isScientific) {
-      const str = number + ''
-      const pair = str.split('.')
-      if (number >= 1) {
-        exponent = pair[0].length - 1
-      } else if (number < 1) {
-        const fraStr = pair[1]
-        exponent = fraStr.replace(LEADING_ZERO_EXP, '').length - fraStr.length - 1
-      }
-      number = number / 10 ** exponent
     }
 
-    const numStr = number + ''
+    // 展开指数形式（如 1e-7 / 1e21），否则 parseInt 会直接截取出错
+    let numStr = _expandExponential(number)
+
+    if (isScientific) {
+      if (number === 0) {
+        exponent = 0
+      } else {
+        const pair = numStr.split('.')
+        if (number >= 1) {
+          exponent = pair[0].length - 1
+        } else {
+          const fraStr = pair[1] || ''
+          exponent = fraStr.replace(LEADING_ZERO_EXP, '').length - fraStr.length - 1
+        }
+      }
+      number = number / 10 ** exponent
+      numStr = _expandExponential(number)
+    }
+
     let integer = parseInt(numStr)
     const pair = numStr.split('.')
     const fraction = pair[1] || ''
@@ -149,7 +162,7 @@ function makeFormatter(pattern: string, v: string | number, isNeg = false) {
     let dStr = ''
     if (fractionPtn) {
       if (fraction.length >= fixedLen) {
-        dStr = parseFloat('0.' + fraction).toFixed(fixedLen)
+        dStr = toFixed(parseFloat('0.' + fraction), fixedLen)
         if (dStr[0] === '1') {
           integer += 1
         }
@@ -174,8 +187,9 @@ function makeFormatter(pattern: string, v: string | number, isNeg = false) {
       integer += carry
     }
     // 处理整数
-    let iStr = integer + ''
-    let sym = num < 0 ? '-' : ''
+    // 大数（如 1e21）经 number→string 会回到指数形式，需再次展开为普通数字串
+    let iStr = _expandExponential(integer)
+    let sym = isNegNum ? '-' : ''
     if (iStr[0] === '-' || iStr[0] === '+') {
       sym = iStr[0]
       iStr = iStr.substring(1)

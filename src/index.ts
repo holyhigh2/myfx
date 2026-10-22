@@ -240,7 +240,7 @@ export {
   add, addTime, after, alphaId, alt, append, arrayToTree, assign, assignWith, bind, bindAll, call, camelCase, capitalize, chunk, clone, cloneDeep, cloneDeepWith, cloneWith, closest, compact, compareDate, compose, concat, countBy, hexToRgb, hslToRgb, lerpColor, parseColor, rgbToHex, rgbToHsl, debounce, defaults, defaultsDeep, defaultTo, delay, divide, each, eachRight, endsWith, eq, escapeRegExp, every, except, fill, filter, filterTree, find, findIndex, findKey, findLast, findLastIndex, findTreeNode, findTreeNodes, first, flat, flatDeep, flatMap, flatMapDeep, formatDate, formatNumber, fromPairs, functions, fval, get, getDayOfYear, getWeekOfMonth, getWeekOfYear, groupBy, gt, gte, has, identity, includes, indexOf, initial, inRange, insert, intersect, isAlnum, isAlpha, isArray, isArrayLike, isBlank, isBoolean, isCustomElement, isDate, isDefined, isElement, isEmpty, isEqual, isEqualWith, isError, isFinite, isFunction, isInteger, isIterator, isLeapYear, isLowerCaseChar, isMap, isMatch, isMatchWith, isNaN, isNative, isNil, isNode, isNull, isNumber, isNumeric, isObject, isPlainObject, isPrimitive, isRegExp, isSafeInteger, isSameDay, isSet, isString, isSymbol, isUndefined, isUpperCaseChar, isWeakMap, isWeakSet, iteratee, join, kebabCase, keyBy, keys, keysIn, last, lastIndexOf, lowerCase, lowerFirst, lt, lte, map, matcher, max, mean, median, merge, mergeWith, min, minmax, mixin, multiply, noop, now, omit, omitBy, once, padEnd, padStart, padZ, parseJSON, partial, partition, pascalCase, pick, pickBy, pop, prop, pull, randf, randi, range, reduce, reject, remove, repeat, replace, replaceAll, reverse, sample, sampleSize, set, shuffle, size, slice, snakeCase, snowflakeId, some, sort, sortBy, sortedIndex, sortedIndexBy, sortTree, split, startsWith, substring, subtract, sum, tail, take, takeRight, tap, template, test, throttle, times, toArray, toDate, toFixed, toInteger, toNumber, toObject, toPairs, toPath, toString, trim, trimEnd, trimStart, truncate, union, uniq, uniqBy, uniqueId, unset, unzip, upperCase, upperFirst, uuid, values, valuesIn, walkTree, without, zip, zipObject, zipWith, groupAggregate, normalizeHex, toPlain
 };
 
-export type { FuncChain } from "./chain";
+export { FuncChain } from "./chain";
 export type { DebouncedFunction } from "./function/debounce";
 export type { ArrayLike, Collection, IList, INode, IOptions, NonFuncItee, UnknownMapKey } from "./types";
 
@@ -282,7 +282,7 @@ let a = ary.map((v)=>{
 ary = _.range(20000000);
 console.time('Myfx');
 let x = 0;
-let targets = _(ary)
+let targets = _.chain(ary)
  .map((v) => {
    x++;
    return v+1;

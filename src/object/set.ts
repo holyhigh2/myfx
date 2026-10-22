@@ -1,6 +1,11 @@
 import _toPath from "../_toPath"
 import isObject from "../is/isObject"
 import type { UnknownMapKey } from "../types"
+const hasOwn = Object.prototype.hasOwnProperty
+/**
+ * 该值能否作为容器继续下钻（能挂属性）
+ */
+const canHost = (v: any): boolean => v !== null && (typeof v === "object" || typeof v === "function")
 /**
  * 通过path设置对象属性值。如果路径不存在则创建，索引会创建数组，属性会创建对象
  * <div class="alert alert-secondary">
@@ -33,9 +38,8 @@ function set<T extends Record<UnknownMapKey, any>>(
     const nextSeg = chain[i + 1]
     let tmp = target[seg]
     if (nextSeg) {
-      let next = !tmp ? (isNaN(parseInt(nextSeg)) ? {} : []) : tmp
-      if (!tmp) {
-        tmp = (target[seg] as any) = next
+      if (!hasOwn.call(target, seg) || !canHost(tmp)) {
+        tmp = (target[seg] as any) = isNaN(parseInt(nextSeg)) ? {} : []
       }
     } else {
       (target[seg] as any) = value

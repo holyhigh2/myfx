@@ -1,6 +1,7 @@
 import _toPath from "../_toPath"
 import isObject from "../is/isObject"
 import type { UnknownMapKey } from "../types"
+const hasOwn = Object.prototype.hasOwnProperty
 /**
  * 删除obj上path路径对应属性
  * @param obj 需要设置属性值的对象，如果obj不是对象(isObject返回false)，直接返回obj
@@ -12,7 +13,7 @@ function unset(
   obj: Record<UnknownMapKey, any>,
   path: Array<string | number> | string | number
 ): boolean {
-  if (!isObject(obj)) return obj
+  if (!isObject(obj)) return false
   const chain = _toPath(path)
   let target = obj
   for (let i = 0; i < chain.length; i++) {
@@ -21,13 +22,14 @@ function unset(
       return false
     }
     const nextSeg = chain[i + 1]
-    let tmp = target[seg]
+    if (!hasOwn.call(target, seg)) return false
     if (nextSeg) {
-      tmp = target[seg] = !tmp ? (isNaN(parseInt(nextSeg)) ? {} : []) : tmp
+      const tmp = target[seg]
+      if (tmp === null || tmp === undefined) return false
+      target = tmp
     } else {
       return delete target[seg]
     }
-    target = tmp
   }
   return false
 }

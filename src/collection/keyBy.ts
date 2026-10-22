@@ -37,7 +37,7 @@ function keyBy<V, K extends string | number | symbol>(
   collection: Collection<V, K>,
   iteratee: ((value: V) => K) | NonFuncItee = identity
 ): Record<K, V> {
-  const stat: Record<UnknownMapKey, unknown> = {}
+  const stat: Record<UnknownMapKey, unknown> = Object.create(null)
   const cb = _iteratee(iteratee || _identity)
   each(collection, (el) => {
     const key = cb(el)

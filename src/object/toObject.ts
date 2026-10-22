@@ -29,6 +29,8 @@ function toObject<V extends Record<UnknownMapKey, any>>(...vals: any[]): V {
   const rs: Record<UnknownMapKey, any> = {}
   const pairs: any[] = [] // 存放k/v
   let key: unknown = null
+  // hasKey哨兵：key为0/''等falsy值时也能正确配对
+  let hasKey = false
 
   vals.forEach((v) => {
     if (isArray(v)) {
@@ -40,22 +42,23 @@ function toObject<V extends Record<UnknownMapKey, any>>(...vals: any[]): V {
         rs[k] = val
       })
     } else if (isObject(v)) {
-      if (key) {
+      if (hasKey) {
         pairs.push(key, v)
-        key = null
+        hasKey = false
       } else {
         assign(rs, v)
       }
     } else {
-      if (key) {
+      if (hasKey) {
         pairs.push(key, v)
-        key = null
-      } else {
+        hasKey = false
+      } else if (v !== null && v !== undefined) {
         key = v
+        hasKey = true
       }
     }
   })
-  if (key) {
+  if (hasKey) {
     pairs.push(key)
   }
   if (pairs.length > 0) {

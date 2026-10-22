@@ -26,6 +26,7 @@ const TIME_MAP: Record<string, number> = {
  * <li><code>m</code> 分</li>
  * <li><code>s</code> 秒</li>
  * </ul>
+ * 注意：传入未知的type（非以上6种）时不会抛错，返回的日期为Invalid Date
  * @returns 日期对象
  */
 function addTime(

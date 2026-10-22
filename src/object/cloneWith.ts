@@ -1,4 +1,5 @@
 import _cloneBuiltInObject from "../_cloneBuiltInObject";
+import _cloneShell from "../_cloneShell";
 import _identity from "../_identity";
 import isElement from "../is/isElement";
 import isFunction from "../is/isFunction";
@@ -45,7 +46,8 @@ function cloneWith<T extends Record<string | number | symbol, any>>(
 
   let copy = _cloneBuiltInObject(obj)
   if (copy !== null) return copy as any
-  copy = new (obj as any).constructor()
+  // 壳语义
+  copy = _cloneShell(obj)
   const propNames = Object.keys(obj)
   propNames.forEach((p) => {
     if (p === "__proto__") return

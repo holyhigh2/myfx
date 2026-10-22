@@ -20,6 +20,9 @@ function isBlank(v: unknown): boolean {
   if (t === 'number' || t === 'boolean' || t === 'function') {
     return false
   }
+  if (t === 'symbol') {
+    return false
+  }
   if (Array.isArray(v)) {
     const n = v.length
     if (n === 0) return true

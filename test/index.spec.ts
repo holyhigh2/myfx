@@ -2,6 +2,19 @@
  * @jest-environment jsdom
  */
 import myfx,{merge,initial,last,isArray,isObject} from '../src/index'
+
+// 用例标题序列化：参数可能含自引用结构（循环引用回归用例），直接 JSON.stringify 会抛
+const safeJson = (v: any): string => {
+  const seen = new WeakSet()
+  return JSON.stringify(v, (k, val) => {
+    if (typeof val === 'object' && val !== null) {
+      if (seen.has(val)) return '[Circular]'
+      seen.add(val)
+    }
+    return val
+  })
+}
+
 import CasesIs from './cases.is'
 import CasesString from './cases.string'
 import CasesArray from './cases.array'
@@ -54,7 +67,7 @@ for (let fnName in Cases) {
               if (val === undefined) return 'undefined'
               if (val instanceof RegExp) return val.toString()
               if (val instanceof Function) return val.toString()
-              return JSON.stringify(val)
+              return safeJson(val)
             })
             .join(',')
         }) +

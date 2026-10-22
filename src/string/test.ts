@@ -1,6 +1,5 @@
 import isRegExp from "../is/isRegExp"
-
-const ESCAPE_EXP = /([+/\\()\[\].{}])/mg
+import escapeRegExp from "./escapeRegExp"
 
 /**
  * 检测字符串是否与指定的正则匹配
@@ -14,7 +13,7 @@ const ESCAPE_EXP = /([+/\\()\[\].{}])/mg
  * console.log(_.test('func.js',/FUNC/))
  *
  * @param str
- * @param pattern 指定正则。如果非正则类型会自动转换为正则再进行匹配
+ * @param pattern 指定正则。如果非正则类型会先转义全部正则特殊字符再转换为正则进行匹配（即字符串pattern按字面量匹配）
  * @param flags 如果pattern参数不是正则类型，会使用该标记作为正则构造的第二个参数
  * @returns 匹配返回true
  * @since 0.19.0
@@ -26,7 +25,7 @@ function test(str: any, pattern: RegExp | string, flags?: string): boolean {
       : pattern
     return re.test(str)
   }
-  const regExp = new RegExp(pattern.replace(ESCAPE_EXP, '\\$1'), flags)
+  const regExp = new RegExp(escapeRegExp(pattern), flags)
   return regExp.test(str)
 }
 
