@@ -1,7 +1,7 @@
+import _hasOwn from "../_hasOwn"
 import _toPath from "../_toPath"
 import isObject from "../is/isObject"
 import type { UnknownMapKey } from "../types"
-const hasOwn = Object.prototype.hasOwnProperty
 /**
  * 删除obj上path路径对应属性
  * @param obj 需要设置属性值的对象，如果obj不是对象(isObject返回false)，直接返回obj
@@ -22,7 +22,7 @@ function unset(
       return false
     }
     const nextSeg = chain[i + 1]
-    if (!hasOwn.call(target, seg)) return false
+    if (!_hasOwn(target, seg)) return false
     if (nextSeg) {
       const tmp = target[seg]
       if (tmp === null || tmp === undefined) return false

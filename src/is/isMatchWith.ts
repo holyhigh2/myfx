@@ -1,9 +1,8 @@
+import _objTag from "../_objTag";
 import isFunction from "./isFunction";
 import isNil from "./isNil";
 import isNode from "./isNode";
 import isObject from "./isObject";
-
-const objToString = Object.prototype.toString;
 
 /**
  * 判断是否为不应按普通对象递归的内建对象类型（Date/RegExp/Map/Set/Error/TypedArray/DataView/ArrayBuffer/包装原语等）。
@@ -11,7 +10,7 @@ const objToString = Object.prototype.toString;
  */
 function isBuiltInObject(v: any): boolean {
   if (ArrayBuffer.isView(v) || v instanceof ArrayBuffer) return true
-  const tag = objToString.call(v)
+  const tag = _objTag(v)
   return tag !== '[object Object]' && tag !== '[object Array]' && tag !== '[object Arguments]'
 }
 

@@ -1,3 +1,4 @@
+import _hasOwn from "../_hasOwn";
 /**
  * 类似eval，对表达式进行求值并返回结果。不同于eval，fval()执行在严格模式下
  * 
@@ -21,7 +22,7 @@ function fval<T>(expression: string, args?: Record<string, any>, context?: any):
   const val: any[] = []
   if (args) {
     for (const k in args) {
-      if (Object.prototype.hasOwnProperty.call(args, k)) {
+      if (_hasOwn(args, k)) {
         ks.push(k)
         val.push(args[k])
       }

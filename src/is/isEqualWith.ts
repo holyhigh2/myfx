@@ -1,4 +1,6 @@
 import _eq from "../_eq";
+import _hasOwn from "../_hasOwn";
+import _objTag from "../_objTag";
 import isElement from "./isElement";
 import isFunction from "./isFunction";
 import isMap from "./isMap";
@@ -6,8 +8,6 @@ import isObject from "./isObject";
 import isSet from "./isSet";
 
 const MAX_DEPTH = 128;
-const hasOwn = Object.prototype.hasOwnProperty;
-const objToString = Object.prototype.toString;
 
 /**
  * comparator优先，返回undefined时回退内置比较器（文档承诺），返回值收敛为boolean
@@ -36,8 +36,8 @@ function isEqualWithInternal(a: any, b: any, comparator: Function | undefined, d
   }
 
   // 内建类型交叉校验：tag不同直接false（Date vs {} / RegExp vs {} / 数组 vs 对象 等）
-  const tag = objToString.call(a)
-  if (tag !== objToString.call(b)) return false
+  const tag = _objTag(a)
+  if (tag !== _objTag(b)) return false
 
   if (tag === '[object Date]') {
     const da = a as Date
@@ -214,7 +214,7 @@ function isEqualWithInternal(a: any, b: any, comparator: Function | undefined, d
   const nextDepth = depth + 1
   for (let i = aKeys.length; i--;) {
     const k = aKeys[i]
-    if (!hasOwn.call(b, k)) return false
+    if (!_hasOwn(b, k)) return false
     const v1 = (a as any)[k]
     const v2 = (b as any)[k]
     if (!isEqualWithInternal(v1, v2, cptor, nextDepth, visited)) {
@@ -223,7 +223,7 @@ function isEqualWithInternal(a: any, b: any, comparator: Function | undefined, d
   }
   for (let i = 0; i < aSyms.length; i++) {
     const s = aSyms[i]
-    if (!hasOwn.call(b, s)) return false
+    if (!_hasOwn(b, s)) return false
     if (!isEqualWithInternal((a as any)[s], (b as any)[s], cptor, nextDepth, visited)) {
       return false
     }

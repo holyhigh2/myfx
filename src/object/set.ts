@@ -1,7 +1,7 @@
+import _hasOwn from "../_hasOwn"
 import _toPath from "../_toPath"
 import isObject from "../is/isObject"
 import type { UnknownMapKey } from "../types"
-const hasOwn = Object.prototype.hasOwnProperty
 /**
  * 该值能否作为容器继续下钻（能挂属性）
  */
@@ -38,7 +38,7 @@ function set<T extends Record<UnknownMapKey, any>>(
     const nextSeg = chain[i + 1]
     let tmp = target[seg]
     if (nextSeg) {
-      if (!hasOwn.call(target, seg) || !canHost(tmp)) {
+      if (!_hasOwn(target, seg) || !canHost(tmp)) {
         tmp = (target[seg] as any) = isNaN(parseInt(nextSeg)) ? {} : []
       }
     } else {

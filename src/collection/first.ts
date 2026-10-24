@@ -1,3 +1,4 @@
+import _hasOwn from "../_hasOwn";
 import toArray from "../collection/toArray";
 import isArrayLike from "../is/isArrayLike";
 import isIterator from "../is/isIterator";
@@ -27,7 +28,7 @@ function first<T>(array: Collection<T>): T {
   if (isArrayLike<T>(array)) return (array as any)[0] as T
   if (isObject(array) && !isIterator(array)) {
     for (const k in array as any) {
-      if (Object.prototype.hasOwnProperty.call(array, k)) return (array as any)[k] as T
+      if (_hasOwn(array, k)) return (array as any)[k] as T
     }
     return undefined as any
   }
