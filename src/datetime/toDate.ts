@@ -1,7 +1,6 @@
 import isArray from "../is/isArray";
 import isInteger from "../is/isInteger";
 import toNumber from "../number/toNumber";
-import padEnd from "../string/padEnd";
 /**
  * 通过指定参数得到日期对象。支持多种签名
  * 
@@ -41,8 +40,8 @@ function toDate(value: number | [year: number, monthIndex: number, date?: number
     const neg = v < 0
     const abs = neg ? -v : v
     if (abs < TIMESTAMP_MIN) {
-      // 位数不足13位，视为unix秒风格时间戳，按符号补位到13位毫秒
-      v = (neg ? -1 : 1) * toNumber(padEnd(abs + '', 13, '0'))
+      // 位数不足13位，视为unix秒风格时间戳，×1000 转为毫秒
+      v = (neg ? -1 : 1) * abs * 1000
     } else if (abs > TIMESTAMP_MAX) {
       v = NaN
     }

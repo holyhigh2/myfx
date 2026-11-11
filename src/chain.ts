@@ -20,6 +20,7 @@ import tail from './collection/tail'
 import take from './collection/take'
 import toArray from './collection/toArray'
 import tap from './function/tap'
+import type { MemoizeOptions } from './function/memoize'
 import isDefined from './is/isDefined'
 import isFunction from './is/isFunction'
 import isUndefined from './is/isUndefined'
@@ -101,12 +102,15 @@ rgbToHsl(g: number,b: number):FuncChain<any>{return get<Function>(FuncChain.prot
 addTime(amount: number,type: string = 's'):FuncChain<any>{return get<Function>(FuncChain.prototype,'_addTime').call(this,...arguments)}
 compareDate(date2: Date | string | number,type: string = 'd'):FuncChain<any>{return get<Function>(FuncChain.prototype,'_compareDate').call(this,...arguments)}
 formatDate(pattern: string = 'yyyy-MM-dd HH:mm:ss'):FuncChain<any>{return get<Function>(FuncChain.prototype,'_formatDate').call(this,...arguments)}
+formatTime(hideSeconds = false):FuncChain<any>{return get<Function>(FuncChain.prototype,'_formatTime').call(this,...arguments)}
 getDayOfYear():FuncChain<any>{return get<Function>(FuncChain.prototype,'_getDayOfYear').call(this,...arguments)}
 getWeekOfMonth():FuncChain<any>{return get<Function>(FuncChain.prototype,'_getWeekOfMonth').call(this,...arguments)}
 getWeekOfYear():FuncChain<any>{return get<Function>(FuncChain.prototype,'_getWeekOfYear').call(this,...arguments)}
 isLeapYear():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isLeapYear').call(this,...arguments)}
 isSameDay(date2: Date | string | number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_isSameDay').call(this,...arguments)}
 now():FuncChain<any>{return get<Function>(FuncChain.prototype,'_now').call(this,...arguments)}
+parseDuration():FuncChain<any>{return get<Function>(FuncChain.prototype,'_parseDuration').call(this,...arguments)}
+parseTime():FuncChain<any>{return get<Function>(FuncChain.prototype,'_parseTime').call(this,...arguments)}
 toDate():FuncChain<any>{return get<Function>(FuncChain.prototype,'_toDate').call(this,...arguments)}
 after<T extends (...args: any[]) => any>(count: number = 0):FuncChain<any>{return get<Function>(FuncChain.prototype,'_after').call(this,...arguments)}
 alt(interceptor1: Function,interceptor2: Function):FuncChain<any>{return get<Function>(FuncChain.prototype,'_alt').call(this,...arguments)}
@@ -117,6 +121,7 @@ compose<T extends (...args: any[]) => any>():FuncChain<any>{return get<Function>
 debounce<T extends (...args: any[]) => any>(wait: number,immediate: boolean = false):FuncChain<any>{return get<Function>(FuncChain.prototype,'_debounce').call(this,...arguments)}
 delay(wait: number = 0,...args: any[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_delay').call(this,...arguments)}
 fval<T>(args?: Record<string, any>,context?: any):FuncChain<any>{return get<Function>(FuncChain.prototype,'_fval').call(this,...arguments)}
+memoize<F extends (...args: any[]) => any>(options?: MemoizeOptions<F>):FuncChain<any>{return get<Function>(FuncChain.prototype,'_memoize').call(this,...arguments)}
 once<T extends (...args: any[]) => any>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_once').call(this,...arguments)}
 partial<T extends (...args: any[]) => any>(...args: any[]):FuncChain<any>{return get<Function>(FuncChain.prototype,'_partial').call(this,...arguments)}
 tap<T>(interceptor: Function):FuncChain<any>{return get<Function>(FuncChain.prototype,'_tap').call(this,...arguments)}
@@ -166,12 +171,15 @@ isUpperCaseChar():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isUp
 isWeakMap<K extends object,V>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isWeakMap').call(this,...arguments)}
 isWeakSet<T extends object>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_isWeakSet').call(this,...arguments)}
 add(b: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_add').call(this,...arguments)}
+clamp(min: number,max: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_clamp').call(this,...arguments)}
 divide(b: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_divide').call(this,...arguments)}
+lerp(b: number,t: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_lerp').call(this,...arguments)}
 max():FuncChain<any>{return get<Function>(FuncChain.prototype,'_max').call(this,...arguments)}
 mean():FuncChain<any>{return get<Function>(FuncChain.prototype,'_mean').call(this,...arguments)}
 median():FuncChain<any>{return get<Function>(FuncChain.prototype,'_median').call(this,...arguments)}
 min():FuncChain<any>{return get<Function>(FuncChain.prototype,'_min').call(this,...arguments)}
 minmax(max: number,value: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_minmax').call(this,...arguments)}
+mod(divisor: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_mod').call(this,...arguments)}
 multiply(b: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_multiply').call(this,...arguments)}
 randf(max?: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_randf').call(this,...arguments)}
 randi(max?: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_randi').call(this,...arguments)}
@@ -215,9 +223,12 @@ toPairs():FuncChain<any>{return get<Function>(FuncChain.prototype,'_toPairs').ca
 unset(path: Array<string | number> | string | number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_unset').call(this,...arguments)}
 values<V>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_values').call(this,...arguments)}
 valuesIn<V>():FuncChain<any>{return get<Function>(FuncChain.prototype,'_valuesIn').call(this,...arguments)}
+alphaIndex():FuncChain<any>{return get<Function>(FuncChain.prototype,'_alphaIndex').call(this,...arguments)}
+alphaLabel():FuncChain<any>{return get<Function>(FuncChain.prototype,'_alphaLabel').call(this,...arguments)}
 camelCase():FuncChain<any>{return get<Function>(FuncChain.prototype,'_camelCase').call(this,...arguments)}
 capitalize():FuncChain<any>{return get<Function>(FuncChain.prototype,'_capitalize').call(this,...arguments)}
 endsWith(searchStr: string,position?: number):FuncChain<any>{return get<Function>(FuncChain.prototype,'_endsWith').call(this,...arguments)}
+escapeHtml():FuncChain<any>{return get<Function>(FuncChain.prototype,'_escapeHtml').call(this,...arguments)}
 escapeRegExp():FuncChain<any>{return get<Function>(FuncChain.prototype,'_escapeRegExp').call(this,...arguments)}
 indexOf(search: string,fromIndex: number = 0):FuncChain<any>{return get<Function>(FuncChain.prototype,'_indexOf').call(this,...arguments)}
 kebabCase():FuncChain<any>{return get<Function>(FuncChain.prototype,'_kebabCase').call(this,...arguments)}

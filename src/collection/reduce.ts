@@ -87,6 +87,21 @@ function reduce<V, K extends string | number | symbol | object, U>(
   let hasAcc = arguments.length > 2
   if (hasAcc) rs = initialValue as U
 
+  // 数组快速路径
+  if (Array.isArray(collection)) {
+    const n = collection.length
+    for (let i = 0; i < n; i++) {
+      const v = collection[i]
+      if (!hasAcc) {
+        rs = v as any
+        hasAcc = true
+        continue
+      }
+      rs = callback(rs, v, i as K, collection as any)
+    }
+    return rs as U
+  }
+
   each<V, K>(collection, (v, k, c) => {
     if (!hasAcc) {
       rs = v as any

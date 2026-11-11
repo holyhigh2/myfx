@@ -113,6 +113,31 @@ const Datas: Record<string, any[]> = {
     ['func.js', 3, { omission: '!!!' }, 'fun!!!'],
     ['ab', 10, 'ab'],
   ],
+  escapeHtml: [
+    ['<a href="x">&\'', '&lt;a href=&quot;x&quot;&gt;&amp;&#39;'],
+    ['', ''],
+    [null, ''],
+    ['plain', 'plain'],
+  ],
+  alphaLabel: [
+    [0, 'A'],
+    [25, 'Z'],
+    [26, 'AA'],
+    [51, 'AZ'],
+    [52, 'BA'],
+    [701, 'ZZ'],
+    [702, 'AAA'],
+    [-3, 'A'],
+  ],
+  alphaIndex: [
+    ['A', 0],
+    ['Z', 25],
+    ['AA', 26],
+    ['AZ', 51],
+    ['BA', 52],
+    ['aa', 26],
+    ['', 0],
+  ],
 }
 
 export default Datas

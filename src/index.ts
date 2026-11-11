@@ -72,12 +72,15 @@ import rgbToHsl from "./color/rgbToHsl";
 import addTime from "./datetime/addTime";
 import compareDate from "./datetime/compareDate";
 import formatDate from "./datetime/formatDate";
+import formatTime from "./datetime/formatTime";
 import getDayOfYear from "./datetime/getDayOfYear";
 import getWeekOfMonth from "./datetime/getWeekOfMonth";
 import getWeekOfYear from "./datetime/getWeekOfYear";
 import isLeapYear from "./datetime/isLeapYear";
 import isSameDay from "./datetime/isSameDay";
 import now from "./datetime/now";
+import parseDuration from "./datetime/parseDuration";
+import parseTime from "./datetime/parseTime";
 import toDate from "./datetime/toDate";
 import after from "./function/after";
 import alt from "./function/alt";
@@ -88,6 +91,7 @@ import compose from "./function/compose";
 import debounce from "./function/debounce";
 import delay from "./function/delay";
 import fval from "./function/fval";
+import memoize from "./function/memoize";
 import once from "./function/once";
 import partial from "./function/partial";
 import tap from "./function/tap";
@@ -134,12 +138,15 @@ import isUpperCaseChar from "./is/isUpperCaseChar";
 import isWeakMap from "./is/isWeakMap";
 import isWeakSet from "./is/isWeakSet";
 import add from "./math/add";
+import clamp from "./math/clamp";
 import divide from "./math/divide";
+import lerp from "./math/lerp";
 import max from "./math/max";
 import mean from "./math/mean";
 import median from "./math/median";
 import min from "./math/min";
 import minmax from "./math/minmax";
+import mod from "./math/mod";
 import multiply from "./math/multiply";
 import randf from "./math/randf";
 import randi from "./math/randi";
@@ -185,7 +192,10 @@ import values from "./object/values";
 import valuesIn from "./object/valuesIn";
 import camelCase from "./string/camelCase";
 import capitalize from "./string/capitalize";
+import alphaIndex from "./string/alphaIndex";
+import alphaLabel from "./string/alphaLabel";
 import endsWith from "./string/endsWith";
+import escapeHtml from "./string/escapeHtml";
 import escapeRegExp from "./string/escapeRegExp";
 import indexOf from "./string/indexOf";
 import kebabCase from "./string/kebabCase";
@@ -237,11 +247,12 @@ import uuid from "./utils/uuid";
 import { FuncChain } from "./chain";
 
 export {
-  add, addTime, after, alphaId, alt, append, arrayToTree, assign, assignWith, bind, bindAll, call, camelCase, capitalize, chunk, clone, cloneDeep, cloneDeepWith, cloneWith, closest, compact, compareDate, compose, concat, countBy, hexToRgb, hslToRgb, lerpColor, parseColor, rgbToHex, rgbToHsl, debounce, defaults, defaultsDeep, defaultTo, delay, divide, each, eachRight, endsWith, eq, escapeRegExp, every, except, fill, filter, filterTree, find, findIndex, findKey, findLast, findLastIndex, findTreeNode, findTreeNodes, first, flat, flatDeep, flatMap, flatMapDeep, formatDate, formatNumber, fromPairs, functions, fval, get, getDayOfYear, getWeekOfMonth, getWeekOfYear, groupBy, gt, gte, has, identity, includes, indexOf, initial, inRange, insert, intersect, isAlnum, isAlpha, isArray, isArrayLike, isBlank, isBoolean, isCustomElement, isDate, isDefined, isElement, isEmpty, isEqual, isEqualWith, isError, isFinite, isFunction, isInteger, isIterator, isLeapYear, isLowerCaseChar, isMap, isMatch, isMatchWith, isNaN, isNative, isNil, isNode, isNull, isNumber, isNumeric, isObject, isPlainObject, isPrimitive, isRegExp, isSafeInteger, isSameDay, isSet, isString, isSymbol, isUndefined, isUpperCaseChar, isWeakMap, isWeakSet, iteratee, join, kebabCase, keyBy, keys, keysIn, last, lastIndexOf, lowerCase, lowerFirst, lt, lte, map, matcher, max, mean, median, merge, mergeWith, min, minmax, mixin, multiply, noop, now, omit, omitBy, once, padEnd, padStart, padZ, parseJSON, partial, partition, pascalCase, pick, pickBy, pop, prop, pull, randf, randi, range, reduce, reject, remove, repeat, replace, replaceAll, reverse, sample, sampleSize, set, shuffle, size, slice, snakeCase, snowflakeId, some, sort, sortBy, sortedIndex, sortedIndexBy, sortTree, split, startsWith, substring, subtract, sum, tail, take, takeRight, tap, template, test, throttle, times, toArray, toDate, toFixed, toInteger, toNumber, toObject, toPairs, toPath, toString, trim, trimEnd, trimStart, truncate, union, uniq, uniqBy, uniqueId, unset, unzip, upperCase, upperFirst, uuid, values, valuesIn, walkTree, without, zip, zipObject, zipWith, groupAggregate, normalizeHex, toPlain
+  add, addTime, after, alphaId, alt, append, arrayToTree, assign, assignWith, bind, bindAll, call, camelCase, capitalize, chunk, clamp, alphaIndex, alphaLabel, clone, cloneDeep, cloneDeepWith, cloneWith, closest, compact, compareDate, compose, concat, countBy, hexToRgb, hslToRgb, lerpColor, parseColor, rgbToHex, rgbToHsl, debounce, defaults, defaultsDeep, defaultTo, delay, divide, each, eachRight, endsWith, eq, escapeHtml, escapeRegExp, every, except, fill, filter, filterTree, find, findIndex, findKey, findLast, findLastIndex, findTreeNode, findTreeNodes, first, flat, flatDeep, flatMap, flatMapDeep, formatDate, formatNumber, formatTime, fromPairs, functions, fval, get, getDayOfYear, getWeekOfMonth, getWeekOfYear, groupBy, gt, gte, has, identity, includes, indexOf, initial, inRange, insert, intersect, isAlnum, isAlpha, isArray, isArrayLike, isBlank, isBoolean, isCustomElement, isDate, isDefined, isElement, isEmpty, isEqual, isEqualWith, isError, isFinite, isFunction, isInteger, isIterator, isLeapYear, isLowerCaseChar, isMap, isMatch, isMatchWith, isNaN, isNative, isNil, isNode, isNull, isNumber, isNumeric, isObject, isPlainObject, isPrimitive, isRegExp, isSafeInteger, isSameDay, isSet, isString, isSymbol, isUndefined, isUpperCaseChar, isWeakMap, isWeakSet, iteratee, join, kebabCase, keyBy, keys, keysIn, last, lastIndexOf, lerp, lowerCase, lowerFirst, lt, lte, map, matcher, max, mean, median, memoize, merge, mergeWith, min, minmax, mixin, mod, multiply, noop, now, omit, omitBy, once, padEnd, padStart, padZ, parseDuration, parseJSON, parseTime, partial, partition, pascalCase, pick, pickBy, pop, prop, pull, randf, randi, range, reduce, reject, remove, repeat, replace, replaceAll, reverse, sample, sampleSize, set, shuffle, size, slice, snakeCase, snowflakeId, some, sort, sortBy, sortedIndex, sortedIndexBy, sortTree, split, startsWith, substring, subtract, sum, tail, take, takeRight, tap, template, test, throttle, times, toArray, toDate, toFixed, toInteger, toNumber, toObject, toPairs, toPath, toString, trim, trimEnd, trimStart, truncate, union, uniq, uniqBy, uniqueId, unset, unzip, upperCase, upperFirst, uuid, values, valuesIn, walkTree, without, zip, zipObject, zipWith, groupAggregate, normalizeHex, toPlain
 };
 
 export { FuncChain } from "./chain";
 export type { DebouncedFunction } from "./function/debounce";
+export type { MemoizeOptions } from "./function/memoize";
 export type { ArrayLike, Collection, IList, INode, IOptions, NonFuncItee, UnknownMapKey } from "./types";
 
 export const VERSION = "#ver#"; //#ver
@@ -309,13 +320,13 @@ const api = {
   append, chunk, compact, concat, except, fill, findIndex, findLastIndex, flat, flatDeep, insert, intersect, join, pop, pull, range, remove, reverse, slice, sortedIndex, sortedIndexBy, union, uniq, uniqBy, unzip, without, zip, zipObject, zipWith,
   countBy, each, eachRight, every, filter, find, findLast, first, flatMap, flatMapDeep, groupAggregate, groupBy, includes, initial, keyBy, last, map, partition, reduce, reject, sample, sampleSize, shuffle, size, some, sort, sortBy, tail, take, takeRight, toArray,
   hexToRgb, hslToRgb, lerpColor, normalizeHex, parseColor, rgbToHex, rgbToHsl,
-  addTime, compareDate, formatDate, getDayOfYear, getWeekOfMonth, getWeekOfYear, isLeapYear, isSameDay, now, toDate,
-  after, alt, bind, bindAll, call, compose, debounce, delay, fval, once, partial, tap, throttle,
+  addTime, compareDate, formatDate, formatTime, getDayOfYear, getWeekOfMonth, getWeekOfYear, isLeapYear, isSameDay, now, parseDuration, parseTime, toDate,
+  after, alt, bind, bindAll, call, compose, debounce, delay, fval, memoize, once, partial, tap, throttle,
   isAlnum, isAlpha, isArray, isArrayLike, isBlank, isBoolean, isCustomElement, isDate, isDefined, isElement, isEmpty, isEqual, isEqualWith, isError, isFinite, isFunction, isInteger, isIterator, isLowerCaseChar, isMap, isMatch, isMatchWith, isNaN, isNative, isNil, isNode, isNull, isNumber, isNumeric, isObject, isPlainObject, isPrimitive, isRegExp, isSafeInteger, isSet, isString, isSymbol, isUndefined, isUpperCaseChar, isWeakMap, isWeakSet,
-  add, divide, max, mean, median, min, minmax, multiply, randf, randi, subtract, sum,
+  add, clamp, divide, lerp, max, mean, median, min, minmax, mod, multiply, randf, randi, subtract, sum,
   formatNumber, gt, gte, inRange, lt, lte, toInteger, toNumber,
   assign, assignWith, clone, cloneDeep, cloneDeepWith, cloneWith, defaults, defaultsDeep, eq, findKey, fromPairs, functions, get, has, keys, keysIn, merge, mergeWith, omit, omitBy, parseJSON, pick, pickBy, prop, set, toObject, toPairs, unset, values, valuesIn,
-  camelCase, capitalize, endsWith, escapeRegExp, indexOf, kebabCase, lastIndexOf, lowerCase, lowerFirst, padEnd, padStart, padZ, pascalCase, repeat, replace, replaceAll, snakeCase, split, startsWith, substring, test, toFixed, toString, trim, trimEnd, trimStart, truncate, upperCase, upperFirst,
+  camelCase, capitalize, alphaIndex, alphaLabel, endsWith, escapeHtml, escapeRegExp, indexOf, kebabCase, lastIndexOf, lowerCase, lowerFirst, padEnd, padStart, padZ, pascalCase, repeat, replace, replaceAll, snakeCase, split, startsWith, substring, test, toFixed, toString, trim, trimEnd, trimStart, truncate, upperCase, upperFirst,
   template,
   arrayToTree, closest, filterTree, findTreeNode, findTreeNodes, sortTree, walkTree,
   alphaId, defaultTo, identity, iteratee, matcher, mixin, noop, snowflakeId, times, toPath, toPlain, uniqueId, uuid

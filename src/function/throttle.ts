@@ -4,7 +4,7 @@
  */
 export type ThrottledFunction<T extends (...args: any[]) => any> = T & {
   /**
-   * 丢弃尚未执行的排队trailing调用，并释放内部滞留的参数引用（如DOM Event）。队列为空时为安全空操作。
+   * 丢弃尚未执行的排队trailing调用，并释放内部滞留的参数引用。队列为空时为安全空操作。
    * 典型场景：宿主（组件/组件库）卸载时调用，避免trailing回调迟到执行时访问已销毁的实例。
    */
   cancel: () => void
@@ -50,42 +50,16 @@ function throttle<T extends (...args: any[]) => any>(fn: T, wait: number, option
 
   function timeout() {
     if (trailing) {
-      for (const arg of timeoutArgs || []) {
-        if (EventTargetMap.has(arg)) {
-          let targets = EventTargetMap.get(arg)
-          let ks = Object.keys(targets)
-          for (const k of ks) {
-            Object.defineProperty(arg, k, {
-              value: targets[k],
-              writable: true,
-              enumerable: true,
-              configurable: true
-            });
-          }
-          EventTargetMap.delete(arg)
-        }
-      }
       proxy.apply(timeoutContext, timeoutArgs);
     }
 
     lastExec = Date.now();
-    // 执行后释放滞留的参数/this引用（含DOM Event）
+    // 执行后释放滞留的参数/this引用
     timeoutArgs = timeoutContext = timer = null;
   }
 
   const throttled = function (this: any, ...args: any[]) {
-    timeoutArgs = args.map(arg => {
-      if (typeof globalThis.Event === 'function' && arg instanceof globalThis.Event) {
-        EventTargetMap.set(arg, {
-          currentTarget: arg.currentTarget,
-          fromElement: Reflect.get(arg, 'fromElement'),
-          relatedTarget: Reflect.get(arg, 'relatedTarget'),
-          target: arg.target,
-          toElement: Reflect.get(arg, 'toElement'),
-        })
-      }
-      return arg
-    })
+    timeoutArgs = args
     timeoutContext = this
     let now = Date.now()
     let remaining = wait - (now - lastExec)
@@ -97,7 +71,7 @@ function throttle<T extends (...args: any[]) => any>(fn: T, wait: number, option
       if (leading) {
         proxy.apply(this, args);
         lastExec = now;
-        // leading执行后释放滞留的参数引用（含DOM Event），trailing由后续调用重新暂存
+        // leading执行后释放滞留的参数引用，trailing由后续调用重新暂存
         timeoutArgs = timeoutContext = null;
       } else if (trailing) {
         timer = setTimeout(timeout, wait);
@@ -128,7 +102,5 @@ function throttle<T extends (...args: any[]) => any>(fn: T, wait: number, option
 
   return throttled
 }
-
-const EventTargetMap = new WeakMap
 
 export default throttle

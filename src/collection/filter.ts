@@ -57,11 +57,20 @@ function filter<V, K extends string | number | symbol | object>(
     ((value: V, index: K, collection: Collection<V>) => boolean)
     | NonFuncItee
 ): V[] {
-  const rs: V[] = []
   const callback = _iteratee(predicate)
+  // 数组快速路径
+  if (Array.isArray(collection)) {
+    const n = collection.length
+    const rs: V[] = []
+    for (let i = 0; i < n; i++) {
+      const v = collection[i]
+      if (callback(v, i, collection)) rs.push(v)
+    }
+    return rs
+  }
+  const rs: V[] = []
   each<V, K>(collection, (v, k, c) => {
-    const r = callback(v, k, c)
-    if (r) {
+    if (callback(v, k, c)) {
       rs.push(v)
     }
   })

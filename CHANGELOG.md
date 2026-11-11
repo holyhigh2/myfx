@@ -1,5 +1,23 @@
 # Changelog
 
+## [2.0.0] - 2026/11/11 ⚠️BreakChange
+### Add
+- collection -> groupAggregate
+- color -> parseColor/hexToRgb/rgbToHex/rgbToHsl/hslToRgb/lerpColor/normalizeHex（新增颜色模块）
+- datetime -> formatTime/parseTime/parseDuration
+- function -> memoize
+- math -> clamp/lerp/mod
+- string -> alphaIndex/alphaLabel/escapeHtml
+- utils -> toPlain
+### Remove
+- utils -> noConflict
+### Change
+- throttle 新增可cancel/flush
+- toDate 修复秒级时间戳转毫秒的错误
+### Optimize
+- 性能优化 - map/filter/reduce/prop/each 等高频函数
+- 模块系统重构 - 移除 _modules 聚合，改为按需导入并自动生成函数链（利于 tree-shaking）
+
 ## [1.15.0] - 2025/12/8
 ### Add
 - is -> isAlnum/isAlpha

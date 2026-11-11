@@ -69,11 +69,19 @@ function map<V, K extends string | number | symbol | object, U>(
   collection: Collection<V, K>,
   iteratee: ((value: V, index: K, collection: Collection<V, K>) => U | Promise<any>) | NonFuncItee = identity
 ): U[] {
-  const rs: U[] = []
   const cb = _iteratee(iteratee)
+  // 数组快速路径
+  if (Array.isArray(collection)) {
+    const n = collection.length
+    const rs = new Array<U>(n)
+    for (let i = 0; i < n; i++) {
+      rs[i] = cb(collection[i], i, collection) as U
+    }
+    return rs
+  }
+  const rs: U[] = []
   each(collection, (v, k, c) => {
-    const r = cb(v, k, c)
-    rs.push(r)
+    rs.push(cb(v, k, c) as U)
   })
   return rs
 }
